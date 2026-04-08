@@ -1,0 +1,11 @@
+# Directorios
+dist
+node_modules
+coverage
+tmp
+logs
+.vscode
+
+# Archivos
+.env
+*.swp
