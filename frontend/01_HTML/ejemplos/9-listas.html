@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tipos de listas en HTML</title>
+</head>
+
+<body>
+
+  <h1>Tipos de listas en HTML</h1>
+
+  <!-- 
+  LISTA DESORDENADA (ul)
+  Se usa cuando el orden de los elementos no es importante.
+  Cada elemento se define con la etiqueta <li> (list item).
+  Normalmente se muestran con viñetas.
+  -->
+  <h2>Lista desordenada</h2>
+
+  <ul>
+    <li>Manzana</li>
+    <li>Banana</li>
+    <li>Naranja</li>
+  </ul>
+
+
+
+  <!-- 
+  LISTA ORDENADA (ol)
+  Se usa cuando el orden de los elementos sí importa.
+  El navegador enumera automáticamente los elementos.
+  -->
+  <h2>Lista ordenada</h2>
+
+  <ol>
+    <li>Encender la computadora</li>
+    <li>Abrir el navegador</li>
+    <li>Visitar una página web</li>
+  </ol>
+
+
+
+  <!-- 
+  LISTA ORDENADA CON DIFERENTES TIPOS DE NUMERACIÓN
+  El atributo "type" permite cambiar el tipo de numeración.
+  
+  Valores comunes:
+  1 → números (por defecto)
+  A → letras mayúsculas
+  a → letras minúsculas
+  I → números romanos mayúsculos
+  i → números romanos minúsculos
+  -->
+  <h2>Lista ordenada con letras</h2>
+
+  <ol type="A">
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+  </ol>
+
+
+
+  <!-- 
+  LISTA ANIDADA
+  Una lista puede contener otra lista dentro de un <li>.
+  Esto se usa para representar jerarquías o categorías.
+  -->
+  <h2>Lista anidada</h2>
+
+  <ul>
+    <li>Frontend
+      <ul>
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+      </ul>
+    </li>
+
+    <li>Backend
+      <ul>
+        <li>Python</li>
+        <li>Java</li>
+        <li>Node.js</li>
+      </ul>
+    </li>
+  </ul>
+
+
+
+  <!-- 
+  LISTA DE DEFINICIÓN (dl)
+  Se usa para describir términos y sus definiciones.
+  
+  Etiquetas usadas:
+  dl → definition list
+  dt → término
+  dd → definición
+  -->
+  <h2>Lista de definiciones</h2>
+
+  <dl>
+    <dt>HTML</dt>
+    <dd>Lenguaje de marcado para crear páginas web.</dd>
+
+    <dt>CSS</dt>
+    <dd>Lenguaje usado para dar estilo a las páginas web.</dd>
+
+    <dt>JavaScript</dt>
+    <dd>Lenguaje de programación que permite interactividad en la web.</dd>
+  </dl>
+
+
+
+</body>
+
+</html>

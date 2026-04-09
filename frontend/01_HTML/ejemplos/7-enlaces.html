@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tipos de enlaces en HTML</title>
+</head>
+
+<body>
+
+  <!-- Enlace básico a otra página web -->
+  <p>
+    <a href="https://www.wikipedia.org">
+      Ir a Wikipedia
+    </a>
+  </p>
+
+
+  <!-- Enlace que abre en una nueva pestaña -->
+  <!-- target="_blank" abre el enlace en otra pestaña del navegador -->
+  <p>
+    <a href="https://www.google.com" target="_blank">
+      Abrir Google en nueva pestaña
+    </a>
+  </p>
+
+
+  <!-- Enlace a otra página dentro del mismo sitio -->
+  <p>
+    <a href="contacto.html">
+      Ir a la página de contacto
+    </a>
+  </p>
+
+
+  <!-- Enlace a una sección específica de la misma página -->
+  <!-- Primero se define un id en el destino -->
+  <p>
+    <a href="#seccion1">
+      Ir a la sección 1
+    </a>
+  </p>
+
+
+  <!-- Sección destino del enlace interno -->
+  <h2 id="seccion1">Sección 1</h2>
+  <p>Esta es la sección a la que lleva el enlace interno.</p>
+
+
+  <!-- Enlace para enviar un email -->
+  <p>
+    <a href="mailto:ejemplo@email.com">
+      Enviar correo electrónico
+    </a>
+  </p>
+
+
+  <!-- Enlace para hacer una llamada telefónica -->
+  <p>
+    <a href="tel:+5491112345678">
+      Llamar por teléfono
+    </a>
+  </p>
+
+
+  <!-- Enlace para descargar un archivo -->
+  <!-- download indica al navegador que descargue el archivo -->
+  <p>
+    <a href="archivo.pdf" download>
+      Descargar archivo PDF
+    </a>
+  </p>
+
+
+  <!-- Enlace a una parte de otra página -->
+  <p>
+    <a href="pagina.html#informacion">
+      Ir a la sección información de otra página
+    </a>
+  </p>
+
+
+  <!-- Enlace que contiene una imagen -->
+  <!-- Al hacer clic en la imagen se abre el enlace -->
+  <p>
+    <a href="https://www.nasa.gov">
+      <img src="logo.png" alt="Logo NASA" width="100">
+    </a>
+  </p>
+
+  <!-- Solo abrir chat -->
+  <a href="https://wa.me/5491112345678">Escribinos por WhatsApp</a>
+
+  <!-- Con mensaje predefinido -->
+  <a href="https://wa.me/5491112345678?text=Hola%2C%20quiero%20más%20información">
+    Escribinos por WhatsApp
+  </a>
+</body>
+
+</html>

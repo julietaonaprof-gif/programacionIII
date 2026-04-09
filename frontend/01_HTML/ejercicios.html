@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ejercicios interactivos de HTML básico con verificación automática">
+  <title>Ejercicios HTML Básicos — Nivel 1</title>
+
+  <!-- 
+    MEJORA: Google Fonts con display=swap para evitar FOIT (Flash of Invisible Text).
+    Docs: https://web.dev/articles/font-display
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* 
+      MEJORA: Custom properties (CSS Variables) centralizadas.
+      Facilita mantenimiento y temas futuros.
+      Docs: https://developer.mozilla.org/es/docs/Web/CSS/Using_CSS_custom_properties
+    */
+    :root {
+      --clr-bg: #0a0a0f;
+      --clr-surface: #12121a;
+      --clr-surface-hover: #1a1a26;
+      --clr-border: #2a2a3a;
+      --clr-text: #e0e0e8;
+      --clr-text-muted: #8888a0;
+      --clr-accent: #39ff14;
+      --clr-accent-dim: rgba(57, 255, 20, 0.1);
+      --clr-pink: #ff2dfb;
+      --clr-pink-dim: rgba(255, 45, 251, 0.1);
+      --clr-yellow: #ffe600;
+      --clr-success: #39ff14;
+      --clr-error: #ff4444;
+      --clr-correct-bg: rgba(57, 255, 20, 0.08);
+      --clr-wrong-bg: rgba(255, 68, 68, 0.08);
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Space Grotesk', sans-serif;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.2s ease;
+    }
+
+    /*
+      MEJORA: box-sizing border-box global.
+      Evita cálculos de padding inesperados.
+      Docs: https://developer.mozilla.org/es/docs/Web/CSS/box-sizing
+    */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      font-family: var(--font-display);
+      line-height: 1.6;
+      min-height: 100vh;
+      /* MEJORA: Fondo con textura sutil para profundidad */
+      background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(57, 255, 20, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(255, 45, 251, 0.03) 0%, transparent 50%);
+    }
+
+    /* 
+      MEJORA: Uso de <header> semántico con skip-link implícito.
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/header
+    */
+    .site-header {
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      border-bottom: 1px solid var(--clr-border);
+      margin-bottom: 2rem;
+    }
+
+    .site-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      color: var(--clr-pink);
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 30px rgba(255, 45, 251, 0.3);
+    }
+
+    .site-header p {
+      color: var(--clr-text-muted);
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Barra de progreso */
+    .progress-bar {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+    }
+
+    .progress-bar__label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--clr-text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar__track {
+      width: 100%;
+      height: 6px;
+      background: var(--clr-surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar__fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--clr-accent), var(--clr-pink));
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /*
+      MEJORA: <main> como landmark principal para accesibilidad.
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/main
+    */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /*
+      MEJORA: <article> para cada ejercicio (contenido autocontenido).
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/article
+    */
+    .exercise {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: border-color var(--transition);
+    }
+
+    .exercise:hover {
+      border-color: var(--clr-text-muted);
+    }
+
+    .exercise--correct {
+      border-color: var(--clr-success);
+      background: var(--clr-correct-bg);
+    }
+
+    .exercise--wrong {
+      border-color: var(--clr-error);
+      background: var(--clr-wrong-bg);
+    }
+
+    .exercise__title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--clr-text);
+      line-height: 1.5;
+    }
+
+    .exercise__number {
+      color: var(--clr-pink);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /*
+      MEJORA: <label> asociado al <textarea> con for/id para accesibilidad.
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/label
+    */
+    .exercise__editor-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 600px) {
+      .exercise__editor-group {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .editor-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-wrapper label {
+      font-size: 0.75rem;
+      color: var(--clr-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+      font-family: var(--font-mono);
+    }
+
+    /*
+      MEJORA: textarea con resize vertical y focus visible para accesibilidad.
+      Docs: https://developer.mozilla.org/es/docs/Web/CSS/:focus-visible
+    */
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      resize: vertical;
+      background: var(--clr-bg);
+      color: var(--clr-accent);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      tab-size: 2;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    textarea:focus-visible {
+      outline: none;
+      border-color: var(--clr-pink);
+      box-shadow: 0 0 0 3px var(--clr-pink-dim);
+    }
+
+    textarea[readonly] {
+      color: var(--clr-yellow);
+      cursor: default;
+      opacity: 0.85;
+    }
+
+    /* Botones */
+    .exercise__actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /*
+      MEJORA: Botones con estados :hover, :active y :focus-visible.
+      Docs: https://developer.mozilla.org/es/docs/Web/CSS/:focus-visible
+    */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--clr-pink);
+      outline-offset: 2px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn--verify {
+      background: var(--clr-accent);
+      color: #000;
+    }
+
+    .btn--verify:hover {
+      box-shadow: 0 0 16px rgba(57, 255, 20, 0.3);
+    }
+
+    .btn--solution {
+      background: var(--clr-yellow);
+      color: #000;
+    }
+
+    .btn--solution:hover {
+      box-shadow: 0 0 16px rgba(255, 230, 0, 0.3);
+    }
+
+    .btn--reset {
+      background: transparent;
+      color: var(--clr-text-muted);
+      border: 1px solid var(--clr-border);
+    }
+
+    .btn--reset:hover {
+      color: var(--clr-error);
+      border-color: var(--clr-error);
+    }
+
+    /* Resultado */
+    .exercise__result {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      min-height: 1.2em;
+    }
+
+    .exercise__result--correct {
+      color: var(--clr-success);
+    }
+
+    .exercise__result--wrong {
+      color: var(--clr-error);
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--clr-border);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .btn--clear-all {
+      background: transparent;
+      color: var(--clr-text-muted);
+      border: 1px solid var(--clr-border);
+      font-size: 0.8rem;
+    }
+
+    .btn--clear-all:hover {
+      color: var(--clr-error);
+      border-color: var(--clr-error);
+    }
+
+    /* Animación de entrada escalonada */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .exercise {
+      animation: fadeInUp 0.4s ease both;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--
+    MEJORA: Estructura semántica con <header>, <main>, <footer>.
+    Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/header
+  -->
+  <header class="site-header">
+    <h1>Ejercicios HTML Básicos</h1>
+    <p>Nivel 1 — Escribe el código y verificá tu respuesta</p>
+  </header>
+
+  <!-- Barra de progreso -->
+  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="15" aria-label="Progreso de ejercicios">
+    <div class="progress-bar__label">
+      <span>Progreso</span>
+      <span id="progress-text">0 / 15</span>
+    </div>
+    <div class="progress-bar__track">
+      <div class="progress-bar__fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <main id="container">
+    <!-- Los ejercicios se generan por JS -->
+  </main>
+
+  <footer class="site-footer">
+    <button type="button" class="btn btn--clear-all" id="btn-clear-all">
+      Reiniciar todo el progreso
+    </button>
+  </footer>
+
+  <script>
+    "use strict";
+
+    /*
+      ====================================================================
+      MEJORA: "use strict" para atrapar errores silenciosos.
+      Docs: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Strict_mode
+      ====================================================================
+    */
+
+    /*
+      MEJORA: Datos separados de la lógica (array de objetos inmutables).
+      Cada ejercicio tiene un id único para localStorage.
+    */
+    const EXERCISES = Object.freeze([
+      {
+        id: "ex01",
+        question: "Crear un documento HTML con un título de documento: Bienvenido a mi primera página (recordá especificar el idioma)",
+        answer: `<!DOCTYPE html>\n<html lang="es">\n<head>\n  <title>Bienvenido a mi primera página</title>\n</head>\n<body>\n</body>\n</html>`
+      },
+      {
+        id: "ex02",
+        question: "Crear un título h1 que diga Historia de Internet",
+        answer: `<h1>Historia de Internet</h1>`
+      },
+      {
+        id: "ex03",
+        question: "Crear tres párrafos: Texto 1, Texto 2, Texto 3",
+        answer: `<p>Texto 1</p>\n<p>Texto 2</p>\n<p>Texto 3</p>`
+      },
+      {
+        id: "ex04",
+        question: "Crear una lista con Manzana Banana Naranja",
+        answer: `<ul>\n<li>Manzana</li>\n<li>Banana</li>\n<li>Naranja</li>\n</ul>`
+      },
+      {
+        id: "ex05",
+        question: "Crear lista ordenada con tres pasos (Paso 1, Paso 2, Paso 3)",
+        answer: `<ol>\n<li>Paso 1</li>\n<li>Paso 2</li>\n<li>Paso 3</li>\n</ol>`
+      },
+      {
+        id: "ex06",
+        question: "Crear enlace a https://wikipedia.org con el texto: Ir a Wikipedia",
+        answer: `<a href="https://wikipedia.org">Ir a Wikipedia</a>`
+      },
+      {
+        id: "ex07",
+        question: "Crear dos títulos h1 y h2: Título y Subtítulo respectivamente",
+        answer: `<h1>Título</h1>\n<h2>Subtítulo</h2>`
+      },
+      {
+        id: "ex08",
+        question: "Crear dos líneas separadas con br, usar los textos: Primera línea y Segunda línea",
+        answer: `Primera línea<br>\nSegunda línea`
+      },
+      {
+        id: "ex09",
+        question: "Crear separación con hr",
+        answer: `<hr>`
+      },
+      {
+        id: "ex10",
+        question: "Crear lista de lenguajes: HTML CSS JS",
+        answer: `<ul>\n<li>HTML</li>\n<li>CSS</li>\n<li>JavaScript</li>\n</ul>`
+      },
+      {
+        id: "ex11",
+        question: "Crear párrafo con palabra importante usando strong: HTML es importante (solo HTML con strong)",
+        answer: `<p><strong>HTML</strong> es importante</p>`
+      },
+      {
+        id: "ex12",
+        question: "Crear palabra enfatizada con em, usar la frase: Texto importante",
+        answer: `<p><em>Texto importante</em></p>`
+      },
+      {
+        id: "ex13",
+        question: "Crear navegación con tres enlaces: Inicio, Blog y Contacto ( con href # )",
+        answer: `<nav>\n<a href="#">Inicio</a>\n<a href="#">Blog</a>\n<a href="#">Contacto</a>\n</nav>`
+      },
+      {
+        id: "ex14",
+        question: "Crear sección con título y párrafo, usar: Noticias y Contenido respectivamente",
+        answer: `<section>\n<h2>Noticias</h2>\n<p>Contenido</p>\n</section>`
+      },
+      {
+        id: "ex15",
+        question: "Crear footer con texto: Copyright 2026",
+        answer: `<footer>Copyright 2026</footer>`
+      }
+    ]);
+
+    /* ====================================================================
+       MEJORA: Módulo de almacenamiento encapsulado.
+       Usa try/catch por si localStorage no está disponible (modo privado, etc.).
+       Docs: https://developer.mozilla.org/es/docs/Web/API/Window/localStorage
+       ==================================================================== */
+    const Storage = {
+      KEY: "html-exercises-v1",
+
+      _read() {
+        try {
+          const raw = localStorage.getItem(this.KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch {
+          return {};
+        }
+      },
+
+      _write(data) {
+        try {
+          localStorage.setItem(this.KEY, JSON.stringify(data));
+        } catch {
+          console.warn("No se pudo guardar en localStorage.");
+        }
+      },
+
+      /** Obtiene el estado guardado de un ejercicio */
+      get(exerciseId) {
+        const data = this._read();
+        return data[exerciseId] ?? { code: "", solved: false };
+      },
+
+      /** Guarda código y estado de un ejercicio */
+      save(exerciseId, code, solved) {
+        const data = this._read();
+        data[exerciseId] = { code, solved };
+        this._write(data);
+      },
+
+      /** Cuenta cuántos ejercicios están resueltos */
+      countSolved() {
+        const data = this._read();
+        return Object.values(data).filter((entry) => entry.solved).length;
+      },
+
+      /** Borra todo el progreso */
+      clearAll() {
+        try {
+          localStorage.removeItem(this.KEY);
+        } catch {
+          /* silencioso */
+        }
+      }
+    };
+
+    /* ====================================================================
+       MEJORA: Normalización más robusta para la comparación.
+       Elimina espacios y convierte a minúsculas.
+       ==================================================================== */
+    function normalize(text) {
+      return text.replace(/\s+/g, "").toLowerCase();
+    }
+
+    /* ====================================================================
+       MEJORA: Actualiza la barra de progreso y atributos ARIA.
+       Docs: https://developer.mozilla.org/es/docs/Web/Accessibility/ARIA/Roles/progressbar_role
+       ==================================================================== */
+    function updateProgress() {
+      const solved = Storage.countSolved();
+      const total = EXERCISES.length;
+      const pct = Math.round((solved / total) * 100);
+
+      const fill = document.getElementById("progress-fill");
+      const text = document.getElementById("progress-text");
+      const bar = document.querySelector(".progress-bar");
+
+      fill.style.width = `${pct}%`;
+      text.textContent = `${solved} / ${total}`;
+      bar.setAttribute("aria-valuenow", String(solved));
+    }
+
+    /* ====================================================================
+       MEJORA: Renderizado con template literals y delegación de eventos.
+       Se usan data-attributes en vez de onclick inline.
+       Docs: https://developer.mozilla.org/es/docs/Learn_web_development/Howto/Solve_HTML_problems/Use_data_attributes
+       ==================================================================== */
+    function renderExercises() {
+      const container = document.getElementById("container");
+
+      const html = EXERCISES.map((ex, i) => {
+        const saved = Storage.get(ex.id);
+        const solvedClass = saved.solved ? "exercise--correct" : "";
+        const savedCode = saved.code
+          ? saved.code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+          : "";
+        const resultHtml = saved.solved
+          ? `<span class="exercise__result exercise__result--correct">✅ Correcto</span>`
+          : `<span class="exercise__result"></span>`;
+
+        /*
+          MEJORA: Cada <article> es semántico y autocontenido.
+          animation-delay escalonado para efecto de entrada.
+        */
+        return `
+          <article class="exercise ${solvedClass}" data-index="${i}" style="animation-delay: ${i * 40}ms">
+            <h2 class="exercise__title">
+              <span class="exercise__number">${String(i + 1).padStart(2, "0")}.</span>
+              ${ex.question}
+            </h2>
+
+            <div class="exercise__editor-group">
+              <div class="editor-wrapper">
+                <label for="code-${i}">Tu código</label>
+                <textarea id="code-${i}" data-id="${ex.id}" spellcheck="false" placeholder="Escribí tu HTML acá...">${savedCode}</textarea>
+              </div>
+              <div class="editor-wrapper">
+                <label for="solution-${i}">Solución</label>
+                <textarea id="solution-${i}" readonly tabindex="-1"></textarea>
+              </div>
+            </div>
+
+            <div class="exercise__actions">
+              <button type="button" class="btn btn--verify" data-action="verify" data-index="${i}">
+                Verificar
+              </button>
+              <button type="button" class="btn btn--solution" data-action="show" data-index="${i}">
+                Mostrar solución
+              </button>
+              <button type="button" class="btn btn--reset" data-action="reset" data-index="${i}">
+                Limpiar
+              </button>
+              ${resultHtml}
+            </div>
+          </article>`;
+      }).join("");
+
+      container.innerHTML = html;
+    }
+
+    /* ====================================================================
+       MEJORA: Verificar, mostrar solución, y limpiar con funciones puras.
+       ==================================================================== */
+    function verifyExercise(index) {
+      const ex = EXERCISES[index];
+      const textarea = document.getElementById(`code-${index}`);
+      const article = textarea.closest(".exercise");
+      const resultEl = article.querySelector(".exercise__result");
+      const userCode = textarea.value;
+
+      const isCorrect = normalize(userCode) === normalize(ex.answer);
+
+      // Actualizar UI
+      article.classList.remove("exercise--correct", "exercise--wrong");
+      resultEl.classList.remove("exercise__result--correct", "exercise__result--wrong");
+
+      if (isCorrect) {
+        article.classList.add("exercise--correct");
+        resultEl.classList.add("exercise__result--correct");
+        resultEl.textContent = "✅ Correcto";
+      } else {
+        article.classList.add("exercise--wrong");
+        resultEl.classList.add("exercise__result--wrong");
+        resultEl.textContent = "❌ Intentá de nuevo";
+      }
+
+      // Guardar en localStorage
+      Storage.save(ex.id, userCode, isCorrect);
+      updateProgress();
+    }
+
+    function showSolution(index) {
+      const solutionArea = document.getElementById(`solution-${index}`);
+      solutionArea.value = EXERCISES[index].answer;
+    }
+
+    function resetExercise(index) {
+      const ex = EXERCISES[index];
+      const textarea = document.getElementById(`code-${index}`);
+      const solutionArea = document.getElementById(`solution-${index}`);
+      const article = textarea.closest(".exercise");
+      const resultEl = article.querySelector(".exercise__result");
+
+      textarea.value = "";
+      solutionArea.value = "";
+      article.classList.remove("exercise--correct", "exercise--wrong");
+      resultEl.classList.remove("exercise__result--correct", "exercise__result--wrong");
+      resultEl.textContent = "";
+
+      Storage.save(ex.id, "", false);
+      updateProgress();
+    }
+
+    /* ====================================================================
+       MEJORA: Event Delegation — un solo listener en el contenedor.
+       Más eficiente que N listeners individuales.
+       Docs: https://developer.mozilla.org/es/docs/Learn_web_development/Core/Events/Event_delegation
+       ==================================================================== */
+    document.getElementById("container").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-action]");
+      if (!btn) return;
+
+      const index = parseInt(btn.dataset.index, 10);
+      const action = btn.dataset.action;
+
+      switch (action) {
+        case "verify":
+          verifyExercise(index);
+          break;
+        case "show":
+          showSolution(index);
+          break;
+        case "reset":
+          resetExercise(index);
+          break;
+      }
+    });
+
+    /*
+      MEJORA: Guardar el código mientras se escribe (debounced con input event).
+      Docs: https://developer.mozilla.org/es/docs/Web/API/HTMLElement/input_event
+    */
+    document.getElementById("container").addEventListener("input", (e) => {
+      if (e.target.tagName === "TEXTAREA" && e.target.dataset.id) {
+        const exId = e.target.dataset.id;
+        const saved = Storage.get(exId);
+        Storage.save(exId, e.target.value, saved.solved);
+      }
+    });
+
+    /* Botón de reiniciar todo */
+    document.getElementById("btn-clear-all").addEventListener("click", () => {
+      if (confirm("¿Seguro que querés reiniciar todo el progreso?")) {
+        Storage.clearAll();
+        renderExercises();
+        updateProgress();
+      }
+    });
+
+    /* ====================================================================
+       INICIALIZACIÓN
+       ==================================================================== */
+    renderExercises();
+    updateProgress();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estructura semántica en HTML</title>
+</head>
+
+<body>
+
+  <!--
+    ============================================================
+    <header> — Encabezado de página o sección
+    ============================================================
+    Contiene contenido introductorio: logo, título, navegación,
+    barra de búsqueda, etc.
+
+    Reglas:
+    - Puede haber VARIOS <header> en una página (uno por sección o artículo).
+    - NO puede estar dentro de otro <header>, <footer> ni <address>.
+    - No confundir con <head> (metadatos) ni con <h1> (título).
+
+    Ejemplo del mundo real:
+    - El encabezado de un sitio con logo + menú de navegación.
+    - El encabezado de un artículo con título + fecha + autor.
+
+    Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/header
+    Spec: https://html.spec.whatwg.org/multipage/sections.html#the-header-element
+  -->
+
+  <header>
+    <h1>Mi Sitio Web</h1>
+    <p>Un blog sobre desarrollo web</p>
+
+    <!--
+      ============================================================
+      <nav> — Navegación principal
+      ============================================================
+      Contiene enlaces de navegación principales del sitio.
+
+      Reglas:
+      - Usalo para navegación PRINCIPAL (menú del sitio, breadcrumbs,
+        tabla de contenidos). No para cualquier grupo de enlaces.
+      - Puede haber varios <nav> en una página (ej: menú principal
+        y menú del footer), pero usá aria-label para diferenciarlos.
+      - Adentro va una lista <ul> con <li> y <a>. ¿Por qué?
+        Porque una lista comunica a los lectores de pantalla
+        cuántos ítems hay ("lista de 4 elementos").
+
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/nav
+      Spec: https://html.spec.whatwg.org/multipage/sections.html#the-nav-element
+    -->
+
+    <nav aria-label="Navegación principal">
+
+      <!--
+        ============================================================
+        <ul> — Lista desordenada
+        ============================================================
+        Representa un grupo de ítems sin orden específico.
+        Cada ítem va dentro de un <li>.
+
+        ¿Por qué usar <ul> dentro de <nav>?
+        - Un lector de pantalla anuncia: "navegación, lista, 4 elementos".
+        - Sin la lista, solo ve enlaces sueltos sin contexto.
+        - Es la convención recomendada por el W3C y MDN.
+
+        Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/ul
+        Spec: https://html.spec.whatwg.org/multipage/grouping-content.html#the-ul-element
+      -->
+
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#acerca">Acerca de</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!--
+    ============================================================
+    <main> — Contenido principal
+    ============================================================
+    Contiene el contenido ÚNICO y CENTRAL de la página.
+    Todo lo que no sea navegación, sidebar, header o footer
+    del sitio va acá.
+
+    Reglas:
+    - Solo puede haber UN <main> visible por página.
+    - NO puede estar dentro de <header>, <footer>, <nav>,
+      <article> ni <aside>.
+    - El contenido de <main> debe ser único a esa página.
+      Lo que se repite en todas las páginas (logo, menú, footer)
+      va FUERA de <main>.
+
+    Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/main
+    Spec: https://html.spec.whatwg.org/multipage/grouping-content.html#the-main-element
+  -->
+
+  <main>
+
+    <!--
+      ============================================================
+      <section> — Sección temática
+      ============================================================
+      Agrupa contenido que comparte un TEMA o PROPÓSITO.
+      Generalmente tiene su propio encabezado (<h2>, <h3>, etc.).
+
+      Reglas:
+      - Usalo cuando el contenido tendría una entrada propia
+        en un índice/tabla de contenidos.
+      - Si solo necesitás un contenedor para aplicar CSS,
+        usá <div> en su lugar. <section> tiene significado semántico.
+      - No es lo mismo que <article>:
+        · <section> = parte de algo más grande.
+        · <article> = contenido autocontenido e independiente.
+
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/section
+      Spec: https://html.spec.whatwg.org/multipage/sections.html#the-section-element
+    -->
+
+    <section id="inicio">
+      <h2>Bienvenido</h2>
+      <p>Esta es la sección de bienvenida del sitio.</p>
+    </section>
+
+
+    <section id="blog">
+      <h2>Últimos artículos</h2>
+
+      <!--
+        ============================================================
+        <article> — Contenido independiente y autocontenido
+        ============================================================
+        Representa un bloque de contenido que tiene SENTIDO POR SÍ SOLO,
+        fuera del contexto de la página. Si lo sacaras y lo pusieras
+        en otro sitio, se entendería igual.
+
+        Ejemplos:
+        - Un post de blog.
+        - Un comentario de usuario.
+        - Una noticia.
+        - Un widget interactivo.
+        - Una tarjeta de producto.
+
+        Reglas:
+        - Debería tener su propio encabezado (<h2>, <h3>, etc.).
+        - Puede contener <header>, <footer>, <section> adentro.
+        - Puede estar anidado (ej: un artículo con comentarios,
+          donde cada comentario es otro <article>).
+
+        Test mental: ¿tiene sentido este contenido si lo publico
+        en un feed RSS sin nada alrededor? Si sí → <article>.
+
+        Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/article
+        Spec: https://html.spec.whatwg.org/multipage/sections.html#the-article-element
+      -->
+
+      <article>
+
+        <!--
+          <header> dentro de <article>:
+          Acá es el encabezado del ARTÍCULO, no del sitio.
+          Contiene título, fecha, autor, etc.
+        -->
+
+        <header>
+          <h3>Cómo aprender HTML en 2026</h3>
+
+          <!--
+            ============================================================
+            <time> — Fecha/hora legible por máquinas
+            ============================================================
+            Representa una fecha, hora, o duración. El atributo datetime
+            tiene el formato legible por máquinas (ISO 8601),
+            mientras que el texto visible es para humanos.
+
+            Usos:
+            - Google puede mostrar la fecha en resultados de búsqueda.
+            - Los lectores de pantalla lo anuncian correctamente.
+            - JS puede parsearlo fácilmente.
+
+            Formatos de datetime:
+            - Fecha:     2026-04-09
+            - Hora:      14:30
+            - Completo:  2026-04-09T14:30:00-03:00
+            - Duración:  PT2H30M (2 horas 30 minutos)
+
+            Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/time
+            Spec: https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-time-element
+          -->
+
+          <p>Publicado el <time datetime="2026-04-09">9 de abril de 2026</time></p>
+        </header>
+
+        <p>HTML es el lenguaje de marcado que estructura toda la web. En este artículo vamos a ver los mejores recursos
+          para aprenderlo desde cero.</p>
+        <p>Lo más importante es entender la semántica: cada etiqueta tiene un significado y un propósito.</p>
+
+        <!--
+          <footer> dentro de <article>:
+          Contiene metadatos del artículo: autor, categorías, tags, etc.
+          NO es el footer del sitio.
+        -->
+
+        <footer>
+          <p>Escrito por <strong>Ana García</strong> en la categoría <em>Tutoriales</em></p>
+        </footer>
+      </article>
+
+
+      <article>
+        <header>
+          <h3>CSS Grid vs Flexbox: cuándo usar cada uno</h3>
+          <p>Publicado el <time datetime="2026-04-07">7 de abril de 2026</time></p>
+        </header>
+
+        <p>Grid y Flexbox son dos sistemas de layout modernos en CSS. No compiten entre sí: se complementan.</p>
+
+        <footer>
+          <p>Escrito por <strong>Luis Martínez</strong> en la categoría <em>CSS</em></p>
+        </footer>
+      </article>
+    </section>
+
+
+    <section id="acerca">
+      <h2>Acerca de</h2>
+
+      <!--
+        ============================================================
+        <figure> y <figcaption> — Contenido con leyenda
+        ============================================================
+        <figure> envuelve contenido autónomo que se referencia desde
+        el texto principal: imágenes, diagramas, fragmentos de código,
+        tablas, videos, etc.
+
+        <figcaption> es la leyenda o descripción de ese contenido.
+        Va como primer o último hijo de <figure>.
+
+        Reglas:
+        - <figure> puede contener CUALQUIER cosa, no solo imágenes.
+        - Si movés el <figure> a otro lugar del documento, el texto
+          principal sigue teniendo sentido sin él.
+        - No todo <img> necesita <figure>; solo si tiene leyenda
+          o es contenido referenciado.
+
+        Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/figure
+        Spec: https://html.spec.whatwg.org/multipage/grouping-content.html#the-figure-element
+      -->
+
+      <figure>
+        <img src="https://placehold.co/600x300?text=Foto+del+equipo" alt="Foto grupal del equipo de desarrollo"
+          width="600" height="300">
+        <figcaption>Nuestro equipo en la conferencia de desarrollo web 2026.</figcaption>
+      </figure>
+
+      <p>Somos un equipo de desarrolladores apasionados por la web abierta y los estándares.</p>
+    </section>
+
+  </main>
+
+
+  <!--
+    ============================================================
+    <aside> — Contenido complementario / Sidebar
+    ============================================================
+    Contenido que está RELACIONADO INDIRECTAMENTE con el contenido
+    principal. Si lo sacás, el contenido principal no pierde sentido.
+
+    Ejemplos:
+    - Sidebar con enlaces relacionados.
+    - Biografía del autor al costado de un artículo.
+    - Publicidad.
+    - Glosario o definiciones.
+    - Widget de "artículos populares".
+    - Pull quotes (citas destacadas sacadas del texto).
+
+    Reglas:
+    - NO es simplemente "una barra lateral". Es contenido tangencial.
+    - Puede estar DENTRO de un <article> (contenido relacionado
+      a ese artículo) o FUERA de <main> (contenido del sitio).
+    - Debería tener un encabezado propio para accesibilidad.
+
+    Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/aside
+    Spec: https://html.spec.whatwg.org/multipage/sections.html#the-aside-element
+  -->
+
+  <aside aria-label="Barra lateral">
+    <h2>Artículos populares</h2>
+
+    <!--
+      ============================================================
+      <ol> — Lista ordenada
+      ============================================================
+      Igual que <ul> pero el ORDEN de los ítems importa.
+      El navegador los numera automáticamente.
+
+      Atributos útiles:
+      - start="5"    → empieza a contar desde 5.
+      - reversed     → cuenta hacia atrás.
+      - type="a"     → usa letras en vez de números (a, b, c...).
+
+      Usá <ol> cuando el orden importa (rankings, pasos, instrucciones).
+      Usá <ul> cuando el orden no importa (navegación, lista de tags).
+
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/ol
+      Spec: https://html.spec.whatwg.org/multipage/grouping-content.html#the-ol-element
+    -->
+
+    <ol>
+      <li><a href="#">Guía completa de Flexbox</a></li>
+      <li><a href="#">Accesibilidad web desde cero</a></li>
+      <li><a href="#">HTML semántico: por qué importa</a></li>
+    </ol>
+
+
+    <h2>Categorías</h2>
+    <ul>
+      <li><a href="#">HTML</a></li>
+      <li><a href="#">CSS</a></li>
+      <li><a href="#">JavaScript</a></li>
+      <li><a href="#">Accesibilidad</a></li>
+    </ul>
+
+
+    <!--
+      ============================================================
+      <details> y <summary> — Acordeón nativo sin JS
+      ============================================================
+      <details> crea un widget desplegable que el usuario puede
+      abrir y cerrar haciendo click.
+      <summary> es el título visible (siempre se muestra).
+
+      Reglas:
+      - <summary> debe ser el PRIMER hijo de <details>.
+      - Si no ponés <summary>, el navegador muestra "Detalles".
+      - El atributo "open" en <details> lo muestra abierto por defecto.
+      - Funciona sin CSS ni JS. Es HTML nativo.
+
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/details
+      Spec: https://html.spec.whatwg.org/multipage/interactive-elements.html#the-details-element
+    -->
+
+    <details>
+      <summary>¿Qué es HTML semántico?</summary>
+      <p>Es el uso de etiquetas HTML que describen el SIGNIFICADO del contenido, no solo su apariencia. Por ejemplo,
+        usar &lt;nav&gt; en vez de &lt;div class="nav"&gt;.</p>
+    </details>
+
+    <details open>
+      <summary>¿Por qué importa la semántica?</summary>
+      <p>Mejora la accesibilidad (lectores de pantalla), el SEO (Google entiende tu estructura), y la mantenibilidad del
+        código.</p>
+    </details>
+  </aside>
+
+
+  <!--
+    ============================================================
+    <footer> — Pie de página
+    ============================================================
+    Contiene información sobre su sección padre: autor,
+    copyright, enlaces legales, contacto, mapa del sitio, etc.
+
+    Reglas:
+    - Puede haber VARIOS <footer> (uno por <article>, <section>, etc.).
+    - NO puede contener otro <footer> ni un <header>.
+    - El <footer> del <body> es el pie de página del sitio.
+    - El <footer> de un <article> es el pie de ese artículo.
+
+    Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/footer
+    Spec: https://html.spec.whatwg.org/multipage/sections.html#the-footer-element
+  -->
+
+  <footer>
+
+    <!--
+      Segundo <nav> del sitio: navegación del footer.
+      Usamos aria-label para diferenciarlo del nav principal,
+      así los lectores de pantalla dicen "navegación del footer"
+      en vez de solo "navegación".
+    -->
+
+    <nav aria-label="Navegación del footer">
+      <ul>
+        <li><a href="#">Política de privacidad</a></li>
+        <li><a href="#">Términos y condiciones</a></li>
+        <li><a href="#">Mapa del sitio</a></li>
+      </ul>
+    </nav>
+
+    <!--
+      ============================================================
+      <address> — Información de contacto
+      ============================================================
+      Representa información de contacto del AUTOR o DUEÑO
+      del documento o artículo más cercano.
+
+      Reglas:
+      - Solo para info de contacto del autor, NO para cualquier
+        dirección postal (ej: la dirección de un restaurant en
+        una reseña NO va en <address>).
+      - Puede contener email, teléfono, redes sociales, dirección física.
+      - El navegador lo muestra en itálica por defecto.
+
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/address
+      Spec: https://html.spec.whatwg.org/multipage/sections.html#the-address-element
+    -->
+
+    <address>
+      Contacto: <a href="mailto:info@misitio.com">info@misitio.com</a><br>
+      Buenos Aires, Argentina
+    </address>
+
+    <!--
+      ============================================================
+      <small> — Texto secundario / legal
+      ============================================================
+      Representa texto secundario como avisos legales, copyright,
+      disclaimers, o atribuciones. No es solo "texto chiquito";
+      tiene significado semántico de "letra chica".
+
+      Docs: https://developer.mozilla.org/es/docs/Web/HTML/Element/small
+      Spec: https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-small-element
+    -->
+
+    <small>&copy; 2026 Mi Sitio Web. Todos los derechos reservados.</small>
+  </footer>
+
+
+  <!--
+    ============================================================
+    RESUMEN: ESTRUCTURA SEMÁNTICA DE ESTA PÁGINA
+    ============================================================
+
+    <body>
+    │
+    ├── <header>              → Encabezado del SITIO
+    │   ├── <h1>              → Título principal
+    │   └── <nav>             → Menú principal
+    │       └── <ul> + <li>   → Lista de enlaces
+    │
+    ├── <main>                → Contenido ÚNICO de esta página
+    │   │
+    │   ├── <section>         → Sección "Bienvenido"
+    │   │
+    │   ├── <section>         → Sección "Blog"
+    │   │   ├── <article>     → Post 1 (autocontenido)
+    │   │   │   ├── <header>  → Encabezado del post
+    │   │   │   │   └── <time>→ Fecha legible por máquinas
+    │   │   │   └── <footer>  → Pie del post (autor, categoría)
+    │   │   └── <article>     → Post 2
+    │   │
+    │   └── <section>         → Sección "Acerca de"
+    │       └── <figure>      → Imagen con leyenda
+    │           └── <figcaption>
+    │
+    ├── <aside>               → Sidebar (contenido complementario)
+    │   ├── <ol>              → Lista ordenada (ranking)
+    │   ├── <ul>              → Lista desordenada (categorías)
+    │   └── <details>         → Acordeón nativo
+    │       └── <summary>     → Título del acordeón
+    │
+    └── <footer>              → Pie del SITIO
+        ├── <nav>             → Navegación secundaria
+        ├── <address>         → Contacto del autor
+        └── <small>           → Copyright / legal
+
+
+    CUÁNDO USAR CADA UNO — GUÍA RÁPIDA:
+
+    ¿Es la cabecera del sitio o de una sección?     → <header>
+    ¿Es navegación principal?                        → <nav>
+    ¿Es el contenido central y único de la página?   → <main>
+    ¿Es un grupo temático con encabezado?            → <section>
+    ¿Tiene sentido solo, fuera de contexto?           → <article>
+    ¿Es contenido complementario/tangencial?          → <aside>
+    ¿Es el pie del sitio o de una sección?            → <footer>
+    ¿Es solo un contenedor para CSS/JS?               → <div>
+  -->
+
+</body>
+
+</html>
