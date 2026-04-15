@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <title>Gestión Escolar</title>
+</head>
+<body>
+    <h1>Sistema de Gestión Escolar</h1>
+    
+    <section>
+        <h2>Registrar Alumno</h2>
+        <input type="text" id="nombreAlumno" placeholder="Nombre completo">
+        <button onclick="registrarAlumno()">Guardar</button>
+    </section>
+
+    <section>
+        <h2>Cargar Calificación</h2>
+        <input type="number" id="idAlumno" placeholder="ID del Alumno">
+        <input type="number" id="nota" placeholder="Nota (0-10)">
+        <button onclick="cargarNota()">Cargar</button>
+    </section>
+
+    <script>
+        async function registrarAlumno() {
+            const nombre = document.getElementById('nombreAlumno').value;
+            await fetch('/api/alumnos', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ nombre })
+            });
+            alert('Alumno registrado');
+        }
+
+        async function cargarNota() {
+            const alumno_id = document.getElementById('idAlumno').value;
+            const nota = document.getElementById('nota').value;
+            const response = await fetch('/api/calificaciones', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ alumno_id: parseInt(alumno_id), nota: parseInt(nota) })
+            });
+            if(response.ok) alert('Nota cargada');
+            else alert('Error en los datos');
+        }
+    </script>
+</body>
+</html>
