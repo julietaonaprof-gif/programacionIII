@@ -1,0 +1,21 @@
+<!-- <dialog> es una etiqueta HTML nativa que representa una ventana de diálogo o cuadro de interacción superpuesto al contenido de la página. Antes de que existiera, los desarrolladores tenían que armar modales a mano con <div>, CSS y JavaScript. Ahora el navegador lo trae incorporado con comportamientos accesibles de fábrica.
+¿Qué resuelve? Antes para hacer un modal necesitabas manejar vos mismo el foco del teclado (que Tab no se escape del modal), el cierre con Escape, el bloqueo del scroll del fondo, el overlay oscuro, y que los lectores de pantalla anuncien que se abrió un diálogo. Todo eso <dialog> lo hace solo cuando usás .showModal().
+Comportamiento nativo que te da gratis:
+Cuando se abre con .showModal(), el navegador automáticamente mueve el foco al primer elemento interactivo dentro del diálogo, atrapa el foco (Tab no sale del diálogo), cierra el diálogo al presionar Escape, agrega un backdrop (fondo oscuro semitransparente que se puede estilizar con el pseudo-elemento ::backdrop en CSS), bloquea la interacción con todo lo que queda detrás, y anuncia a los lectores de pantalla que se abrió un diálogo con role="dialog" implícito.
+Los atributos y métodos clave:
+El atributo open es un booleano que indica si el diálogo está visible. No se recomienda manipularlo directamente, mejor usar los métodos JavaScript. La propiedad returnValue contiene el valor del botón que cerró el diálogo cuando se usa method="dialog" en un form interno.
+Los métodos son .showModal() que abre como modal (con backdrop, foco atrapado, cierre con Escape), .show() que abre como no-modal (sin backdrop, sin atrapar el foco), y .close(valor) que cierra el diálogo y opcionalmente asigna un valor a returnValue.
+Los eventos que dispara son close cuando el diálogo se cierra (por cualquier medio), y cancel cuando el usuario presiona Escape (se dispara antes de close).
+Cuándo usarlo:
+Es ideal para confirmaciones ("¿Estás seguro de eliminar?"), formularios emergentes (login, contacto rápido), alertas o avisos que requieren una acción del usuario, y selectores o configuraciones temporales. No es para notificaciones tipo toast ni para menús desplegables, esos tienen otros patrones.
+Soporte: Todos los navegadores modernos lo soportan desde hace años (Chrome, Firefox, Safari, Edge). No necesitás polyfill.
+Referencia: MDN — dialog -->
+
+
+<dialog id="miDialogo" open>
+  <form method="dialog">
+    <p>¿Estás seguro?</p>
+    <button type="submit" value="si">Sí</button>
+    <button type="submit" value="no">No</button>
+  </form>
+</dialog>

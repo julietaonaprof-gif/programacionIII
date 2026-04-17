@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Form GET básico</title>
+</head>
+
+<body>
+
+  <!--
+    method="GET": los datos se envían en la URL como query string.
+    action: la URL destino. Acá no hay servidor, así que
+    simplemente vas a ver los datos en la barra de direcciones.
+
+    Al enviar, el navegador genera:
+    https://www.youtube.com/results?search_query=lo+que+escribiste
+  -->
+  <form action="https://www.youtube.com/results" method="GET">
+    <label for="yt">Buscar en YouTube:</label><br>
+    <input type="search" id="yt" name="search_query" required>
+    <button type="submit">Buscar</button>
+  </form>
+
+</body>
+
+</html>

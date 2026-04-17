@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicios de tablas</title>
+</head>
+
+<body>
+  <main>
+    <table border="1">
+      <caption>Listado de empleados del departamento de IT</caption>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Puesto</th>
+          <th scope="col">Antigüedad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Sofía Méndez</td>
+          <td>Frontend Developer</td>
+          <td>3 años</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Martín Ruiz</td>
+          <td>Backend Developer</td>
+          <td>5 años</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Lucía Gómez</td>
+          <td>QA Tester</td>
+          <td>2 años</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Diego Torres</td>
+          <td>DevOps</td>
+          <td>4 años</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Valentina López</td>
+          <td>Tech Lead</td>
+          <td>7 años</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="3">Total empleados</th>
+          <td>5</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <hr>
+
+    <table border="1">
+      <caption>
+        Horario semanal del curso de Desarrollo Web — Turno mañana
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Turno</th>
+          <th scope="col">Hora</th>
+          <th scope="col">Materia</th>
+          <th scope="col">Profesor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="rowgroup" rowspan="3">Mañana</th>
+          <td>08:00 - 09:30</td>
+          <td>HTML y CSS</td>
+          <td>Prof. Álvarez</td>
+        </tr>
+        <tr>
+          <td>09:45 - 11:15</td>
+          <td>JavaScript</td>
+          <td>Prof. Fernández</td>
+        </tr>
+        <tr>
+          <td>11:30 - 13:00</td>
+          <td>React</td>
+          <td>Prof. Domínguez</td>
+        </tr>
+        <tr>
+          <th scope="rowgroup" rowspan="2">Tarde</th>
+          <td>14:00 - 15:30</td>
+          <td>Node.js</td>
+          <td>Prof. Castro</td>
+        </tr>
+        <tr>
+          <td>15:45 - 17:15</td>
+          <td>Base de datos</td>
+          <td>Prof. Herrera</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" colspan="3">Total de horas diarias</th>
+          <td>7.5 hs</td>
+        </tr>
+      </tfoot>
+    </table>
+
+  </main>
+</body>
+
+</html>

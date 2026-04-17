@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <main>
+
+
+    <form action="https://www.google.com/search" method="GET">
+
+      <label for="g1-q">Buscar:</label><br>
+      <input type="search" id="g1-q" name="q" placeholder="Escribí algo..." required>
+
+      <br><br>
+
+      <label for="g1-idioma">Idioma:</label><br>
+      <select id="g1-idioma" name="lr">
+        <option value="">Todos</option>
+        <option value="lang_es" selected>Español</option>
+        <option value="lang_en">Inglés</option>
+        <option value="lang_pt">Portugués</option>
+      </select>
+
+      <br><br>
+
+      <label for="g1-cant">Resultados por página:</label><br>
+      <input type="number" id="g1-cant" name="num" min="5" max="50" step="5" value="10">
+
+      <br><br>
+
+      <fieldset>
+        <legend>Tipo de contenido</legend>
+        <label><input type="radio" name="tbm" value="" checked> Todo</label>
+        <label><input type="radio" name="tbm" value="isch"> Imágenes</label>
+        <label><input type="radio" name="tbm" value="nws"> Noticias</label>
+      </fieldset>
+
+      <br>
+
+      <label><input type="checkbox" name="safe" value="active"> Búsqueda segura</label>
+
+      <br><br>
+
+      <button type="submit">Buscar en Google</button>
+      <button type="reset">Limpiar</button>
+
+    </form>
+
+    <hr>
+
+    <!-- =============================== -->
+    <!-- FORMULARIO 2: POST (Registro)   -->
+    <!-- =============================== -->
+    <h2>Formulario 2 — Registro (POST)</h2>
+
+    <form action="/registro" method="POST">
+
+      <label for="g2-nombre">Nombre completo:</label><br>
+      <input type="text" id="g2-nombre" name="nombre" placeholder="Juan Pérez" required>
+
+      <br><br>
+
+      <label for="g2-email">Email:</label><br>
+      <input type="email" id="g2-email" name="email" placeholder="tu@email.com" required>
+
+      <br><br>
+
+      <label for="g2-pass">Contraseña:</label><br>
+      <input type="password" id="g2-pass" name="password" minlength="8" required>
+
+      <br><br>
+
+      <label for="g2-fecha">Fecha de nacimiento:</label><br>
+      <input type="date" id="g2-fecha" name="nacimiento" required>
+
+      <br><br>
+
+      <label for="g2-bio">Sobre vos:</label><br>
+      <textarea id="g2-bio" name="bio" rows="4" cols="40" placeholder="Contanos algo..."></textarea>
+
+      <br><br>
+
+      <button type="submit">Registrarse</button>
+      <button type="reset">Limpiar</button>
+
+    </form>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scope vs headers — Diferencias con ejemplos</title>
+</head>
+
+<body>
+
+  <header>
+    <h1><code>scope</code> vs <code>headers</code></h1>
+    <p>
+      Ambos conectan celdas de datos con sus encabezados para que los
+      lectores de pantalla anuncien el contexto. La diferencia es cuándo usar cada uno.
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <!-- 1. SCOPE — ENCABEZADOS DE COLUMNA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. <code>scope="col"</code> — Encabezados de columna</h2>
+      <p>
+        El caso más simple. Los encabezados están arriba y mandan hacia abajo.<br>
+        El lector de pantalla al llegar a "28" anuncia: <em>"Edad: 28"</em>.
+      </p>
+
+      <!--
+        scope="col" le dice al lector de pantalla:
+        "Este encabezado aplica a toda la COLUMNA de abajo."
+
+        No necesita IDs. El navegador infiere la relación por posición.
+      -->
+      <table border="1">
+        <caption>scope="col" — Encabezados de columna</caption>
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Edad</th>
+            <th scope="col">Ciudad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ana</td> <!-- Lector anuncia: "Nombre: Ana" -->
+            <td>28</td> <!-- Lector anuncia: "Edad: 28" -->
+            <td>Córdoba</td> <!-- Lector anuncia: "Ciudad: Córdoba" -->
+          </tr>
+          <tr>
+            <td>Luis</td>
+            <td>35</td>
+            <td>Rosario</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 2. SCOPE — ENCABEZADOS DE FILA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. <code>scope="row"</code> — Encabezados de fila</h2>
+      <p>
+        Los encabezados están a la izquierda y mandan hacia la derecha.<br>
+        El lector al llegar a "22°" anuncia: <em>"Lunes, Máxima: 22°"</em>.
+      </p>
+
+      <!--
+        scope="row" le dice al lector de pantalla:
+        "Este encabezado aplica a toda la FILA a la derecha."
+      -->
+      <table border="1">
+        <caption>scope="row" — Encabezados de fila</caption>
+        <thead>
+          <tr>
+            <th scope="col">Día</th>
+            <th scope="col">Mínima</th>
+            <th scope="col">Máxima</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Lunes</th> <!-- Manda hacia la derecha -->
+            <td>14°</td> <!-- Lector: "Lunes, Mínima: 14°" -->
+            <td>22°</td> <!-- Lector: "Lunes, Máxima: 22°" -->
+          </tr>
+          <tr>
+            <th scope="row">Martes</th>
+            <td>15°</td>
+            <td>25°</td>
+          </tr>
+          <tr>
+            <th scope="row">Miércoles</th>
+            <td>12°</td>
+            <td>19°</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 3. SCOPE — COL + ROW COMBINADOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. <code>scope="col"</code> + <code>scope="row"</code> — Combinados</h2>
+      <p>
+        Encabezados arriba Y a la izquierda. La celda recibe contexto de ambos.<br>
+        El lector al llegar a "$150" anuncia: <em>"Ventas, Febrero: $150"</em>.
+      </p>
+
+      <!--
+        Combinación típica: scope="col" arriba, scope="row" a la izquierda.
+        El navegador infiere que cada celda depende de su encabezado
+        de columna (arriba) y su encabezado de fila (izquierda).
+        Funciona PERFECTO para tablas regulares sin colspan/rowspan.
+      -->
+      <table border="1">
+        <caption>scope combinado — Ventas por departamento</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="col">Enero</th>
+            <th scope="col">Febrero</th>
+            <th scope="col">Marzo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Ventas</th>
+            <td>$100</td> <!-- Lector: "Ventas, Enero: $100" -->
+            <td>$150</td> <!-- Lector: "Ventas, Febrero: $150" -->
+            <td>$120</td>
+          </tr>
+          <tr>
+            <th scope="row">Marketing</th>
+            <td>$80</td> <!-- Lector: "Marketing, Enero: $80" -->
+            <td>$90</td>
+            <td>$85</td>
+          </tr>
+          <tr>
+            <th scope="row">IT</th>
+            <td>$200</td>
+            <td>$210</td>
+            <td>$220</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total</th>
+            <td>$380</td>
+            <td>$450</td>
+            <td>$425</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 4. SCOPE — COLGROUP Y ROWGROUP -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. <code>scope="colgroup"</code> y <code>scope="rowgroup"</code></h2>
+      <p>
+        Para encabezados que abarcan un GRUPO de columnas o filas
+        (usan <code>colspan</code> o <code>rowspan</code>).<br>
+        <strong>Hasta acá llega scope.</strong> Para tablas más complejas, se necesita <code>headers</code>.
+      </p>
+
+      <!--
+        scope="colgroup": aplica a un grupo de columnas (con colspan).
+        scope="rowgroup": aplica a un grupo de filas (con rowspan).
+
+        Esto funciona cuando la tabla es regular y los grupos son claros.
+      -->
+      <table border="1">
+        <caption>scope colgroup/rowgroup — Horario de clases</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th scope="colgroup" colspan="2">Mañana</th>
+            <th scope="colgroup" colspan="2">Tarde</th>
+          </tr>
+          <tr>
+            <td></td>
+            <th scope="col">8:00</th>
+            <th scope="col">10:00</th>
+            <th scope="col">14:00</th>
+            <th scope="col">16:00</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Lunes</th>
+            <td>HTML</td> <!-- Lector: "Lunes, Mañana, 8:00: HTML" -->
+            <td>CSS</td>
+            <td>JavaScript</td>
+            <td>React</td>
+          </tr>
+          <tr>
+            <th scope="row">Martes</th>
+            <td>Node.js</td>
+            <td>Express</td>
+            <td>MongoDB</td>
+            <td>Proyecto</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- LÍMITE DE SCOPE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>⚠ El límite de <code>scope</code></h2>
+      <p>
+        <code>scope</code> funciona cuando la tabla es <strong>regular</strong>:
+        una fila de encabezados arriba, una columna a la izquierda, sin celdas
+        fusionadas que rompan la estructura.<br><br>
+        Cuando la tabla tiene <code>colspan</code> / <code>rowspan</code> complejos,
+        múltiples niveles de encabezados, o celdas que dependen de encabezados
+        que no están en su misma fila ni columna, <code>scope</code> se vuelve
+        ambiguo y el lector de pantalla no puede inferir las relaciones.<br><br>
+        <strong>Ahí es donde entra <code>headers</code>.</strong>
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 5. HEADERS — TABLA BÁSICA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. <code>headers</code> — La misma tabla pero explícita</h2>
+      <p>
+        Cada celda dice exactamente cuáles son sus encabezados usando
+        <code>headers="id1 id2"</code>.<br>
+        Más trabajo, pero cero ambigüedad.
+      </p>
+
+      <!--
+        headers + id: conexión EXPLÍCITA.
+
+        Paso 1: Ponerle id a cada <th>.
+        Paso 2: En cada <td>, poner headers="id_fila id_columna".
+
+        El lector de pantalla al llegar a "$150" lee:
+        "Ventas, Febrero: $150"
+        porque headers="ventas feb" apunta a esos dos encabezados.
+      -->
+      <table border="1">
+        <caption>headers — Ventas por departamento (explícito)</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th id="ene">Enero</th>
+            <th id="feb">Febrero</th>
+            <th id="mar">Marzo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th id="ventas">Ventas</th>
+            <td headers="ventas ene">$100</td>
+            <td headers="ventas feb">$150</td>
+            <td headers="ventas mar">$120</td>
+          </tr>
+          <tr>
+            <th id="mkt">Marketing</th>
+            <td headers="mkt ene">$80</td>
+            <td headers="mkt feb">$90</td>
+            <td headers="mkt mar">$85</td>
+          </tr>
+          <tr>
+            <th id="it">IT</th>
+            <td headers="it ene">$200</td>
+            <td headers="it feb">$210</td>
+            <td headers="it mar">$220</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <strong>Comparación:</strong> Esta tabla es idéntica a la del ejemplo 3.
+        Con <code>scope</code> alcanzaba. Pero <code>headers</code> también funciona.
+        La diferencia se nota en las tablas complejas de abajo.
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 6. HEADERS — TABLA CON COLSPAN (scope no alcanza) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. <code>headers</code> — Tabla con colspan (scope NO alcanza)</h2>
+      <p>
+        "Primer Semestre" abarca Q1 y Q2. ¿A cuál aplica <code>scope="col"</code>?
+        A las dos, pero scope no puede decir "aplico a las próximas 2 columnas"
+        de forma confiable. <code>headers</code> sí puede.
+      </p>
+
+      <!--
+        Acá scope="colgroup" PODRÍA funcionar en algunos lectores,
+        pero headers es la forma 100% confiable de hacerlo.
+
+        El lector al llegar a "$100" anuncia:
+        "Ventas, Primer Semestre, Q1: $100"
+        porque headers="ventas sem1 q1" le da los 3 niveles.
+      -->
+      <table border="1">
+        <caption>headers con colspan — Presupuesto semestral</caption>
+        <thead>
+          <tr>
+            <td></td>
+            <th id="h-sem1" colspan="2">Primer Semestre</th>
+            <th id="h-sem2" colspan="2">Segundo Semestre</th>
+          </tr>
+          <tr>
+            <td></td>
+            <th id="h-q1">Q1</th>
+            <th id="h-q2">Q2</th>
+            <th id="h-q3">Q3</th>
+            <th id="h-q4">Q4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th id="h-ventas">Ventas</th>
+            <td headers="h-ventas h-sem1 h-q1">$100</td> <!-- 3 niveles de contexto -->
+            <td headers="h-ventas h-sem1 h-q2">$150</td>
+            <td headers="h-ventas h-sem2 h-q3">$120</td>
+            <td headers="h-ventas h-sem2 h-q4">$180</td>
+          </tr>
+          <tr>
+            <th id="h-gastos">Gastos</th>
+            <td headers="h-gastos h-sem1 h-q1">$80</td>
+            <td headers="h-gastos h-sem1 h-q2">$90</td>
+            <td headers="h-gastos h-sem2 h-q3">$85</td>
+            <td headers="h-gastos h-sem2 h-q4">$95</td>
+          </tr>
+          <tr>
+            <th id="h-ganancia">Ganancia</th>
+            <td headers="h-ganancia h-sem1 h-q1">$20</td>
+            <td headers="h-ganancia h-sem1 h-q2">$60</td>
+            <td headers="h-ganancia h-sem2 h-q3">$35</td>
+            <td headers="h-ganancia h-sem2 h-q4">$85</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 7. HEADERS — TABLA CON ROWSPAN (scope no alcanza) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. <code>headers</code> — Tabla con rowspan (scope NO alcanza)</h2>
+      <p>
+        "Electrónica" abarca 2 filas con <code>rowspan</code>.
+        <code>scope="row"</code> solo aplica a una fila.
+        <code>headers</code> permite asociar "Tablet" con "Electrónica" explícitamente.
+      </p>
+
+      <!--
+        El lector al llegar a "$500" anuncia:
+        "Electrónica, Tablet, Precio: $500"
+        porque headers="cat-elec prod-tablet precio" conecta 3 encabezados.
+      -->
+      <table border="1">
+        <caption>headers con rowspan — Productos por categoría</caption>
+        <thead>
+          <tr>
+            <th id="cat">Categoría</th>
+            <th id="prod">Producto</th>
+            <th id="precio">Precio</th>
+            <th id="stock">Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th id="cat-elec" rowspan="2">Electrónica</th>
+            <th id="prod-phone">Smartphone</th>
+            <td headers="cat-elec prod-phone precio">$800</td>
+            <td headers="cat-elec prod-phone stock">150</td>
+          </tr>
+          <tr>
+            <!-- No hay <td> para Categoría porque rowspan la ocupa -->
+            <th id="prod-tablet">Tablet</th>
+            <td headers="cat-elec prod-tablet precio">$500</td>
+            <td headers="cat-elec prod-tablet stock">80</td>
+          </tr>
+          <tr>
+            <th id="cat-ropa" rowspan="2">Ropa</th>
+            <th id="prod-remera">Remera</th>
+            <td headers="cat-ropa prod-remera precio">$25</td>
+            <td headers="cat-ropa prod-remera stock">500</td>
+          </tr>
+          <tr>
+            <th id="prod-campera">Campera</th>
+            <td headers="cat-ropa prod-campera precio">$120</td>
+            <td headers="cat-ropa prod-campera stock">60</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 8. HEADERS — TABLA SUPER COMPLEJA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. <code>headers</code> — Tabla compleja (colspan + rowspan + 3 niveles)</h2>
+      <p>
+        Esta tabla tiene todo: colspan en los encabezados, rowspan en las filas,
+        y tres niveles de encabezados. Sin <code>headers</code>, un lector de pantalla
+        no podría darle contexto a cada celda.
+      </p>
+
+      <table border="1">
+        <caption>Informe de ventas — Regional por canal y trimestre</caption>
+        <thead>
+          <tr>
+            <td colspan="2"></td>
+            <th id="c-online" colspan="2">Online</th>
+            <th id="c-local" colspan="2">Local</th>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <th id="c-on-q1">Q1</th>
+            <th id="c-on-q2">Q2</th>
+            <th id="c-lo-q1">Q1</th>
+            <th id="c-lo-q2">Q2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th id="r-norte" rowspan="2">Norte</th>
+            <th id="r-norte-vta">Ventas</th>
+            <td headers="r-norte r-norte-vta c-online c-on-q1">$50</td>
+            <td headers="r-norte r-norte-vta c-online c-on-q2">$60</td>
+            <td headers="r-norte r-norte-vta c-local c-lo-q1">$30</td>
+            <td headers="r-norte r-norte-vta c-local c-lo-q2">$35</td>
+          </tr>
+          <tr>
+            <th id="r-norte-dev">Devoluciones</th>
+            <td headers="r-norte r-norte-dev c-online c-on-q1">$5</td>
+            <td headers="r-norte r-norte-dev c-online c-on-q2">$3</td>
+            <td headers="r-norte r-norte-dev c-local c-lo-q1">$2</td>
+            <td headers="r-norte r-norte-dev c-local c-lo-q2">$4</td>
+          </tr>
+          <tr>
+            <th id="r-sur" rowspan="2">Sur</th>
+            <th id="r-sur-vta">Ventas</th>
+            <td headers="r-sur r-sur-vta c-online c-on-q1">$40</td>
+            <td headers="r-sur r-sur-vta c-online c-on-q2">$55</td>
+            <td headers="r-sur r-sur-vta c-local c-lo-q1">$25</td>
+            <td headers="r-sur r-sur-vta c-local c-lo-q2">$30</td>
+          </tr>
+          <tr>
+            <th id="r-sur-dev">Devoluciones</th>
+            <td headers="r-sur r-sur-dev c-online c-on-q1">$3</td>
+            <td headers="r-sur r-sur-dev c-online c-on-q2">$2</td>
+            <td headers="r-sur r-sur-dev c-local c-lo-q1">$1</td>
+            <td headers="r-sur r-sur-dev c-local c-lo-q2">$2</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        El lector de pantalla al llegar a "$50" anuncia:<br>
+        <em>"Norte, Ventas, Online, Q1: $50"</em><br>
+        porque <code>headers="r-norte r-norte-vta c-online c-on-q1"</code>
+        le da los 4 niveles de contexto: región, tipo, canal, trimestre.
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- TABLA RESUMEN COMPARATIVA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Resumen — ¿Cuándo usar cuál?</h2>
+
+      <table border="1" cellpadding="5">
+        <caption>scope vs headers — Comparación</caption>
+        <thead>
+          <tr>
+            <th scope="col">Característica</th>
+            <th scope="col">scope</th>
+            <th scope="col">headers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Se pone en</th>
+            <td>&lt;th&gt;</td>
+            <td>&lt;td&gt; o &lt;th&gt;</td>
+          </tr>
+          <tr>
+            <th scope="row">Necesita IDs</th>
+            <td>No</td>
+            <td>Sí (en cada &lt;th&gt;)</td>
+          </tr>
+          <tr>
+            <th scope="row">Relación</th>
+            <td>Implícita (por posición)</td>
+            <td>Explícita (por ID)</td>
+          </tr>
+          <tr>
+            <th scope="row">Tablas simples</th>
+            <td>Perfecto</td>
+            <td>Funciona pero es innecesario</td>
+          </tr>
+          <tr>
+            <th scope="row">Tablas con colspan</th>
+            <td>Limitado / ambiguo</td>
+            <td>Perfecto</td>
+          </tr>
+          <tr>
+            <th scope="row">Tablas con rowspan</th>
+            <td>Limitado / ambiguo</td>
+            <td>Perfecto</td>
+          </tr>
+          <tr>
+            <th scope="row">Múltiples niveles</th>
+            <td>No soporta bien</td>
+            <td>Perfecto (sin límite)</td>
+          </tr>
+          <tr>
+            <th scope="row">Esfuerzo de código</th>
+            <td>Poco (solo agregar scope)</td>
+            <td>Mucho (IDs + headers en cada celda)</td>
+          </tr>
+          <tr>
+            <th scope="row">Recomendación</th>
+            <td>Usar siempre en tablas simples</td>
+            <td>Usar cuando scope no alcanza</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- REGLA PRÁCTICA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Regla práctica</h2>
+      <ol>
+        <li><strong>¿La tabla tiene una sola fila de encabezados arriba y/o una columna a la izquierda, sin colspan ni
+            rowspan?</strong><br>
+          → Usá <code>scope</code>. Es suficiente.</li>
+        <li><strong>¿La tabla tiene colspan, rowspan, o múltiples niveles de encabezados?</strong><br>
+          → Usá <code>headers</code> con <code>id</code>. Es la única forma confiable.</li>
+        <li><strong>¿No estás seguro?</strong><br>
+          → Usá <code>headers</code>. Nunca falla. Es más trabajo pero cubre todo.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <hr>
+    <p><small>
+        Referencia:
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th#scope">MDN — th: scope</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/td#headers">MDN — td: headers</a> |
+        <a href="https://www.w3.org/WAI/tutorials/tables/">W3C WAI — Tablas accesibles</a>
+        <br>Material educativo — Abril 2026
+      </small></p>
+  </footer>
+
+</body>
+
+</html>

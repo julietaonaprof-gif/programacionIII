@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>6 Tablas HTML con Buenas Prácticas de Accesibilidad</title>
+</head>
+
+<body>
+
+  <h1>6 Tablas HTML — Todas las buenas prácticas aplicadas</h1>
+  <p>
+    Cada tabla implementa: <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>,
+    <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, <code>scope</code> en todos los
+    <code>&lt;th&gt;</code>, y <code>&lt;th&gt;</code> en lugar de <code>&lt;td&gt;</code>
+    para etiquetas descriptivas.
+  </p>
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TABLA 1: Simple — Encabezados de columna -->
+  <!-- ============================================================ -->
+  <h2>Tabla 1 — Empleados</h2>
+
+  <table border="1">
+    <caption>Listado de empleados del departamento de IT</caption>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Puesto</th>
+        <th scope="col">Antigüedad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Sofía Méndez</td>
+        <td>Frontend Developer</td>
+        <td>3 años</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Martín Ruiz</td>
+        <td>Backend Developer</td>
+        <td>5 años</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Lucía Gómez</td>
+        <td>QA Tester</td>
+        <td>2 años</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Diego Torres</td>
+        <td>DevOps</td>
+        <td>4 años</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Valentina López</td>
+        <td>Tech Lead</td>
+        <td>7 años</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row" colspan="3">Total empleados</th>
+        <td>5</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TABLA 2: Encabezados de fila y columna -->
+  <!-- ============================================================ -->
+  <h2>Tabla 2 — Temperaturas semanales</h2>
+
+  <table border="1">
+    <caption>Temperatura máxima y mínima en Buenos Aires (°C) — Semana del 14/04/2026</caption>
+    <thead>
+      <tr>
+        <th scope="col">Día</th>
+        <th scope="col">Mínima</th>
+        <th scope="col">Máxima</th>
+        <th scope="col">Sensación térmica</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Lunes</th>
+        <td>14°</td>
+        <td>22°</td>
+        <td>20°</td>
+      </tr>
+      <tr>
+        <th scope="row">Martes</th>
+        <td>15°</td>
+        <td>25°</td>
+        <td>23°</td>
+      </tr>
+      <tr>
+        <th scope="row">Miércoles</th>
+        <td>12°</td>
+        <td>19°</td>
+        <td>17°</td>
+      </tr>
+      <tr>
+        <th scope="row">Jueves</th>
+        <td>16°</td>
+        <td>27°</td>
+        <td>26°</td>
+      </tr>
+      <tr>
+        <th scope="row">Viernes</th>
+        <td>13°</td>
+        <td>21°</td>
+        <td>19°</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row">Promedio</th>
+        <td>14°</td>
+        <td>22.8°</td>
+        <td>21°</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TABLA 3: Con colspan en thead -->
+  <!-- ============================================================ -->
+  <h2>Tabla 3 — Ventas por semestre</h2>
+
+  <table border="1">
+    <caption>Ventas trimestrales por producto — Año 2026 (en miles de USD)</caption>
+    <thead>
+      <tr>
+        <td></td>
+        <th scope="colgroup" colspan="2">1er Semestre</th>
+        <th scope="colgroup" colspan="2">2do Semestre</th>
+      </tr>
+      <tr>
+        <th scope="col">Producto</th>
+        <th scope="col" abbr="Q1">Trimestre 1</th>
+        <th scope="col" abbr="Q2">Trimestre 2</th>
+        <th scope="col" abbr="Q3">Trimestre 3</th>
+        <th scope="col" abbr="Q4">Trimestre 4</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Laptop Pro</th>
+        <td>$120</td>
+        <td>$135</td>
+        <td>$142</td>
+        <td>$160</td>
+      </tr>
+      <tr>
+        <th scope="row">Monitor UHD</th>
+        <td>$80</td>
+        <td>$95</td>
+        <td>$88</td>
+        <td>$102</td>
+      </tr>
+      <tr>
+        <th scope="row">Teclado Mecánico</th>
+        <td>$25</td>
+        <td>$30</td>
+        <td>$28</td>
+        <td>$35</td>
+      </tr>
+      <tr>
+        <th scope="row">Mouse Ergonómico</th>
+        <td>$15</td>
+        <td>$18</td>
+        <td>$20</td>
+        <td>$22</td>
+      </tr>
+      <tr>
+        <th scope="row">Webcam HD</th>
+        <td>$10</td>
+        <td>$12</td>
+        <td>$14</td>
+        <td>$11</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row">Total</th>
+        <td>$250</td>
+        <td>$290</td>
+        <td>$292</td>
+        <td>$330</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TABLA 4: Con rowspan y múltiples tbody -->
+  <!-- ============================================================ -->
+  <h2>Tabla 4 — Horario de clases</h2>
+
+  <table border="1">
+    <caption>Horario semanal del curso de Desarrollo Web — Turno mañana</caption>
+    <thead>
+      <tr>
+        <th scope="col">Turno</th>
+        <th scope="col">Hora</th>
+        <th scope="col">Materia</th>
+        <th scope="col">Profesor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="rowgroup" rowspan="3">Mañana</th>
+        <td>08:00 - 09:30</td>
+        <td>HTML y CSS</td>
+        <td>Prof. Álvarez</td>
+      </tr>
+      <tr>
+        <td>09:45 - 11:15</td>
+        <td>JavaScript</td>
+        <td>Prof. Fernández</td>
+      </tr>
+      <tr>
+        <td>11:30 - 13:00</td>
+        <td>React</td>
+        <td>Prof. Domínguez</td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr>
+        <th scope="rowgroup" rowspan="2">Tarde</th>
+        <td>14:00 - 15:30</td>
+        <td>Node.js</td>
+        <td>Prof. Castro</td>
+      </tr>
+      <tr>
+        <td>15:45 - 17:15</td>
+        <td>Base de datos</td>
+        <td>Prof. Herrera</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row" colspan="3">Total de horas diarias</th>
+        <td>7.5 hs</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TABLA 5: Con headers + id (tabla compleja) -->
+  <!-- ============================================================ -->
+  <h2>Tabla 5 — Presupuesto por región</h2>
+
+  <p id="desc-tabla5">
+    Esta tabla cruza regiones geográficas con categorías de gasto.
+    Las filas representan regiones y las columnas representan categorías.
+  </p>
+
+  <table border="1" aria-describedby="desc-tabla5">
+    <caption>Presupuesto asignado por región y categoría — 2026 (en USD)</caption>
+    <thead>
+      <tr>
+        <td></td>
+        <th id="t5-infra" scope="col">Infraestructura</th>
+        <th id="t5-rrhh" scope="col">Recursos Humanos</th>
+        <th id="t5-mkt" scope="col">Marketing</th>
+        <th id="t5-total" scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th id="t5-norte" scope="row">Zona Norte</th>
+        <td headers="t5-norte t5-infra">$40,000</td>
+        <td headers="t5-norte t5-rrhh">$25,000</td>
+        <td headers="t5-norte t5-mkt">$15,000</td>
+        <td headers="t5-norte t5-total">$80,000</td>
+      </tr>
+      <tr>
+        <th id="t5-sur" scope="row">Zona Sur</th>
+        <td headers="t5-sur t5-infra">$35,000</td>
+        <td headers="t5-sur t5-rrhh">$22,000</td>
+        <td headers="t5-sur t5-mkt">$18,000</td>
+        <td headers="t5-sur t5-total">$75,000</td>
+      </tr>
+      <tr>
+        <th id="t5-este" scope="row">Zona Este</th>
+        <td headers="t5-este t5-infra">$28,000</td>
+        <td headers="t5-este t5-rrhh">$20,000</td>
+        <td headers="t5-este t5-mkt">$12,000</td>
+        <td headers="t5-este t5-total">$60,000</td>
+      </tr>
+      <tr>
+        <th id="t5-oeste" scope="row">Zona Oeste</th>
+        <td headers="t5-oeste t5-infra">$32,000</td>
+        <td headers="t5-oeste t5-rrhh">$19,000</td>
+        <td headers="t5-oeste t5-mkt">$14,000</td>
+        <td headers="t5-oeste t5-total">$65,000</td>
+      </tr>
+      <tr>
+        <th id="t5-centro" scope="row">Zona Centro</th>
+        <td headers="t5-centro t5-infra">$50,000</td>
+        <td headers="t5-centro t5-rrhh">$30,000</td>
+        <td headers="t5-centro t5-mkt">$25,000</td>
+        <td headers="t5-centro t5-total">$105,000</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row">Total general</th>
+        <td>$185,000</td>
+        <td>$116,000</td>
+        <td>$84,000</td>
+        <td>$385,000</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- TABLA 6: Con colgroup, abbr y todo combinado -->
+  <!-- ============================================================ -->
+  <h2>Tabla 6 — Métricas de rendimiento web</h2>
+
+  <p id="desc-tabla6">
+    Comparativa de métricas Core Web Vitals de 5 páginas del sitio,
+    medidas con Lighthouse en Abril 2026.
+  </p>
+
+  <table border="1" aria-describedby="desc-tabla6">
+    <caption>Core Web Vitals por página — Auditoría Abril 2026</caption>
+    <colgroup>
+      <col span="1">
+      <col span="3">
+      <col span="1">
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Página</th>
+        <th scope="col" abbr="LCP">Largest Contentful Paint</th>
+        <th scope="col" abbr="FID">First Input Delay</th>
+        <th scope="col" abbr="CLS">Cumulative Layout Shift</th>
+        <th scope="col">Puntaje global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Inicio</th>
+        <td>1.2s</td>
+        <td>45ms</td>
+        <td>0.03</td>
+        <td>96/100</td>
+      </tr>
+      <tr>
+        <th scope="row">Productos</th>
+        <td>2.5s</td>
+        <td>120ms</td>
+        <td>0.15</td>
+        <td>72/100</td>
+      </tr>
+      <tr>
+        <th scope="row">Blog</th>
+        <td>1.8s</td>
+        <td>60ms</td>
+        <td>0.05</td>
+        <td>89/100</td>
+      </tr>
+      <tr>
+        <th scope="row">Contacto</th>
+        <td>0.9s</td>
+        <td>30ms</td>
+        <td>0.01</td>
+        <td>99/100</td>
+      </tr>
+      <tr>
+        <th scope="row">Checkout</th>
+        <td>3.1s</td>
+        <td>200ms</td>
+        <td>0.22</td>
+        <td>58/100</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th scope="row">Promedio</th>
+        <td>1.9s</td>
+        <td>91ms</td>
+        <td>0.09</td>
+        <td>82.8/100</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- CHECKLIST DE BUENAS PRÁCTICAS -->
+  <!-- ============================================================ -->
+  <h2>Checklist de buenas prácticas aplicadas</h2>
+
+  <table border="1">
+    <caption>Verificación de buenas prácticas en cada tabla</caption>
+    <thead>
+      <tr>
+        <th scope="col">Práctica</th>
+        <th scope="col">T1</th>
+        <th scope="col">T2</th>
+        <th scope="col">T3</th>
+        <th scope="col">T4</th>
+        <th scope="col">T5</th>
+        <th scope="col">T6</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">&lt;caption&gt;</th>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">&lt;thead&gt; + &lt;tbody&gt; + &lt;tfoot&gt;</th>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">scope en todos los &lt;th&gt;</th>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">&lt;th&gt; para etiquetas (no &lt;td&gt;)</th>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">scope="row" en encabezados de fila</th>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">scope="colgroup" / "rowgroup"</th>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+        <td>✔</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <th scope="row">headers + id (tabla compleja)</th>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <th scope="row">abbr en &lt;th&gt; largos</th>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">aria-describedby</th>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+        <td>✔</td>
+      </tr>
+      <tr>
+        <th scope="row">Múltiples &lt;tbody&gt;</th>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <th scope="row">&lt;colgroup&gt; + &lt;col&gt;</th>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>✔</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+  <p><em>Referencia: <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Advanced">MDN — Funciones
+        avanzadas de tablas y accesibilidad</a></em></p>
+
+</body>
+
+</html>

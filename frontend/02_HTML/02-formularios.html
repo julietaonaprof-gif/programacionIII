@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guía completa de formularios HTML con buenas prácticas y estructura semántica">
+  <title>Guía Completa de Formularios HTML — Buenas Prácticas</title>
+</head>
+
+<body>
+
+  <!--
+    ESTRUCTURA SEMÁNTICA DEL DOCUMENTO:
+    <header>  → encabezado de la página (logo, título, nav)
+    <nav>     → navegación principal
+    <main>    → contenido principal (SOLO UNO por página)
+    <section> → sección temática (tiene su propio <h2>)
+    <article> → contenido independiente y reutilizable
+    <aside>   → contenido relacionado pero secundario
+    <footer>  → pie de página
+
+    📖 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/main
+    📖 https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure
+  -->
+
+
+  <!-- ============================================================ -->
+  <!-- HEADER: encabezado de la página -->
+  <!-- ============================================================ -->
+  <header>
+    <h1>Guía Completa de Formularios en HTML</h1>
+    <p>Todos los elementos de formulario con buenas prácticas, estructura semántica y accesibilidad.</p>
+
+    <!--
+      NAV: navegación del sitio.
+      Usar <nav> solo para bloques de navegación principales.
+      Los links internos de la página (anclas) también van acá.
+      📖 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav
+    -->
+    <nav aria-label="Índice de la guía">
+      <h2>Índice</h2>
+      <ol>
+        <li><a href="#form-basico">Formulario básico</a></li>
+        <li><a href="#form-registro">Registro de usuario</a></li>
+        <li><a href="#form-fieldset">Fieldset y Legend</a></li>
+        <li><a href="#form-seleccion">Checkboxes, Radios y Select</a></li>
+        <li><a href="#form-textarea">Textarea y Datalist</a></li>
+        <li><a href="#form-archivos">Subida de archivos</a></li>
+        <li><a href="#form-especiales">Campos especiales</a></li>
+        <li><a href="#form-botones">Botones</a></li>
+        <li><a href="#form-meter">Meter, Progress y Output</a></li>
+        <li><a href="#form-completo">Formulario completo</a></li>
+      </ol>
+    </nav>
+  </header>
+
+
+  <!-- ============================================================ -->
+  <!-- MAIN: contenido principal — SOLO UNO por página -->
+  <!-- ============================================================ -->
+  <main>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 1: FORMULARIO BÁSICO -->
+    <!-- ======================================================== -->
+    <section id="form-basico" aria-labelledby="titulo-basico">
+      <h2 id="titulo-basico">1. Formulario básico</h2>
+      <p>
+        Los tres elementos mínimos: <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>
+        y <code>&lt;input&gt;</code>.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form">MDN — &lt;form&gt;</a>
+      </p>
+
+      <!--
+        <form> — Contenedor del formulario.
+          action: URL donde se envían los datos.
+          method: GET (datos en la URL) o POST (datos en el cuerpo HTTP).
+
+        Cuándo usar cada method:
+          GET  → búsquedas, filtros (los datos se ven en la URL, se puede copiar el link)
+          POST → registro, login, datos sensibles (los datos NO se ven en la URL)
+      -->
+      <form action="/enviar" method="POST">
+
+        <!--
+          <label> describe el campo.
+          "for" se conecta con el "id" del input.
+          Esto permite:
+            1) Clic en el texto = enfoca el input
+            2) Lectores de pantalla anuncian el nombre del campo
+          NUNCA usar un input sin label.
+        -->
+        <label for="f1-nombre">Nombre:</label><br>
+        <input type="text" id="f1-nombre" name="nombre" placeholder="Ej: Juan Pérez" required autocomplete="name">
+
+        <br><br>
+
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 2: REGISTRO -->
+    <!-- ======================================================== -->
+    <section id="form-registro" aria-labelledby="titulo-registro">
+      <h2 id="titulo-registro">2. Registro de usuario</h2>
+      <p>
+        Múltiples tipos de input con validación nativa del navegador.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">MDN — &lt;input&gt;</a>
+      </p>
+
+      <form action="/registro" method="POST" novalidate>
+        <!--
+          novalidate en el <form>: desactiva la validación nativa del navegador.
+          Útil si vas a validar con JavaScript personalizado.
+          Si no lo ponés, el navegador valida automáticamente al hacer submit.
+        -->
+
+        <!-- type="text" — Texto libre, una línea -->
+        <label for="f2-nombre">Nombre completo:</label><br>
+        <input type="text" id="f2-nombre" name="nombre" placeholder="María García" required minlength="2" maxlength="60"
+          autocomplete="name" aria-describedby="f2-nombre-ayuda">
+        <!--
+          aria-describedby: conecta el input con un texto de ayuda.
+          El lector de pantalla lee primero el label y después la descripción.
+        -->
+        <br>
+        <small id="f2-nombre-ayuda">Entre 2 y 60 caracteres.</small>
+
+        <br><br>
+
+        <!-- type="email" — Valida formato con @. Teclado con @ en celulares. -->
+        <label for="f2-email">Correo electrónico:</label><br>
+        <input type="email" id="f2-email" name="email" placeholder="tu@email.com" required autocomplete="email">
+
+        <br><br>
+
+        <!--
+          type="password" — Oculta caracteres.
+          NO encripta nada. Siempre usar HTTPS.
+          autocomplete="new-password": indica contraseña nueva (no autocompletar con la vieja).
+        -->
+        <label for="f2-pass">Contraseña:</label><br>
+        <input type="password" id="f2-pass" name="password" placeholder="Mínimo 8 caracteres" required minlength="8"
+          autocomplete="new-password" aria-describedby="f2-pass-ayuda">
+        <br>
+        <small id="f2-pass-ayuda">Debe tener al menos 8 caracteres.</small>
+
+        <br><br>
+
+        <!-- type="date" — Calendario nativo. Valor enviado: YYYY-MM-DD. -->
+        <label for="f2-fecha">Fecha de nacimiento:</label><br>
+        <input type="date" id="f2-fecha" name="nacimiento" min="1920-01-01" max="2010-12-31" required>
+
+        <br><br>
+
+        <!--
+          type="tel" — NO valida formato (varían por país).
+          Muestra teclado numérico en celulares.
+          Usar pattern + title para validar.
+        -->
+        <label for="f2-tel">Teléfono:</label><br>
+        <input type="tel" id="f2-tel" name="telefono" placeholder="+54 11 1234-5678" pattern="[+]?[0-9\s\-]{7,20}"
+          title="Número de teléfono válido (7 a 20 dígitos)" autocomplete="tel">
+
+        <br><br>
+
+        <button type="submit">Crear cuenta</button>
+        <button type="reset">Limpiar</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 3: FIELDSET Y LEGEND -->
+    <!-- ======================================================== -->
+    <section id="form-fieldset" aria-labelledby="titulo-fieldset">
+      <h2 id="titulo-fieldset">3. Agrupación con <code>&lt;fieldset&gt;</code> y <code>&lt;legend&gt;</code></h2>
+      <p>
+        <code>&lt;fieldset&gt;</code> agrupa campos relacionados (dibuja un borde).<br>
+        <code>&lt;legend&gt;</code> le da título al grupo.<br>
+        Lectores de pantalla anuncian el legend antes de cada campo del grupo.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset">MDN — &lt;fieldset&gt;</a>
+      </p>
+
+      <form action="/pedido" method="POST">
+
+        <fieldset>
+          <legend>Datos personales</legend>
+
+          <label for="f3-nombre">Nombre:</label><br>
+          <input type="text" id="f3-nombre" name="nombre" required autocomplete="name">
+          <br><br>
+
+          <label for="f3-email">Email:</label><br>
+          <input type="email" id="f3-email" name="email" required autocomplete="email">
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+          <legend>Dirección de envío</legend>
+
+          <label for="f3-calle">Calle y número:</label><br>
+          <input type="text" id="f3-calle" name="calle" required autocomplete="address-line1">
+          <br><br>
+
+          <label for="f3-ciudad">Ciudad:</label><br>
+          <input type="text" id="f3-ciudad" name="ciudad" required>
+          <br><br>
+
+          <!--
+            inputmode="numeric": teclado numérico en celulares
+            SIN las flechitas que trae type="number".
+            Ideal para códigos postales, DNI, tarjetas.
+          -->
+          <label for="f3-cp">Código postal:</label><br>
+          <input type="text" id="f3-cp" name="codigo_postal" inputmode="numeric" pattern="[0-9]{4,6}"
+            title="Código postal de 4 a 6 dígitos" autocomplete="postal-code">
+        </fieldset>
+
+        <br>
+
+        <!--
+          fieldset disabled: desactiva TODOS los campos del grupo.
+          Útil para secciones que dependen de una condición.
+        -->
+        <fieldset disabled>
+          <legend>Facturación (próximamente)</legend>
+          <label for="f3-cuit">CUIT:</label><br>
+          <input type="text" id="f3-cuit" name="cuit">
+        </fieldset>
+
+        <br>
+        <button type="submit">Realizar pedido</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 4: CHECKBOX, RADIO, SELECT -->
+    <!-- ======================================================== -->
+    <section id="form-seleccion" aria-labelledby="titulo-seleccion">
+      <h2 id="titulo-seleccion">4. Checkboxes, Radios y Select</h2>
+      <p>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox">MDN — checkbox</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio">MDN — radio</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select">MDN — select</a>
+      </p>
+
+      <form action="/encuesta" method="POST">
+
+        <!--
+          CHECKBOX: selección múltiple (0, 1 o varios).
+          - Mismo "name" para agruparse lógicamente.
+          - "value" es lo que recibe el servidor.
+          - "checked" marca por defecto.
+          - Envolver en <label> agranda el área de clic.
+        -->
+        <fieldset>
+          <legend>¿Qué tecnologías usás? (varias)</legend>
+          <label><input type="checkbox" name="tech" value="html"> HTML</label><br>
+          <label><input type="checkbox" name="tech" value="css"> CSS</label><br>
+          <label><input type="checkbox" name="tech" value="js" checked> JavaScript</label><br>
+          <label><input type="checkbox" name="tech" value="python"> Python</label>
+        </fieldset>
+
+        <br>
+
+        <!--
+          RADIO: selección única dentro del grupo.
+          TODOS deben tener el MISMO "name".
+        -->
+        <fieldset>
+          <legend>¿Cuál es tu nivel? (uno solo)</legend>
+          <label><input type="radio" name="nivel" value="principiante" required> Principiante</label><br>
+          <label><input type="radio" name="nivel" value="intermedio"> Intermedio</label><br>
+          <label><input type="radio" name="nivel" value="avanzado"> Avanzado</label>
+        </fieldset>
+
+        <br>
+
+        <!--
+          SELECT SIMPLE: menú desplegable.
+          Primera opción sin value = placeholder.
+          "value" de cada option es lo que recibe el servidor.
+        -->
+        <fieldset>
+          <legend>Tu país</legend>
+          <label for="f4-pais">País:</label><br>
+          <select id="f4-pais" name="pais" required>
+            <option value="">-- Seleccioná --</option>
+            <option value="ar">Argentina</option>
+            <option value="br">Brasil</option>
+            <option value="cl">Chile</option>
+            <option value="uy">Uruguay</option>
+          </select>
+        </fieldset>
+
+        <br>
+
+        <!--
+          SELECT con OPTGROUP: agrupa opciones bajo subtítulos.
+          Los subtítulos NO son seleccionables.
+          📖 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/optgroup
+        -->
+        <fieldset>
+          <legend>Lenguaje favorito</legend>
+          <label for="f4-lang">Lenguaje:</label><br>
+          <select id="f4-lang" name="lenguaje">
+            <option value="">-- Elegí uno --</option>
+            <optgroup label="Frontend">
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="js">JavaScript</option>
+            </optgroup>
+            <optgroup label="Backend">
+              <option value="python">Python</option>
+              <option value="java">Java</option>
+              <option value="node">Node.js</option>
+            </optgroup>
+          </select>
+        </fieldset>
+
+        <br>
+
+        <!--
+          SELECT con MULTIPLE: elegir varias opciones (Ctrl+clic).
+          "size" define cuántas opciones se ven sin scroll.
+        -->
+        <fieldset>
+          <legend>Intereses (Ctrl+clic para varios)</legend>
+          <label for="f4-intereses">Intereses:</label><br>
+          <select id="f4-intereses" name="intereses" multiple size="4">
+            <option value="web">Desarrollo Web</option>
+            <option value="mobile">Desarrollo Móvil</option>
+            <option value="data">Ciencia de Datos</option>
+            <option value="devops">DevOps</option>
+            <option value="seguridad">Ciberseguridad</option>
+          </select>
+        </fieldset>
+
+        <br>
+        <button type="submit">Enviar encuesta</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 5: TEXTAREA Y DATALIST -->
+    <!-- ======================================================== -->
+    <section id="form-textarea" aria-labelledby="titulo-textarea">
+      <h2 id="titulo-textarea">5. Textarea y Datalist</h2>
+      <p>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea">MDN — &lt;textarea&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist">MDN — &lt;datalist&gt;</a>
+      </p>
+
+      <form action="/contacto" method="POST">
+
+        <!--
+          TEXTAREA: texto multilínea.
+          - TIENE etiqueta de cierre (no es vacío como <input>).
+          - rows/cols: tamaño inicial visible.
+          - Texto por defecto va ENTRE las etiquetas, no en "value".
+          - El usuario puede redimensionarlo (salvo que lo impidas con CSS).
+        -->
+        <label for="f5-mensaje">Tu mensaje:</label><br>
+        <textarea id="f5-mensaje" name="mensaje" rows="5" cols="50" placeholder="Escribí tu consulta..." required
+          minlength="10" maxlength="2000" aria-describedby="f5-mensaje-ayuda"></textarea>
+        <br>
+        <small id="f5-mensaje-ayuda">Entre 10 y 2000 caracteres.</small>
+
+        <br><br>
+
+        <!--
+          DATALIST: sugiere opciones mientras el usuario escribe.
+          A diferencia de <select>, permite escribir valores libres.
+          Se conecta al input con el atributo "list".
+        -->
+        <label for="f5-ciudad">Ciudad (escribí o elegí):</label><br>
+        <input type="text" id="f5-ciudad" name="ciudad" list="ciudades" placeholder="Empezá a escribir...">
+
+        <datalist id="ciudades">
+          <option value="Buenos Aires">
+          <option value="Córdoba">
+          <option value="Rosario">
+          <option value="Mendoza">
+          <option value="La Plata">
+          <option value="Mar del Plata">
+          <option value="Salta">
+        </datalist>
+
+        <br><br>
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 6: FILE UPLOAD -->
+    <!-- ======================================================== -->
+    <section id="form-archivos" aria-labelledby="titulo-archivos">
+      <h2 id="titulo-archivos">6. Subida de archivos</h2>
+      <p>
+        El formulario <strong>DEBE</strong> tener <code>enctype="multipart/form-data"</code>
+        y <code>method="POST"</code>.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file">MDN — input type="file"</a>
+      </p>
+
+      <!--
+        enctype="multipart/form-data": OBLIGATORIO para archivos.
+        Sin esto, solo se envía el nombre del archivo, no el contenido.
+      -->
+      <form action="/subir" method="POST" enctype="multipart/form-data">
+
+        <!-- accept="image/*": solo imágenes (jpg, png, gif, webp, etc.) -->
+        <label for="f6-foto">Foto de perfil:</label><br>
+        <input type="file" id="f6-foto" name="foto" accept="image/*">
+
+        <br><br>
+
+        <!-- multiple: permite seleccionar varios archivos a la vez -->
+        <label for="f6-docs">Documentos (PDF o Word, varios):</label><br>
+        <input type="file" id="f6-docs" name="documentos" accept=".pdf,.doc,.docx" multiple>
+
+        <br><br>
+
+        <!--
+          capture: en celulares, abre la cámara directamente.
+          "user" = cámara frontal (selfie)
+          "environment" = cámara trasera
+        -->
+        <label for="f6-selfie">Tomar foto (solo celulares):</label><br>
+        <input type="file" id="f6-selfie" name="selfie" accept="image/*" capture="user">
+
+        <br><br>
+        <button type="submit">Subir archivos</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 7: CAMPOS ESPECIALES -->
+    <!-- ======================================================== -->
+    <section id="form-especiales" aria-labelledby="titulo-especiales">
+      <h2 id="titulo-especiales">7. Campos especiales</h2>
+
+      <form action="/config" method="POST">
+
+        <!--
+          HIDDEN: invisible para el usuario, se envía con el form.
+          Uso: tokens CSRF, IDs internos, versiones.
+        -->
+        <input type="hidden" name="csrf_token" value="tok3n_s3gur0_123">
+        <input type="hidden" name="form_version" value="2.1">
+        <p><em>(Hay 2 campos hidden invisibles en este formulario)</em></p>
+
+        <!-- COLOR: abre el selector de color del sistema operativo -->
+        <label for="f7-color">Color favorito:</label>
+        <input type="color" id="f7-color" name="color" value="#3498db">
+
+        <br><br>
+
+        <!--
+          NUMBER: solo números, con flechitas (spinners).
+          step="0.01" permite decimales de 2 cifras.
+          step="any" permite cualquier decimal.
+        -->
+        <label for="f7-precio">Precio:</label>
+        <input type="number" id="f7-precio" name="precio" min="0" max="999999" step="0.01" placeholder="0.00">
+
+        <br><br>
+
+        <!--
+          RANGE: slider deslizable.
+          No muestra el valor por defecto; usar <output> para mostrarlo.
+          "list" conecta con un datalist para mostrar marcas.
+        -->
+        <label for="f7-brillo">Brillo:</label>
+        <input type="range" id="f7-brillo" name="brillo" min="0" max="100" step="5" value="50" list="marcas-brillo"
+          aria-describedby="f7-brillo-desc">
+        <datalist id="marcas-brillo">
+          <option value="0" label="Mín">
+          <option value="50" label="Medio">
+          <option value="100" label="Máx">
+        </datalist>
+        <br>
+        <small id="f7-brillo-desc">Deslizá para ajustar el brillo (0-100).</small>
+
+        <br><br>
+
+        <!-- URL: valida que tenga protocolo (https://) -->
+        <label for="f7-web">Tu sitio web:</label><br>
+        <input type="url" id="f7-web" name="sitio" placeholder="https://ejemplo.com" autocomplete="url">
+
+        <br><br>
+
+        <!-- SEARCH: campo optimizado para búsqueda (puede tener X para limpiar) -->
+        <label for="f7-buscar">Buscar:</label><br>
+        <input type="search" id="f7-buscar" name="buscar" placeholder="Buscar configuración...">
+
+        <br><br>
+
+        <!-- Fechas y horas -->
+        <fieldset>
+          <legend>Fecha y hora</legend>
+
+          <!-- DATE: selector de calendario. Valor: YYYY-MM-DD -->
+          <label for="f7-fecha">Fecha:</label>
+          <input type="date" id="f7-fecha" name="fecha">
+          <br><br>
+
+          <!-- TIME: selector de hora. Valor: hh:mm. step en segundos (900=15min) -->
+          <label for="f7-hora">Hora:</label>
+          <input type="time" id="f7-hora" name="hora" step="900">
+          <br><br>
+
+          <!-- DATETIME-LOCAL: fecha + hora combinadas. Valor: YYYY-MM-DDThh:mm -->
+          <label for="f7-reunion">Reunión:</label>
+          <input type="datetime-local" id="f7-reunion" name="reunion">
+          <br><br>
+
+          <!-- MONTH: mes y año. Valor: YYYY-MM -->
+          <label for="f7-mes">Mes:</label>
+          <input type="month" id="f7-mes" name="mes">
+          <br><br>
+
+          <!-- WEEK: semana del año ISO. Valor: YYYY-Www -->
+          <label for="f7-semana">Semana:</label>
+          <input type="week" id="f7-semana" name="semana">
+        </fieldset>
+
+        <br>
+        <button type="submit">Guardar</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 8: BOTONES -->
+    <!-- ======================================================== -->
+    <section id="form-botones" aria-labelledby="titulo-botones">
+      <h2 id="titulo-botones">8. Botones — <code>&lt;button&gt;</code> vs <code>&lt;input&gt;</code></h2>
+      <p>
+        <code>&lt;button&gt;</code> puede contener HTML adentro (iconos, imágenes).<br>
+        <code>&lt;input type="submit"&gt;</code> solo acepta texto plano.<br>
+        <strong>Preferir siempre <code>&lt;button&gt;</code>.</strong><br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button">MDN — &lt;button&gt;</a>
+      </p>
+
+      <form action="/accion" method="POST">
+
+        <label for="f8-dato">Dato:</label>
+        <input type="text" id="f8-dato" name="dato" value="Hola">
+        <br><br>
+
+        <!--
+          <button> tipos:
+          - type="submit" (DEFAULT dentro de un form): envía el formulario
+          - type="reset": restaura valores originales
+          - type="button": no hace nada (para JavaScript)
+
+          OJO: si no ponés type, un <button> dentro de un form
+          actúa como submit por defecto.
+        -->
+        <button type="submit">Enviar</button>
+        <button type="reset">Limpiar</button>
+        <button type="button" onclick="alert('¡Hola!')">Acción JS</button>
+
+        <br><br>
+
+        <!--
+          formaction: sobreescribe el action del form solo para este botón.
+          formnovalidate: envía sin validar (útil para "guardar borrador").
+        -->
+        <button type="submit" formaction="/borrador" formmethod="post" formnovalidate>
+          Guardar borrador (sin validar)
+        </button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 9: METER, PROGRESS, OUTPUT -->
+    <!-- ======================================================== -->
+    <section id="form-meter" aria-labelledby="titulo-meter">
+      <h2 id="titulo-meter">9. Meter, Progress y Output</h2>
+      <p>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meter">MDN — &lt;meter&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">MDN — &lt;progress&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">MDN — &lt;output&gt;</a>
+      </p>
+
+      <!--
+        METER: valor escalar dentro de un rango conocido.
+        low/high: umbrales. optimum: valor ideal.
+        El navegador puede cambiar el color según si el valor es bueno o malo.
+      -->
+      <label for="f9-disco">Uso de disco:</label>
+      <meter id="f9-disco" min="0" max="100" low="50" high="80" optimum="30" value="72">72%</meter> (72%)
+
+      <br><br>
+
+      <!--
+        PROGRESS: progreso de una tarea.
+        Sin value = barra indeterminada (animada).
+      -->
+      <label for="f9-progreso">Carga:</label>
+      <progress id="f9-progreso" max="100" value="65">65%</progress> (65%)
+
+      <br><br>
+
+      <label>Procesando...</label>
+      <progress></progress> (indeterminado)
+
+      <br><br>
+
+      <!--
+        OUTPUT: resultado de un cálculo.
+        "for" indica de qué inputs depende.
+        El cálculo se hace con JS inline (oninput en el form).
+      -->
+      <form oninput="resultado.value = parseInt(a.value) + parseInt(b.value)">
+        <label>Suma:</label>
+        <input type="number" name="a" value="10" aria-label="Número A">
+        +
+        <input type="number" name="b" value="20" aria-label="Número B">
+        =
+        <output name="resultado" for="a b">30</output>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 10: FORMULARIO COMPLETO -->
+    <!-- ======================================================== -->
+    <section id="form-completo" aria-labelledby="titulo-completo">
+      <h2 id="titulo-completo">10. Formulario completo — Contacto profesional</h2>
+      <p>Todas las buenas prácticas aplicadas en un formulario realista.</p>
+
+      <form action="/contacto" method="POST" enctype="multipart/form-data">
+
+        <fieldset>
+          <legend>Tus datos</legend>
+
+          <label for="fc-nombre">Nombre completo:</label><br>
+          <input type="text" id="fc-nombre" name="nombre" required minlength="2" maxlength="60" autocomplete="name"
+            placeholder="María García" aria-describedby="fc-nombre-ayuda">
+          <br>
+          <small id="fc-nombre-ayuda">Nombre y apellido.</small>
+
+          <br><br>
+
+          <label for="fc-email">Email:</label><br>
+          <input type="email" id="fc-email" name="email" required autocomplete="email" placeholder="tu@email.com">
+
+          <br><br>
+
+          <label for="fc-tel">Teléfono (opcional):</label><br>
+          <input type="tel" id="fc-tel" name="telefono" autocomplete="tel" placeholder="+54 11 1234-5678">
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+          <legend>Tu consulta</legend>
+
+          <label for="fc-asunto">Asunto:</label><br>
+          <select id="fc-asunto" name="asunto" required>
+            <option value="">-- Elegí un asunto --</option>
+            <option value="consulta">Consulta general</option>
+            <option value="soporte">Soporte técnico</option>
+            <option value="ventas">Ventas</option>
+            <option value="otro">Otro</option>
+          </select>
+
+          <br><br>
+
+          <fieldset>
+            <legend>Prioridad</legend>
+            <label><input type="radio" name="prioridad" value="baja" checked> Baja</label>
+            <label><input type="radio" name="prioridad" value="media"> Media</label>
+            <label><input type="radio" name="prioridad" value="alta"> Alta</label>
+          </fieldset>
+
+          <br>
+
+          <label for="fc-mensaje">Mensaje:</label><br>
+          <textarea id="fc-mensaje" name="mensaje" rows="6" cols="50" required minlength="20" maxlength="2000"
+            placeholder="Describí tu consulta..." aria-describedby="fc-mensaje-ayuda"></textarea>
+          <br>
+          <small id="fc-mensaje-ayuda">Mínimo 20 caracteres.</small>
+
+          <br><br>
+
+          <label for="fc-adjunto">Adjuntar archivo (opcional):</label><br>
+          <input type="file" id="fc-adjunto" name="adjunto" accept=".pdf,.jpg,.png,.doc,.docx">
+        </fieldset>
+
+        <br>
+
+        <label>
+          <input type="checkbox" name="newsletter" value="si">
+          Quiero recibir novedades por email
+        </label>
+
+        <br><br>
+
+        <label>
+          <input type="checkbox" name="privacidad" value="aceptada" required>
+          Acepto la <a href="/privacidad">política de privacidad</a>
+        </label>
+
+        <br><br>
+
+        <button type="submit">Enviar consulta</button>
+        <button type="reset">Limpiar todo</button>
+      </form>
+    </section>
+
+  </main>
+
+
+  <!-- ============================================================ -->
+  <!-- ASIDE: contenido complementario -->
+  <!-- ============================================================ -->
+  <aside aria-label="Recursos adicionales">
+    <h2>Recursos adicionales</h2>
+    <ul>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form">MDN — &lt;form&gt;</a></li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">MDN — &lt;input&gt;</a></li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes">MDN — Atributos ARIA</a>
+      </li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Learn/Forms">MDN — Guía de formularios web</a></li>
+    </ul>
+  </aside>
+
+
+  <!-- ============================================================ -->
+  <!-- FOOTER: pie de página -->
+  <!-- ============================================================ -->
+  <footer>
+    <hr>
+    <p>
+      <small>
+        Guía creada como material educativo — Abril 2026.<br>
+        Estructura semántica: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>,
+        <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code>,
+        <code>&lt;footer&gt;</code>.
+      </small>
+    </p>
+  </footer>
+
+</body>
+
+</html>

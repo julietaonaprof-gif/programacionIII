@@ -13,6 +13,7 @@ Curso completo de desarrollo frontend. Cada carpeta es una clase con archivos co
 | # | Carpeta | Tema | Estado |
 |---|---------|------|--------|
 | 1 | `01_HTML/` | HTML: estructura, head, textos, semántica, enlaces, imágenes, listas | ✅ |
+| 2 | `02_HTML/` | HTML: formularios, tablas, dialog, ejercicios formularios y tablas | ✅ |
 
 
 > Los temas y la cantidad de clases pueden cambiar a medida que avance el curso.
