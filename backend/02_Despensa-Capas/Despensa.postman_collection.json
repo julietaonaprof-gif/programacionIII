@@ -1,0 +1,80 @@
+{
+  "info": {
+    "_postman_id": "e90a9cc2-f157-4b86-804f-f96d634fa725",
+    "name": "Despensa",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15683350",
+    "_collection_link": "https://go.postman.co/collection/15683350-e90a9cc2-f157-4b86-804f-f96d634fa725?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3000/products",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear Producto",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Lavandina\",\n    \"category\": \"Limpieza\",\n    \"quantity\": 10,\n    \"purchaseDate\": \"2026-04-21\",\n    \"expDate\": \"2027-04-21\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:3000/products",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ProductByName",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:3000/productsbyname?name=Lavandina",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "productsbyname"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "Lavandina"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
