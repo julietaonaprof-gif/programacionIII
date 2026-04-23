@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía Completa — Etiqueta &lt;audio&gt; en HTML</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Guía Completa de <code>&lt;audio&gt;</code> en HTML</h1>
+    <p>
+      La etiqueta <code>&lt;audio&gt;</code> permite reproducir sonido directamente
+      en la página web sin plugins externos.<br>
+      📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio">MDN — &lt;audio&gt;</a>
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <!-- 1. AUDIO BÁSICO CON CONTROLES -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. Audio básico con controles</h2>
+      <p>
+        El atributo <code>controls</code> muestra el reproductor nativo del navegador
+        (play/pausa, barra de progreso, volumen).<br>
+        Sin <code>controls</code>, el audio existe pero el usuario no puede interactuar.
+      </p>
+
+      <!--
+        <audio> — Reproductor de audio.
+        controls: muestra los controles nativos (play, pausa, volumen, progreso).
+        El texto entre las etiquetas es el fallback: solo aparece si el
+        navegador NO soporta <audio> (hoy en día, prácticamente ninguno).
+      -->
+      <audio controls>
+        <source src="audio/cancion.mp3" type="audio/mpeg">
+        Tu navegador no soporta la etiqueta audio.
+      </audio>
+
+      <pre><code>&lt;audio controls&gt;
+  &lt;source src="audio/cancion.mp3" type="audio/mpeg"&gt;
+  Tu navegador no soporta la etiqueta audio.
+&lt;/audio&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 2. MÚLTIPLES FORMATOS (source) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. Múltiples formatos con <code>&lt;source&gt;</code></h2>
+      <p>
+        Se ponen varios <code>&lt;source&gt;</code> con diferentes formatos.
+        El navegador usa el <strong>primero que soporte</strong> e ignora el resto.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source">MDN — &lt;source&gt;</a>
+      </p>
+
+      <!--
+        <source> — Define una fuente de audio.
+          src: ruta al archivo.
+          type: tipo MIME del archivo. Ayuda al navegador a decidir
+                sin descargar el archivo.
+
+        Formatos principales:
+          audio/mpeg  → .mp3 (el más compatible, funciona en todos)
+          audio/ogg   → .ogg (libre de patentes, no va en Safari)
+          audio/wav   → .wav (sin compresión, archivos pesados)
+          audio/webm  → .webm (moderno, buena compresión)
+          audio/aac   → .aac / .m4a (usado por Apple)
+          audio/flac  → .flac (sin pérdida, archivos pesados)
+
+        El navegador recorre los <source> de arriba a abajo
+        y usa el primero que pueda reproducir.
+      -->
+      <audio controls>
+        <!-- Primero OGG (libre, buena compresión) -->
+        <source src="audio/cancion.ogg" type="audio/ogg">
+        <!-- Segundo MP3 (máxima compatibilidad) -->
+        <source src="audio/cancion.mp3" type="audio/mpeg">
+        <!-- Tercero WAV (fallback sin compresión) -->
+        <source src="audio/cancion.wav" type="audio/wav">
+        Tu navegador no soporta audio.
+      </audio>
+
+      <pre><code>&lt;audio controls&gt;
+  &lt;source src="audio/cancion.ogg" type="audio/ogg"&gt;
+  &lt;source src="audio/cancion.mp3" type="audio/mpeg"&gt;
+  &lt;source src="audio/cancion.wav" type="audio/wav"&gt;
+  Tu navegador no soporta audio.
+&lt;/audio&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 3. ATRIBUTO SRC DIRECTO -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. Usando <code>src</code> directo (sin source)</h2>
+      <p>
+        Si solo tenés un formato, podés poner el <code>src</code> directamente
+        en la etiqueta <code>&lt;audio&gt;</code> sin usar <code>&lt;source&gt;</code>.
+      </p>
+
+      <!--
+        src directo en <audio>: más corto, pero solo permite un formato.
+        Si necesitás múltiples formatos, usá <source>.
+      -->
+      <audio controls src="audio/cancion.mp3">
+        Tu navegador no soporta audio.
+      </audio>
+
+      <pre><code>&lt;audio controls src="audio/cancion.mp3"&gt;
+  Tu navegador no soporta audio.
+&lt;/audio&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 4. AUTOPLAY -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. Reproducción automática — <code>autoplay</code></h2>
+      <p>
+        <code>autoplay</code> intenta reproducir el audio automáticamente al cargar la página.<br>
+        <strong>IMPORTANTE:</strong> la mayoría de navegadores <strong>bloquean</strong>
+        el autoplay con sonido. Solo funciona si el audio tiene también <code>muted</code>,
+        o si el usuario ya interactuó con la página antes.
+      </p>
+
+      <!--
+        autoplay: intenta reproducir automáticamente.
+        muted: arranca silenciado.
+
+        Sin muted, la mayoría de navegadores bloquean el autoplay
+        para evitar que las páginas reproduzcan sonido sin permiso.
+        Es una política de los navegadores, no un bug.
+
+        📖 https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
+      -->
+      <audio controls autoplay muted>
+        <source src="audio/notificacion.mp3" type="audio/mpeg">
+      </audio>
+
+      <pre><code>&lt;!-- Funciona: autoplay + muted --&gt;
+&lt;audio controls autoplay muted&gt;
+  &lt;source src="audio/notificacion.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;!-- BLOQUEADO por el navegador: autoplay sin muted --&gt;
+&lt;audio controls autoplay&gt;
+  &lt;source src="audio/notificacion.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 5. LOOP -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. Repetir en bucle — <code>loop</code></h2>
+      <p>
+        <code>loop</code> hace que el audio se repita automáticamente
+        cuando llega al final. Útil para música de fondo o ambientación.
+      </p>
+
+      <!--
+        loop: cuando el audio termina, vuelve a empezar automáticamente.
+        Se puede combinar con autoplay y muted para música de fondo.
+      -->
+      <audio controls loop>
+        <source src="audio/ambiente.mp3" type="audio/mpeg">
+      </audio>
+
+      <pre><code>&lt;audio controls loop&gt;
+  &lt;source src="audio/ambiente.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;!-- Música de fondo automática silenciada en loop --&gt;
+&lt;audio autoplay muted loop&gt;
+  &lt;source src="audio/fondo.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 6. PRELOAD -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. Precarga — <code>preload</code></h2>
+      <p>
+        <code>preload</code> le indica al navegador qué tanto del audio
+        debería descargar anticipadamente al cargar la página.
+      </p>
+
+      <!--
+        preload tiene 3 valores:
+
+        "auto"     → El navegador descarga TODO el archivo anticipadamente.
+                     Bueno para audios cortos que el usuario seguro va a reproducir.
+                     Malo para archivos pesados o si hay muchos audios en la página.
+
+        "metadata" → Solo descarga los metadatos (duración, codec, etc.)
+                     NO descarga el audio en sí.
+                     Es el VALOR POR DEFECTO en la mayoría de navegadores.
+                     El mejor balance entre UX y performance.
+
+        "none"     → No descarga NADA hasta que el usuario presione play.
+                     Ideal para páginas con muchos audios (podcasts, listas).
+                     Ahorra ancho de banda.
+
+        NOTA: el navegador puede ignorar este atributo si tiene autoplay.
+      -->
+
+      <!-- Precargar todo (audio corto) -->
+      <p><strong>preload="auto"</strong> — Descarga todo:</p>
+      <audio controls preload="auto">
+        <source src="audio/efecto-corto.mp3" type="audio/mpeg">
+      </audio>
+
+      <br><br>
+
+      <!-- Solo metadatos (default) -->
+      <p><strong>preload="metadata"</strong> — Solo metadatos (duración, etc.):</p>
+      <audio controls preload="metadata">
+        <source src="audio/podcast-largo.mp3" type="audio/mpeg">
+      </audio>
+
+      <br><br>
+
+      <!-- No precargar nada (muchos audios en la página) -->
+      <p><strong>preload="none"</strong> — No descarga nada hasta que apretés play:</p>
+      <audio controls preload="none">
+        <source src="audio/cancion-pesada.mp3" type="audio/mpeg">
+      </audio>
+
+      <pre><code>&lt;audio controls preload="auto"&gt;...&lt;/audio&gt;     &lt;!-- Descarga todo --&gt;
+&lt;audio controls preload="metadata"&gt;...&lt;/audio&gt; &lt;!-- Solo metadatos --&gt;
+&lt;audio controls preload="none"&gt;...&lt;/audio&gt;     &lt;!-- Nada hasta play --&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 7. AUDIO SIN CONTROLES (para JavaScript) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. Audio sin controles — Controlado por JavaScript</h2>
+      <p>
+        Sin <code>controls</code>, el audio es invisible. Se controla
+        100% desde JavaScript. Útil para efectos de sonido, notificaciones,
+        o reproductores personalizados.
+      </p>
+
+      <!--
+        Sin "controls": el audio existe pero no se ve.
+        Se controla con JavaScript:
+          .play()       → reproduce
+          .pause()      → pausa
+          .currentTime  → posición actual (en segundos)
+          .volume       → volumen (0.0 a 1.0)
+          .muted        → true/false
+          .duration     → duración total (en segundos)
+          .paused       → true si está pausado
+          .ended        → true si terminó
+      -->
+      <audio id="efecto-click">
+        <source src="audio/click.mp3" type="audio/mpeg">
+      </audio>
+
+      <audio id="efecto-exito">
+        <source src="audio/exito.mp3" type="audio/mpeg">
+      </audio>
+
+      <!-- Botones que controlan los audios con JavaScript -->
+      <button type="button" onclick="document.getElementById('efecto-click').play()">
+        Reproducir sonido de click
+      </button>
+
+      <button type="button" onclick="document.getElementById('efecto-exito').play()">
+        Reproducir sonido de éxito
+      </button>
+
+      <pre><code>&lt;!-- Audio invisible (sin controls) --&gt;
+&lt;audio id="efecto-click"&gt;
+  &lt;source src="audio/click.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;!-- Botón que lo reproduce --&gt;
+&lt;button onclick="document.getElementById('efecto-click').play()"&gt;
+  Reproducir
+&lt;/button&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 8. REPRODUCTOR CUSTOM CON JS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. Reproductor personalizado con JavaScript</h2>
+      <p>
+        Podés ocultar los controles nativos y crear los tuyos propios
+        usando botones HTML y JavaScript.
+      </p>
+
+      <!--
+        Reproductor custom: el audio no tiene "controls",
+        los botones manejan todo con JS.
+
+        Métodos de audio útiles:
+          audio.play()     → reproduce
+          audio.pause()    → pausa
+          audio.load()     → recarga el audio desde el inicio
+
+        Propiedades útiles:
+          audio.currentTime → posición actual (leer/escribir)
+          audio.volume      → volumen de 0.0 a 1.0 (leer/escribir)
+          audio.duration    → duración total en segundos (solo lectura)
+          audio.paused      → ¿está pausado? (solo lectura)
+          audio.ended       → ¿terminó? (solo lectura)
+          audio.playbackRate → velocidad (1.0 = normal, 2.0 = doble)
+
+        Eventos útiles:
+          "play"         → empezó a reproducir
+          "pause"        → se pausó
+          "ended"        → terminó
+          "timeupdate"   → la posición cambió (se dispara continuamente)
+          "loadedmetadata" → se cargaron los metadatos (duración disponible)
+          "volumechange" → cambió el volumen
+          "error"        → hubo un error al cargar
+      -->
+      <audio id="mi-audio" preload="metadata">
+        <source src="audio/cancion.mp3" type="audio/mpeg">
+      </audio>
+
+      <div>
+        <button type="button" onclick="document.getElementById('mi-audio').play()">
+          ▶ Play
+        </button>
+        <button type="button" onclick="document.getElementById('mi-audio').pause()">
+          ⏸ Pausa
+        </button>
+        <button type="button" onclick="document.getElementById('mi-audio').currentTime = 0">
+          ⏮ Reiniciar
+        </button>
+        <button type="button" onclick="document.getElementById('mi-audio').currentTime += 10">
+          ⏩ +10s
+        </button>
+        <button type="button" onclick="document.getElementById('mi-audio').currentTime -= 10">
+          ⏪ -10s
+        </button>
+        <button type="button"
+          onclick="document.getElementById('mi-audio').volume = Math.min(1, document.getElementById('mi-audio').volume + 0.1)">
+          🔊 Subir volumen
+        </button>
+        <button type="button"
+          onclick="document.getElementById('mi-audio').volume = Math.max(0, document.getElementById('mi-audio').volume - 0.1)">
+          🔉 Bajar volumen
+        </button>
+        <button type="button"
+          onclick="document.getElementById('mi-audio').muted = !document.getElementById('mi-audio').muted">
+          🔇 Mute/Unmute
+        </button>
+        <button type="button" onclick="document.getElementById('mi-audio').playbackRate = 2.0">
+          ⏩ x2 velocidad
+        </button>
+        <button type="button" onclick="document.getElementById('mi-audio').playbackRate = 1.0">
+          ▶ x1 normal
+        </button>
+      </div>
+
+      <pre><code>&lt;audio id="mi-audio"&gt;
+  &lt;source src="audio/cancion.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;button onclick="document.getElementById('mi-audio').play()"&gt;Play&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-audio').pause()"&gt;Pausa&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-audio').currentTime = 0"&gt;Reiniciar&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-audio').volume += 0.1"&gt;+Vol&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-audio').playbackRate = 2"&gt;x2&lt;/button&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 9. AUDIO CON URL EXTERNA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>9. Audio desde una URL externa</h2>
+      <p>
+        El <code>src</code> puede ser un archivo local o una URL externa.
+        Funciona con cualquier URL pública que apunte a un archivo de audio.
+      </p>
+
+      <!--
+        El src puede ser:
+          - Ruta relativa: "audio/cancion.mp3"
+          - Ruta absoluta: "/assets/audio/cancion.mp3"
+          - URL externa:   "https://ejemplo.com/audio.mp3"
+
+        CORS: si la URL externa tiene restricciones CORS,
+        podés agregar crossorigin="anonymous" para pedirle
+        al servidor que permita el acceso.
+      -->
+      <audio controls preload="none" crossorigin="anonymous">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio.
+      </audio>
+
+      <pre><code>&lt;audio controls preload="none" crossorigin="anonymous"&gt;
+  &lt;source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+          type="audio/mpeg"&gt;
+&lt;/audio&gt;</code></pre>
+
+      <p>
+        <small>
+          <strong>crossorigin="anonymous"</strong>: pide el audio sin enviar cookies.
+          Necesario para manipular audio externo con JavaScript (Web Audio API).<br>
+          📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin">MDN — crossorigin</a>
+        </small>
+      </p>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 10. LISTA DE AUDIOS (podcast) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>10. Lista de audios (estilo podcast)</h2>
+      <p>
+        Cuando tenés varios audios en la misma página, es importante usar
+        <code>preload="none"</code> para no descargar todos a la vez.
+      </p>
+
+      <!--
+        Buena práctica para múltiples audios:
+        - preload="none" en todos (ahorra ancho de banda)
+        - Cada audio con su label descriptivo
+        - Estructura semántica con <article> para cada episodio
+      -->
+      <article>
+        <h3>Episodio 1 — Introducción a HTML</h3>
+        <p>Duración: 15 min | Publicado: 10/04/2026</p>
+        <audio controls preload="none">
+          <source src="audio/ep01-intro-html.mp3" type="audio/mpeg">
+        </audio>
+      </article>
+
+      <article>
+        <h3>Episodio 2 — Tablas y formularios</h3>
+        <p>Duración: 22 min | Publicado: 12/04/2026</p>
+        <audio controls preload="none">
+          <source src="audio/ep02-tablas-forms.mp3" type="audio/mpeg">
+        </audio>
+      </article>
+
+      <article>
+        <h3>Episodio 3 — Multimedia en la web</h3>
+        <p>Duración: 18 min | Publicado: 14/04/2026</p>
+        <audio controls preload="none">
+          <source src="audio/ep03-multimedia.mp3" type="audio/mpeg">
+        </audio>
+      </article>
+
+      <pre><code>&lt;article&gt;
+  &lt;h3&gt;Episodio 1 — Introducción&lt;/h3&gt;
+  &lt;p&gt;Duración: 15 min&lt;/p&gt;
+  &lt;audio controls preload="none"&gt;
+    &lt;source src="audio/ep01.mp3" type="audio/mpeg"&gt;
+  &lt;/audio&gt;
+&lt;/article&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 11. ACCESIBILIDAD -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>11. Accesibilidad en audio</h2>
+      <p>
+        El audio no es accesible por sí solo para personas sordas o con
+        dificultades auditivas. Hay que proveer alternativas.
+      </p>
+
+      <!--
+        Buenas prácticas de accesibilidad para audio:
+
+        1. Siempre proveer una transcripción de texto del audio.
+        2. Usar aria-label o aria-describedby para describir el audio.
+        3. No usar autoplay (molesta a usuarios de lectores de pantalla).
+        4. Si el audio tiene información importante, no depender solo del audio.
+      -->
+
+      <!-- Audio con descripción accesible y transcripción -->
+      <audio controls aria-label="Episodio 1 del podcast: Introducción a HTML, duración 15 minutos"
+        aria-describedby="transcripcion-ep1">
+        <source src="audio/ep01.mp3" type="audio/mpeg">
+      </audio>
+
+      <!--
+        Transcripción: el texto completo de lo que se dice en el audio.
+        Fundamental para accesibilidad.
+        Se puede ocultar con un <details> para no ocupar espacio visual.
+      -->
+      <details id="transcripcion-ep1">
+        <summary>Ver transcripción del Episodio 1</summary>
+        <p>
+          Bienvenidos al primer episodio de nuestro podcast sobre desarrollo web.
+          Hoy vamos a hablar sobre HTML, el lenguaje de marcado que forma la base
+          de toda página web. HTML significa HyperText Markup Language...
+          [transcripción completa del audio]
+        </p>
+      </details>
+
+      <pre><code>&lt;audio controls
+       aria-label="Episodio 1: Intro a HTML, 15 min"
+       aria-describedby="transcripcion"&gt;
+  &lt;source src="audio/ep01.mp3" type="audio/mpeg"&gt;
+&lt;/audio&gt;
+
+&lt;!-- Transcripción colapsable --&gt;
+&lt;details id="transcripcion"&gt;
+  &lt;summary&gt;Ver transcripción&lt;/summary&gt;
+  &lt;p&gt;Texto completo del audio...&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- TABLA RESUMEN -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Resumen de atributos de <code>&lt;audio&gt;</code></h2>
+
+      <table border="1" cellpadding="5">
+        <caption>Todos los atributos de la etiqueta audio</caption>
+        <thead>
+          <tr>
+            <th scope="col">Atributo</th>
+            <th scope="col">Valores</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">src</th>
+            <td>URL</td>
+            <td>Ruta al archivo de audio (alternativa a usar &lt;source&gt;)</td>
+          </tr>
+          <tr>
+            <th scope="row">controls</th>
+            <td>(booleano)</td>
+            <td>Muestra los controles nativos (play, pausa, volumen)</td>
+          </tr>
+          <tr>
+            <th scope="row">autoplay</th>
+            <td>(booleano)</td>
+            <td>Reproduce automáticamente (bloqueado sin muted)</td>
+          </tr>
+          <tr>
+            <th scope="row">muted</th>
+            <td>(booleano)</td>
+            <td>Arranca silenciado</td>
+          </tr>
+          <tr>
+            <th scope="row">loop</th>
+            <td>(booleano)</td>
+            <td>Se repite al terminar</td>
+          </tr>
+          <tr>
+            <th scope="row">preload</th>
+            <td>auto | metadata | none</td>
+            <td>Cuánto descargar anticipadamente</td>
+          </tr>
+          <tr>
+            <th scope="row">crossorigin</th>
+            <td>anonymous | use-credentials</td>
+            <td>Configuración CORS para audio externo</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br>
+
+      <table border="1" cellpadding="5">
+        <caption>Formatos de audio soportados</caption>
+        <thead>
+          <tr>
+            <th scope="col">Formato</th>
+            <th scope="col">MIME Type</th>
+            <th scope="col">Chrome</th>
+            <th scope="col">Firefox</th>
+            <th scope="col">Safari</th>
+            <th scope="col">Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">MP3</th>
+            <td>audio/mpeg</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>El más compatible. Usar como fallback siempre.</td>
+          </tr>
+          <tr>
+            <th scope="row">OGG Vorbis</th>
+            <td>audio/ogg</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>No</td>
+            <td>Libre de patentes. No funciona en Safari.</td>
+          </tr>
+          <tr>
+            <th scope="row">WAV</th>
+            <td>audio/wav</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sin compresión. Archivos muy pesados.</td>
+          </tr>
+          <tr>
+            <th scope="row">WebM</th>
+            <td>audio/webm</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>No</td>
+            <td>Buena compresión. No funciona en Safari.</td>
+          </tr>
+          <tr>
+            <th scope="row">AAC</th>
+            <td>audio/aac</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Usado por Apple (iTunes, iPhone).</td>
+          </tr>
+          <tr>
+            <th scope="row">FLAC</th>
+            <td>audio/flac</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sin pérdida. Archivos pesados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- BUENAS PRÁCTICAS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Buenas prácticas</h2>
+      <ol>
+        <li><strong>Siempre poner <code>controls</code></strong> a menos que controles el audio con JavaScript. Un audio
+          sin controles y sin JS es inaccesible.</li>
+        <li><strong>Proveer al menos MP3</strong> como formato. Es el que funciona en todos los navegadores.</li>
+        <li><strong>Usar <code>preload="none"</code></strong> si tenés varios audios en la página para ahorrar ancho de
+          banda.</li>
+        <li><strong>No usar <code>autoplay</code> con sonido</strong>. Los navegadores lo bloquean y es molesto para el
+          usuario.</li>
+        <li><strong>Siempre ofrecer una transcripción</strong> para accesibilidad (personas sordas o con dificultades
+          auditivas).</li>
+        <li><strong>Usar <code>aria-label</code></strong> para describir el contenido del audio a lectores de pantalla.
+        </li>
+        <li><strong>Incluir texto de fallback</strong> entre las etiquetas por si el navegador no soporta audio (raro
+          hoy).</li>
+        <li><strong>Especificar <code>type</code> en cada <code>&lt;source&gt;</code></strong> para que el navegador
+          sepa qué formato es sin descargarlo.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <hr>
+    <p><small>
+        Referencia: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio">MDN — &lt;audio&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Audio_codecs">MDN — Codecs de audio</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide">MDN — Guía de autoplay</a>
+        <br>Material educativo — Abril 2026
+      </small></p>
+  </footer>
+
+</body>
+
+</html>

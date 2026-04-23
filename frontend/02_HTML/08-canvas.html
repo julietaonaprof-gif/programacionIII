@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de &lt;canvas&gt; en HTML</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Guía de <code>&lt;canvas&gt;</code> en HTML</h1>
+    <p>
+      <code>&lt;canvas&gt;</code> es un contenedor en blanco donde se dibujan
+      gráficos, animaciones o juegos usando <strong>JavaScript</strong>.
+      La etiqueta sola no dibuja nada.<br>
+      📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas">MDN — &lt;canvas&gt;</a>
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <!-- 1. CANVAS BÁSICO -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. Canvas básico</h2>
+      <p>
+        <code>&lt;canvas&gt;</code> crea un área de dibujo.
+        Sin JavaScript, es un rectángulo vacío (invisible sin borde).
+      </p>
+
+      <!--
+        <canvas> — Área de dibujo.
+          id:     para acceder desde JavaScript.
+          width:  ancho en píxeles (default: 300).
+          height: alto en píxeles (default: 150).
+
+        El texto entre las etiquetas es fallback: solo aparece
+        si el navegador NO soporta canvas (muy raro hoy).
+
+        IMPORTANTE: width y height van como ATRIBUTOS, no como CSS.
+        Si los ponés con CSS, el canvas se estira y se ve pixelado.
+      -->
+      <canvas id="canvas1" width="400" height="200" style="border: 1px solid black;">
+        Tu navegador no soporta canvas.
+      </canvas>
+
+      <!--
+        Para dibujar, necesitás JavaScript:
+        1. Obtener el elemento canvas con getElementById
+        2. Obtener el "contexto" de dibujo con getContext('2d')
+        3. Usar los métodos del contexto para dibujar
+      -->
+      <script>
+        // 1. Obtener el canvas
+        var canvas1 = document.getElementById('canvas1');
+
+        // 2. Obtener el contexto 2D (el "pincel")
+        var ctx1 = canvas1.getContext('2d');
+
+        // 3. Dibujar un rectángulo azul
+        ctx1.fillStyle = '#3498db';           // Color de relleno
+        ctx1.fillRect(50, 50, 300, 100);      // x, y, ancho, alto
+      </script>
+
+      <pre><code>&lt;canvas id="canvas1" width="400" height="200"&gt;
+  Tu navegador no soporta canvas.
+&lt;/canvas&gt;
+
+&lt;script&gt;
+  var canvas = document.getElementById('canvas1');
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#3498db';
+  ctx.fillRect(50, 50, 300, 100);
+&lt;/script&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 2. FIGURAS BÁSICAS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. Figuras básicas — Rectángulos</h2>
+      <p>
+        Los rectángulos son las únicas figuras que canvas dibuja directamente.
+        Todo lo demás se hace con "paths" (trazados).
+      </p>
+
+      <canvas id="canvas2" width="500" height="200" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        Tres formas de dibujar rectángulos:
+          fillRect(x, y, ancho, alto)    → rectángulo RELLENO
+          strokeRect(x, y, ancho, alto)  → rectángulo solo BORDE
+          clearRect(x, y, ancho, alto)   → BORRA un área rectangular
+      -->
+      <script>
+        var ctx2 = document.getElementById('canvas2').getContext('2d');
+
+        // Rectángulo relleno (azul)
+        ctx2.fillStyle = '#3498db';
+        ctx2.fillRect(20, 20, 120, 80);
+
+        // Rectángulo solo borde (rojo)
+        ctx2.strokeStyle = '#e74c3c';
+        ctx2.lineWidth = 3;                // Grosor del borde
+        ctx2.strokeRect(170, 20, 120, 80);
+
+        // Rectángulo relleno (verde) y luego borrar parte
+        ctx2.fillStyle = '#2ecc71';
+        ctx2.fillRect(320, 20, 150, 150);
+        ctx2.clearRect(350, 50, 90, 90);   // Borra un hueco en el centro
+      </script>
+
+      <pre><code>// Rectángulo relleno
+ctx.fillStyle = '#3498db';
+ctx.fillRect(20, 20, 120, 80);
+
+// Rectángulo solo borde
+ctx.strokeStyle = '#e74c3c';
+ctx.lineWidth = 3;
+ctx.strokeRect(170, 20, 120, 80);
+
+// Borrar un área
+ctx.clearRect(350, 50, 90, 90);</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 3. LÍNEAS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. Líneas y trazados (paths)</h2>
+      <p>
+        Todo lo que no sea un rectángulo se dibuja con <strong>paths</strong>:
+        empezás un trazo, definís puntos, y después lo rellenás o dibujás el borde.
+      </p>
+
+      <canvas id="canvas3" width="500" height="200" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        Flujo de un path:
+          1. beginPath()      → empieza un trazo nuevo
+          2. moveTo(x, y)     → mueve el "lápiz" sin dibujar
+          3. lineTo(x, y)     → dibuja línea hasta ese punto
+          4. stroke()         → dibuja el borde del trazo
+          5. fill()           → rellena el trazo
+          6. closePath()      → cierra el trazo (une último punto con el primero)
+      -->
+      <script>
+        var ctx3 = document.getElementById('canvas3').getContext('2d');
+
+        // Línea simple
+        ctx3.beginPath();
+        ctx3.moveTo(20, 100);         // Punto de inicio
+        ctx3.lineTo(200, 30);         // Línea hasta acá
+        ctx3.strokeStyle = '#e74c3c';
+        ctx3.lineWidth = 2;
+        ctx3.stroke();
+
+        // Triángulo (3 líneas + closePath)
+        ctx3.beginPath();
+        ctx3.moveTo(250, 150);        // Punto inferior izquierdo
+        ctx3.lineTo(350, 30);         // Punto superior
+        ctx3.lineTo(450, 150);        // Punto inferior derecho
+        ctx3.closePath();             // Cierra: une con el primer punto
+        ctx3.fillStyle = '#9b59b6';
+        ctx3.fill();                  // Rellena el triángulo
+        ctx3.strokeStyle = '#8e44ad';
+        ctx3.lineWidth = 3;
+        ctx3.stroke();                // Dibuja el borde
+      </script>
+
+      <pre><code>// Línea simple
+ctx.beginPath();
+ctx.moveTo(20, 100);
+ctx.lineTo(200, 30);
+ctx.stroke();
+
+// Triángulo relleno con borde
+ctx.beginPath();
+ctx.moveTo(250, 150);
+ctx.lineTo(350, 30);
+ctx.lineTo(450, 150);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 4. CÍRCULOS Y ARCOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. Círculos y arcos</h2>
+      <p>
+        No existe un método "circle". Se usa <code>arc()</code> para dibujar
+        arcos y círculos completos.
+      </p>
+
+      <canvas id="canvas4" width="500" height="250" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        arc(x, y, radio, anguloInicio, anguloFin, sentidoAntihorario)
+
+          x, y         → centro del arco
+          radio        → radio en píxeles
+          anguloInicio → en radianes (0 = derecha, horizontal)
+          anguloFin    → en radianes
+          antihorario  → true/false (opcional, default false)
+
+        Un círculo completo: arc(x, y, radio, 0, Math.PI * 2)
+        Medio círculo:       arc(x, y, radio, 0, Math.PI)
+
+        Radianes útiles:
+          0            = 0°     (derecha)
+          Math.PI / 2  = 90°    (abajo)
+          Math.PI      = 180°   (izquierda)
+          Math.PI * 1.5 = 270°  (arriba)
+          Math.PI * 2  = 360°   (vuelta completa)
+      -->
+      <script>
+        var ctx4 = document.getElementById('canvas4').getContext('2d');
+
+        // Círculo relleno
+        ctx4.beginPath();
+        ctx4.arc(80, 120, 60, 0, Math.PI * 2);  // Centro (80,120), radio 60
+        ctx4.fillStyle = '#e74c3c';
+        ctx4.fill();
+
+        // Círculo solo borde
+        ctx4.beginPath();
+        ctx4.arc(230, 120, 60, 0, Math.PI * 2);
+        ctx4.strokeStyle = '#3498db';
+        ctx4.lineWidth = 4;
+        ctx4.stroke();
+
+        // Medio círculo (semicírculo)
+        ctx4.beginPath();
+        ctx4.arc(380, 120, 60, 0, Math.PI);      // Solo hasta PI = 180°
+        ctx4.fillStyle = '#2ecc71';
+        ctx4.fill();
+      </script>
+
+      <pre><code>// Círculo relleno
+ctx.beginPath();
+ctx.arc(80, 120, 60, 0, Math.PI * 2);
+ctx.fillStyle = '#e74c3c';
+ctx.fill();
+
+// Círculo solo borde
+ctx.beginPath();
+ctx.arc(230, 120, 60, 0, Math.PI * 2);
+ctx.stroke();
+
+// Semicírculo
+ctx.beginPath();
+ctx.arc(380, 120, 60, 0, Math.PI);
+ctx.fill();</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 5. TEXTO -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. Texto</h2>
+
+      <canvas id="canvas5" width="500" height="200" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        Texto en canvas:
+          fillText(texto, x, y)     → texto relleno
+          strokeText(texto, x, y)   → texto solo borde
+
+        Propiedades del texto:
+          font         → fuente (mismo formato que CSS)
+          textAlign    → alineación horizontal: left, center, right, start, end
+          textBaseline → alineación vertical: top, middle, bottom, alphabetic
+      -->
+      <script>
+        var ctx5 = document.getElementById('canvas5').getContext('2d');
+
+        // Texto relleno
+        ctx5.font = '30px Arial';
+        ctx5.fillStyle = '#2c3e50';
+        ctx5.fillText('¡Hola Canvas!', 20, 60);
+
+        // Texto solo borde
+        ctx5.font = 'bold 40px Georgia';
+        ctx5.strokeStyle = '#e74c3c';
+        ctx5.lineWidth = 2;
+        ctx5.strokeText('Texto con borde', 20, 130);
+
+        // Texto centrado
+        ctx5.font = '20px Verdana';
+        ctx5.fillStyle = '#7f8c8d';
+        ctx5.textAlign = 'center';
+        ctx5.fillText('Texto centrado en X=250', 250, 180);
+      </script>
+
+      <pre><code>// Texto relleno
+ctx.font = '30px Arial';
+ctx.fillStyle = '#2c3e50';
+ctx.fillText('¡Hola Canvas!', 20, 60);
+
+// Texto solo borde
+ctx.font = 'bold 40px Georgia';
+ctx.strokeText('Texto con borde', 20, 130);
+
+// Texto centrado
+ctx.textAlign = 'center';
+ctx.fillText('Centrado', 250, 180);</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 6. COLORES Y GRADIENTES -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. Colores y gradientes</h2>
+
+      <canvas id="canvas6" width="500" height="200" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        Colores: se pueden usar los mismos formatos que CSS:
+          '#ff0000'           → hexadecimal
+          'rgb(255, 0, 0)'    → RGB
+          'rgba(255,0,0,0.5)' → RGBA (con transparencia)
+          'red'               → nombre de color
+
+        Gradientes:
+          createLinearGradient(x0, y0, x1, y1) → gradiente lineal
+          createRadialGradient(x0, y0, r0, x1, y1, r1) → gradiente radial
+          .addColorStop(posicion, color) → agrega un color (posicion: 0 a 1)
+      -->
+      <script>
+        var ctx6 = document.getElementById('canvas6').getContext('2d');
+
+        // Gradiente lineal (izquierda a derecha)
+        var gradLineal = ctx6.createLinearGradient(0, 0, 220, 0);
+        gradLineal.addColorStop(0, '#3498db');    // Azul al inicio
+        gradLineal.addColorStop(1, '#e74c3c');    // Rojo al final
+        ctx6.fillStyle = gradLineal;
+        ctx6.fillRect(10, 10, 220, 80);
+
+        // Gradiente radial (centro hacia afuera)
+        var gradRadial = ctx6.createRadialGradient(370, 100, 10, 370, 100, 80);
+        gradRadial.addColorStop(0, '#f1c40f');    // Amarillo en el centro
+        gradRadial.addColorStop(1, '#e67e22');    // Naranja en el borde
+        ctx6.fillStyle = gradRadial;
+        ctx6.beginPath();
+        ctx6.arc(370, 100, 80, 0, Math.PI * 2);
+        ctx6.fill();
+
+        // Color con transparencia (RGBA)
+        ctx6.fillStyle = 'rgba(46, 204, 113, 0.5)';  // Verde 50% transparente
+        ctx6.fillRect(100, 60, 200, 120);
+      </script>
+
+      <pre><code>// Gradiente lineal
+var grad = ctx.createLinearGradient(0, 0, 220, 0);
+grad.addColorStop(0, '#3498db');
+grad.addColorStop(1, '#e74c3c');
+ctx.fillStyle = grad;
+ctx.fillRect(10, 10, 220, 80);
+
+// Gradiente radial
+var grad2 = ctx.createRadialGradient(370, 100, 10, 370, 100, 80);
+grad2.addColorStop(0, '#f1c40f');
+grad2.addColorStop(1, '#e67e22');
+ctx.fillStyle = grad2;
+
+// Transparencia
+ctx.fillStyle = 'rgba(46, 204, 113, 0.5)';</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 7. IMÁGENES -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. Dibujar imágenes</h2>
+      <p>
+        Se pueden dibujar imágenes dentro del canvas con <code>drawImage()</code>.
+      </p>
+
+      <canvas id="canvas7" width="500" height="200" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        drawImage() tiene 3 formas:
+
+        Forma simple (posición):
+          drawImage(imagen, x, y)
+
+        Con tamaño:
+          drawImage(imagen, x, y, ancho, alto)
+
+        Recortar y posicionar (sprite sheet):
+          drawImage(imagen, sx, sy, sAncho, sAlto, dx, dy, dAncho, dAlto)
+          s = source (origen), d = destination (destino)
+
+        IMPORTANTE: la imagen debe estar CARGADA antes de dibujarla.
+        Por eso se usa el evento onload.
+      -->
+      <script>
+        var ctx7 = document.getElementById('canvas7').getContext('2d');
+
+        // Crear imagen desde JavaScript
+        var img = new Image();
+        img.onload = function () {
+          // Se ejecuta cuando la imagen terminó de cargar
+          ctx7.drawImage(img, 10, 10);              // Tamaño original
+          ctx7.drawImage(img, 280, 10, 200, 180);   // Redimensionada
+        };
+        img.src = 'https://via.placeholder.com/250x180/3498db/ffffff?text=Canvas';
+
+        // Mientras carga, dibujar texto
+        ctx7.fillStyle = '#999';
+        ctx7.font = '16px Arial';
+        ctx7.fillText('Cargando imagen...', 10, 100);
+      </script>
+
+      <pre><code>var img = new Image();
+img.onload = function() {
+  ctx.drawImage(img, 10, 10);             // Posición
+  ctx.drawImage(img, 280, 10, 200, 180);  // Redimensionada
+};
+img.src = 'imagen.jpg';</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 8. ANIMACIÓN SIMPLE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. Animación simple</h2>
+      <p>
+        Las animaciones se hacen redibujando el canvas muchas veces por segundo
+        con <code>requestAnimationFrame()</code>.
+      </p>
+
+      <canvas id="canvas8" width="500" height="200" style="border: 1px solid black;">
+      </canvas>
+
+      <!--
+        requestAnimationFrame(funcion):
+        Le dice al navegador que ejecute la función antes del próximo repintado.
+        Se ejecuta ~60 veces por segundo (60fps).
+
+        Flujo de animación:
+          1. Borrar todo el canvas (clearRect)
+          2. Dibujar en la nueva posición
+          3. Actualizar las variables (mover)
+          4. Pedir el siguiente frame (requestAnimationFrame)
+      -->
+      <script>
+        var canvas8 = document.getElementById('canvas8');
+        var ctx8 = canvas8.getContext('2d');
+
+        var x = 0;       // Posición horizontal de la pelota
+        var y = 100;      // Posición vertical
+        var velocidad = 2; // Píxeles por frame
+        var radio = 20;
+
+        function animar() {
+          // 1. Borrar todo
+          ctx8.clearRect(0, 0, canvas8.width, canvas8.height);
+
+          // 2. Dibujar la pelota
+          ctx8.beginPath();
+          ctx8.arc(x, y, radio, 0, Math.PI * 2);
+          ctx8.fillStyle = '#e74c3c';
+          ctx8.fill();
+
+          // 3. Mover
+          x += velocidad;
+
+          // Si se sale por la derecha, vuelve a la izquierda
+          if (x > canvas8.width + radio) {
+            x = -radio;
+          }
+
+          // 4. Pedir siguiente frame
+          requestAnimationFrame(animar);
+        }
+
+        // Iniciar la animación
+        animar();
+      </script>
+
+      <pre><code>var x = 0;
+
+function animar() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);  // Borrar
+
+  ctx.beginPath();
+  ctx.arc(x, 100, 20, 0, Math.PI * 2);               // Dibujar
+  ctx.fill();
+
+  x += 2;                                              // Mover
+  if (x > canvas.width + 20) x = -20;                 // Rebote
+
+  requestAnimationFrame(animar);                       // Siguiente frame
+}
+animar();</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 9. INTERACCIÓN CON EL MOUSE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>9. Interacción con el mouse</h2>
+      <p>
+        Canvas detecta eventos del mouse como cualquier otro elemento HTML.
+        Pero hay que calcular la posición relativa al canvas.
+      </p>
+
+      <canvas id="canvas9" width="500" height="250" style="border: 1px solid black; cursor: crosshair;">
+      </canvas>
+      <p><small>Hacé clic en el canvas para dibujar círculos. Mové el mouse para ver la posición.</small></p>
+
+      <!--
+        Para obtener la posición del mouse RELATIVA al canvas:
+          var rect = canvas.getBoundingClientRect();
+          var x = evento.clientX - rect.left;
+          var y = evento.clientY - rect.top;
+
+        Eventos útiles:
+          click       → clic
+          mousedown   → botón presionado
+          mouseup     → botón soltado
+          mousemove   → mouse moviéndose
+          mouseenter  → mouse entró al canvas
+          mouseleave  → mouse salió del canvas
+      -->
+      <script>
+        var canvas9 = document.getElementById('canvas9');
+        var ctx9 = canvas9.getContext('2d');
+
+        // Fondo
+        ctx9.fillStyle = '#ecf0f1';
+        ctx9.fillRect(0, 0, 500, 250);
+        ctx9.fillStyle = '#999';
+        ctx9.font = '16px Arial';
+        ctx9.textAlign = 'center';
+        ctx9.fillText('Hacé clic para dibujar', 250, 125);
+
+        // Al hacer clic: dibujar un círculo de color aleatorio
+        canvas9.addEventListener('click', function (evento) {
+          var rect = canvas9.getBoundingClientRect();
+          var x = evento.clientX - rect.left;
+          var y = evento.clientY - rect.top;
+
+          // Color aleatorio
+          var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+          ctx9.beginPath();
+          ctx9.arc(x, y, 15, 0, Math.PI * 2);
+          ctx9.fillStyle = color;
+          ctx9.fill();
+        });
+      </script>
+
+      <pre><code>canvas.addEventListener('click', function(evento) {
+  var rect = canvas.getBoundingClientRect();
+  var x = evento.clientX - rect.left;
+  var y = evento.clientY - rect.top;
+
+  ctx.beginPath();
+  ctx.arc(x, y, 15, 0, Math.PI * 2);
+  ctx.fill();
+});</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 10. ACCESIBILIDAD -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>10. Accesibilidad</h2>
+      <p>
+        Canvas es <strong>inaccesible por defecto</strong>: los lectores de pantalla
+        no pueden leer lo que hay dibujado. Hay que agregar alternativas.
+      </p>
+
+      <!--
+        Canvas es una imagen: los lectores de pantalla no leen su contenido.
+
+        Opciones para hacerlo accesible:
+          1. Texto fallback entre las etiquetas (básico)
+          2. role="img" + aria-label (descripción corta)
+          3. aria-describedby apuntando a un texto descriptivo
+          4. Contenido HTML alternativo dentro del canvas
+             (lo ven los lectores de pantalla pero no los navegadores visuales)
+      -->
+
+      <!-- Opción 1: aria-label (descripción corta) -->
+      <canvas id="canvas10a" width="300" height="100" role="img"
+        aria-label="Gráfico de barras mostrando ventas: Enero $100, Febrero $150, Marzo $200"
+        style="border: 1px solid black;">
+      </canvas>
+
+      <script>
+        var ctx10a = document.getElementById('canvas10a').getContext('2d');
+        ctx10a.fillStyle = '#3498db';
+        ctx10a.fillRect(20, 60, 60, 40);
+        ctx10a.fillRect(100, 40, 60, 60);
+        ctx10a.fillRect(180, 10, 60, 90);
+        ctx10a.fillStyle = '#333';
+        ctx10a.font = '12px Arial';
+        ctx10a.fillText('Ene', 35, 80);
+        ctx10a.fillText('Feb', 115, 65);
+        ctx10a.fillText('Mar', 195, 40);
+      </script>
+
+      <br><br>
+
+      <!-- Opción 2: aria-describedby con texto largo -->
+      <canvas id="canvas10b" width="300" height="100" role="img" aria-label="Gráfico de ventas trimestrales"
+        aria-describedby="desc-canvas10b" style="border: 1px solid black;">
+
+        <!-- Contenido fallback dentro del canvas -->
+        <p>Gráfico de barras: Enero $100, Febrero $150, Marzo $200.</p>
+      </canvas>
+      <div id="desc-canvas10b" hidden>
+        Gráfico de barras que muestra las ventas del primer trimestre.
+        Enero: $100. Febrero: $150. Marzo: $200.
+        La tendencia es creciente.
+      </div>
+
+      <script>
+        var ctx10b = document.getElementById('canvas10b').getContext('2d');
+        ctx10b.fillStyle = '#2ecc71';
+        ctx10b.fillRect(20, 60, 60, 40);
+        ctx10b.fillRect(100, 40, 60, 60);
+        ctx10b.fillRect(180, 10, 60, 90);
+      </script>
+
+      <pre><code>&lt;!-- Opción 1: aria-label --&gt;
+&lt;canvas role="img"
+        aria-label="Gráfico: Enero $100, Febrero $150, Marzo $200"&gt;
+&lt;/canvas&gt;
+
+&lt;!-- Opción 2: aria-describedby con texto oculto --&gt;
+&lt;canvas role="img"
+        aria-label="Gráfico de ventas"
+        aria-describedby="descripcion"&gt;
+  &lt;p&gt;Fallback: Enero $100, Febrero $150, Marzo $200.&lt;/p&gt;
+&lt;/canvas&gt;
+&lt;div id="descripcion" hidden&gt;
+  Descripción larga del gráfico...
+&lt;/div&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- TABLA RESUMEN -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Resumen</h2>
+
+      <table border="1" cellpadding="5">
+        <caption>Atributos de &lt;canvas&gt;</caption>
+        <thead>
+          <tr>
+            <th scope="col">Atributo</th>
+            <th scope="col">Valores</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">width</th>
+            <td>px (default: 300)</td>
+            <td>Ancho del área de dibujo</td>
+          </tr>
+          <tr>
+            <th scope="row">height</th>
+            <td>px (default: 150)</td>
+            <td>Alto del área de dibujo</td>
+          </tr>
+          <tr>
+            <th scope="row">id</th>
+            <td>texto</td>
+            <td>Para acceder desde JavaScript</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br>
+
+      <table border="1" cellpadding="5">
+        <caption>Métodos principales del contexto 2D</caption>
+        <thead>
+          <tr>
+            <th scope="col">Método</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">fillRect(x, y, w, h)</th>
+            <td>Rectángulo relleno</td>
+          </tr>
+          <tr>
+            <th scope="row">strokeRect(x, y, w, h)</th>
+            <td>Rectángulo solo borde</td>
+          </tr>
+          <tr>
+            <th scope="row">clearRect(x, y, w, h)</th>
+            <td>Borrar un área</td>
+          </tr>
+          <tr>
+            <th scope="row">beginPath()</th>
+            <td>Empezar un trazo nuevo</td>
+          </tr>
+          <tr>
+            <th scope="row">moveTo(x, y)</th>
+            <td>Mover el lápiz sin dibujar</td>
+          </tr>
+          <tr>
+            <th scope="row">lineTo(x, y)</th>
+            <td>Línea hasta un punto</td>
+          </tr>
+          <tr>
+            <th scope="row">arc(x, y, r, ini, fin)</th>
+            <td>Arco o círculo</td>
+          </tr>
+          <tr>
+            <th scope="row">closePath()</th>
+            <td>Cerrar el trazo</td>
+          </tr>
+          <tr>
+            <th scope="row">fill()</th>
+            <td>Rellenar el trazo</td>
+          </tr>
+          <tr>
+            <th scope="row">stroke()</th>
+            <td>Dibujar el borde del trazo</td>
+          </tr>
+          <tr>
+            <th scope="row">fillText(txt, x, y)</th>
+            <td>Texto relleno</td>
+          </tr>
+          <tr>
+            <th scope="row">strokeText(txt, x, y)</th>
+            <td>Texto solo borde</td>
+          </tr>
+          <tr>
+            <th scope="row">drawImage(img, x, y)</th>
+            <td>Dibujar imagen</td>
+          </tr>
+          <tr>
+            <th scope="row">createLinearGradient()</th>
+            <td>Gradiente lineal</td>
+          </tr>
+          <tr>
+            <th scope="row">createRadialGradient()</th>
+            <td>Gradiente radial</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br>
+
+      <table border="1" cellpadding="5">
+        <caption>Propiedades principales del contexto 2D</caption>
+        <thead>
+          <tr>
+            <th scope="col">Propiedad</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">fillStyle</th>
+            <td>Color de relleno (color, gradiente, patrón)</td>
+          </tr>
+          <tr>
+            <th scope="row">strokeStyle</th>
+            <td>Color de borde</td>
+          </tr>
+          <tr>
+            <th scope="row">lineWidth</th>
+            <td>Grosor de línea (en px)</td>
+          </tr>
+          <tr>
+            <th scope="row">font</th>
+            <td>Fuente del texto (formato CSS)</td>
+          </tr>
+          <tr>
+            <th scope="row">textAlign</th>
+            <td>Alineación horizontal del texto</td>
+          </tr>
+          <tr>
+            <th scope="row">textBaseline</th>
+            <td>Alineación vertical del texto</td>
+          </tr>
+          <tr>
+            <th scope="row">globalAlpha</th>
+            <td>Transparencia global (0 a 1)</td>
+          </tr>
+          <tr>
+            <th scope="row">lineCap</th>
+            <td>Forma del extremo de línea (butt, round, square)</td>
+          </tr>
+          <tr>
+            <th scope="row">lineJoin</th>
+            <td>Forma de la unión de líneas (miter, round, bevel)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- BUENAS PRÁCTICAS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Buenas prácticas</h2>
+      <ol>
+        <li><strong>Poner <code>width</code> y <code>height</code> como atributos</strong>, no como CSS. Si usás CSS, el
+          canvas se estira y se ve pixelado.</li>
+        <li><strong>Siempre agregar texto de fallback</strong> entre las etiquetas para navegadores sin soporte.</li>
+        <li><strong>Usar <code>role="img"</code> y <code>aria-label</code></strong> para describir lo que se dibuja.
+        </li>
+        <li><strong>Usar <code>requestAnimationFrame()</code></strong> para animaciones, nunca
+          <code>setInterval()</code> (es menos eficiente).</li>
+        <li><strong>Borrar el canvas antes de redibujar</strong> en animaciones con <code>clearRect()</code>.</li>
+        <li><strong>Para gráficos de datos usar una librería</strong> como Chart.js en vez de dibujar a mano. Canvas
+          puro es para casos personalizados.</li>
+        <li><strong>Canvas es para gráficos dinámicos</strong>. Para gráficos estáticos, usar SVG (es accesible,
+          escalable y se puede estilizar con CSS).</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <hr>
+    <p><small>
+        Referencia:
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas">MDN — &lt;canvas&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial">MDN — Tutorial de Canvas</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">MDN —
+          CanvasRenderingContext2D</a>
+        <br>Material educativo — Abril 2026
+      </small></p>
+  </footer>
+
+</body>
+
+</html>

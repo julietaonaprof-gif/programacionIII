@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de &lt;iframe&gt; en HTML</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Guía de <code>&lt;iframe&gt;</code> en HTML</h1>
+    <p>
+      <code>&lt;iframe&gt;</code> incrusta otra página web dentro de tu página.
+      Es un "marco" que muestra contenido externo.<br>
+      📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe">MDN — &lt;iframe&gt;</a>
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <!-- 1. IFRAME BÁSICO -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. Iframe básico</h2>
+
+      <!--
+        <iframe> — Incrusta otra página web.
+          src:    URL de la página a incrustar.
+          width:  ancho en píxeles o %.
+          height: alto en píxeles.
+          title:  descripción para accesibilidad (OBLIGATORIO).
+                  Los lectores de pantalla leen esto.
+      -->
+      <iframe src="https://es.wikipedia.org/wiki/HTML" width="600" height="400"
+        title="Artículo de Wikipedia sobre HTML">
+      </iframe>
+
+      <pre><code>&lt;iframe src="https://es.wikipedia.org/wiki/HTML"
+        width="600" height="400"
+        title="Artículo de Wikipedia sobre HTML"&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 2. YOUTUBE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. Incrustar YouTube</h2>
+      <p>
+        La URL de embed de YouTube es diferente a la URL normal.<br>
+        Normal: <code>https://www.youtube.com/watch?v=VIDEO_ID</code><br>
+        Embed: <code>https://www.youtube.com/embed/VIDEO_ID</code>
+      </p>
+
+      <!--
+        YouTube usa una URL especial para embeds.
+        allowfullscreen: permite que el video se ponga en pantalla completa.
+        loading="lazy": solo carga cuando el usuario hace scroll hasta acá.
+      -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video de YouTube"
+        allowfullscreen loading="lazy">
+      </iframe>
+
+      <pre><code>&lt;iframe width="560" height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Video de YouTube"
+        allowfullscreen
+        loading="lazy"&gt;
+&lt;/iframe&gt;</code></pre>
+
+      <br>
+
+      <h3>YouTube con parámetros</h3>
+
+      <!--
+        Parámetros de YouTube (se agregan a la URL):
+          ?start=30        → empieza en el segundo 30
+          &end=120         → termina en el segundo 120
+          &autoplay=1      → reproduce automáticamente
+          &mute=1          → arranca silenciado
+          &loop=1          → se repite
+          &controls=0      → oculta los controles
+          &rel=0           → no muestra videos relacionados al final
+          &cc_load_policy=1 → activa subtítulos
+      -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?start=10&rel=0&cc_load_policy=1"
+        title="YouTube desde segundo 10, sin relacionados, con subtítulos" allowfullscreen loading="lazy">
+      </iframe>
+
+      <pre><code>&lt;!-- Empieza en segundo 10, sin videos relacionados, con subtítulos --&gt;
+&lt;iframe width="560" height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID?start=10&amp;rel=0&amp;cc_load_policy=1"
+        title="Video con parámetros"
+        allowfullscreen&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Autoplay silenciado en loop --&gt;
+&lt;iframe width="560" height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&amp;mute=1&amp;loop=1"
+        title="Video en loop"
+        allowfullscreen&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 3. GOOGLE MAPS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. Incrustar Google Maps</h2>
+      <p>
+        En Google Maps: Menú → Compartir → Insertar un mapa → copiar el iframe.
+      </p>
+
+      <!--
+        Google Maps genera su propio código de iframe.
+        Solo hay que copiar y pegar desde Google Maps.
+        loading="lazy" es muy recomendable para mapas.
+      -->
+      <iframe width="600" height="400"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.9!2d-58.3816!3d-34.6037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacf8a8d1f3b%3A0x734c87e98e4d0a7f!2sObelisco!5e0!3m2!1ses!2sar!4v1"
+        title="Mapa del Obelisco, Buenos Aires" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen>
+      </iframe>
+
+      <pre><code>&lt;iframe width="600" height="400"
+        src="https://www.google.com/maps/embed?pb=..."
+        title="Mapa del Obelisco, Buenos Aires"
+        loading="lazy"
+        allowfullscreen&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 4. SPOTIFY -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. Incrustar Spotify</h2>
+      <p>
+        En Spotify: botón Compartir → Copiar código de inserción.
+      </p>
+
+      <!--
+        Spotify embed:
+          URL normal: https://open.spotify.com/track/TRACK_ID
+          URL embed:  https://open.spotify.com/embed/track/TRACK_ID
+      -->
+      <iframe width="300" height="380" src="https://open.spotify.com/embed/track/4cOdK2wGLETKBW3PvgPWqT"
+        title="Canción en Spotify" allowfullscreen loading="lazy" allow="encrypted-media">
+      </iframe>
+
+      <pre><code>&lt;iframe width="300" height="380"
+        src="https://open.spotify.com/embed/track/TRACK_ID"
+        title="Canción en Spotify"
+        allow="encrypted-media"
+        loading="lazy"&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 5. PÁGINA PROPIA -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. Incrustar una página propia</h2>
+
+      <!--
+        El src puede ser:
+        - URL externa: "https://otro-sitio.com"
+        - Archivo local: "otra-pagina.html"
+        - Ruta relativa: "../contacto.html"
+      -->
+      <iframe src="otra-pagina.html" width="100%" height="300" title="Página de contacto incrustada">
+      </iframe>
+
+      <pre><code>&lt;!-- Otra página de tu propio sitio --&gt;
+&lt;iframe src="otra-pagina.html"
+        width="100%" height="300"
+        title="Página de contacto"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- URL externa --&gt;
+&lt;iframe src="https://ejemplo.com"
+        width="100%" height="400"
+        title="Sitio externo"&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 6. LOADING LAZY -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. Carga diferida — <code>loading="lazy"</code></h2>
+      <p>
+        <code>loading="lazy"</code> hace que el iframe se cargue solo cuando
+        el usuario hace scroll hasta él. Mejora la velocidad de carga de la página.
+      </p>
+
+      <!--
+        loading tiene 2 valores:
+          "eager" → carga inmediatamente (default).
+          "lazy"  → carga solo cuando está cerca del viewport.
+
+        SIEMPRE usar lazy en iframes que no se ven al cargar la página
+        (están más abajo del scroll). Especialmente en videos y mapas.
+      -->
+      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" width="560" height="315" title="Video con carga diferida"
+        loading="lazy" allowfullscreen>
+      </iframe>
+
+      <pre><code>&lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"
+        width="560" height="315"
+        title="Video"
+        loading="lazy"
+        allowfullscreen&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 7. SANDBOX (seguridad) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. Seguridad — <code>sandbox</code></h2>
+      <p>
+        <code>sandbox</code> restringe lo que puede hacer el contenido del iframe.
+        Es como ponerlo en una caja de seguridad.
+      </p>
+
+      <!--
+        sandbox: restringe el iframe. Sin valores, bloquea TODO:
+          - No puede ejecutar JavaScript
+          - No puede enviar formularios
+          - No puede abrir popups
+          - No puede acceder al DOM de la página padre
+
+        Para habilitar cosas específicas, se agregan permisos:
+          allow-scripts         → permite JavaScript
+          allow-same-origin     → permite acceder a cookies/storage del mismo dominio
+          allow-forms           → permite enviar formularios
+          allow-popups          → permite abrir ventanas/popups
+          allow-top-navigation  → permite cambiar la URL de la página padre
+
+        OJO: allow-scripts + allow-same-origin juntos eliminan
+        la protección del sandbox. Usarlos juntos con cuidado.
+      -->
+
+      <!-- Sandbox total: bloquea todo -->
+      <p><strong>sandbox</strong> (bloquea todo):</p>
+      <iframe src="https://ejemplo.com" width="400" height="200" title="Iframe restringido" sandbox>
+      </iframe>
+
+      <br><br>
+
+      <!-- Sandbox parcial: permite scripts y formularios -->
+      <p><strong>sandbox con permisos</strong> (permite scripts y forms):</p>
+      <iframe src="https://ejemplo.com" width="400" height="200" title="Iframe con scripts y forms"
+        sandbox="allow-scripts allow-forms">
+      </iframe>
+
+      <pre><code>&lt;!-- Bloquea TODO --&gt;
+&lt;iframe src="https://ejemplo.com" sandbox
+        title="Restringido total"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Permite scripts y formularios --&gt;
+&lt;iframe src="https://ejemplo.com"
+        sandbox="allow-scripts allow-forms"
+        title="Permite scripts y forms"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Permite scripts, forms y popups --&gt;
+&lt;iframe src="https://ejemplo.com"
+        sandbox="allow-scripts allow-forms allow-popups"
+        title="Permite scripts, forms y popups"&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 8. ALLOW (permisos de funcionalidades) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. Permisos de funcionalidades — <code>allow</code></h2>
+      <p>
+        <code>allow</code> controla qué APIs del navegador puede usar el iframe
+        (cámara, micrófono, geolocalización, etc.).
+      </p>
+
+      <!--
+        allow: permisos separados por punto y coma.
+
+        Permisos comunes:
+          accelerometer          → sensor de aceleración
+          autoplay               → reproducción automática
+          camera                 → cámara
+          clipboard-write        → escribir en el portapapeles
+          encrypted-media        → DRM (para Spotify, Netflix, etc.)
+          fullscreen             → pantalla completa
+          geolocation            → ubicación del usuario
+          gyroscope              → giroscopio
+          microphone             → micrófono
+          payment                → API de pagos
+          picture-in-picture     → PiP (video flotante)
+          web-share              → API de compartir
+      -->
+      <iframe src="https://ejemplo.com/videollamada" width="600" height="400" title="Videollamada"
+        allow="camera; microphone; fullscreen">
+      </iframe>
+
+      <pre><code>&lt;!-- Videollamada: necesita cámara y micrófono --&gt;
+&lt;iframe src="https://ejemplo.com/videollamada"
+        width="600" height="400"
+        title="Videollamada"
+        allow="camera; microphone; fullscreen"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- YouTube: permisos típicos --&gt;
+&lt;iframe src="https://www.youtube.com/embed/VIDEO_ID"
+        allow="accelerometer; autoplay; clipboard-write;
+               encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 9. REFERRERPOLICY -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>9. Privacidad — <code>referrerpolicy</code></h2>
+      <p>
+        Controla cuánta información de tu página se envía al sitio del iframe.
+      </p>
+
+      <!--
+        referrerpolicy: qué datos de tu página se envían al sitio incrustado.
+
+        Valores más usados:
+          "no-referrer"                  → no envía nada
+          "no-referrer-when-downgrade"   → envía URL completa si es HTTPS→HTTPS,
+                                           no envía si es HTTPS→HTTP (default)
+          "origin"                       → solo envía el dominio (no la URL completa)
+          "strict-origin"                → solo dominio, y solo si es HTTPS→HTTPS
+      -->
+      <iframe src="https://ejemplo.com" width="400" height="200" title="Iframe con privacidad"
+        referrerpolicy="no-referrer">
+      </iframe>
+
+      <pre><code>&lt;!-- No envía información de tu página al sitio del iframe --&gt;
+&lt;iframe src="https://ejemplo.com"
+        referrerpolicy="no-referrer"
+        title="Privado"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Solo envía tu dominio, no la URL completa --&gt;
+&lt;iframe src="https://ejemplo.com"
+        referrerpolicy="origin"
+        title="Solo dominio"&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 10. SITIOS QUE BLOQUEAN IFRAME -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>10. Sitios que bloquean iframe</h2>
+      <p>
+        <strong>No todos los sitios se pueden incrustar.</strong> Muchos bloquean
+        los iframes por seguridad usando el header <code>X-Frame-Options</code>
+        o <code>Content-Security-Policy</code>.
+      </p>
+
+      <!--
+        Sitios que NO se pueden incrustar (bloquean iframes):
+          - Google (google.com)
+          - Facebook (facebook.com)
+          - Twitter/X (x.com)
+          - GitHub (github.com)
+          - Instagram (instagram.com)
+          - La mayoría de bancos y sitios financieros
+
+        Esto lo hacen para prevenir "clickjacking": un ataque donde
+        un sitio malicioso pone un iframe transparente encima de botones
+        para que el usuario haga clic sin darse cuenta.
+
+        Si intentás incrustar un sitio bloqueado, el iframe
+        aparece en blanco o con un error "Refused to display".
+
+        Sitios que SÍ se pueden incrustar (tienen URLs de embed):
+          - YouTube (youtube.com/embed/...)
+          - Vimeo (player.vimeo.com/video/...)
+          - Google Maps (google.com/maps/embed...)
+          - Spotify (open.spotify.com/embed/...)
+          - CodePen (codepen.io/embed/...)
+          - Google Docs/Sheets (solo con URL de publicación)
+      -->
+
+      <!-- ESTO NO FUNCIONA (Google bloquea iframes) -->
+      <p><strong>Esto NO funciona</strong> (Google bloquea iframes):</p>
+      <iframe src="https://www.google.com" width="400" height="200" title="Google bloqueado">
+      </iframe>
+
+      <pre><code>&lt;!-- NO funciona: Google bloquea iframes --&gt;
+&lt;iframe src="https://www.google.com" title="Bloqueado"&gt;&lt;/iframe&gt;
+
+&lt;!-- SÍ funciona: YouTube tiene URL de embed --&gt;
+&lt;iframe src="https://www.youtube.com/embed/VIDEO_ID" title="YouTube"&gt;&lt;/iframe&gt;
+
+&lt;!-- SÍ funciona: Google Maps tiene URL de embed --&gt;
+&lt;iframe src="https://www.google.com/maps/embed?pb=..." title="Mapa"&gt;&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- TABLA RESUMEN -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Resumen de atributos de <code>&lt;iframe&gt;</code></h2>
+
+      <table border="1" cellpadding="5">
+        <caption>Todos los atributos de la etiqueta iframe</caption>
+        <thead>
+          <tr>
+            <th scope="col">Atributo</th>
+            <th scope="col">Valores</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">src</th>
+            <td>URL</td>
+            <td>Página a incrustar</td>
+          </tr>
+          <tr>
+            <th scope="row">width</th>
+            <td>px o %</td>
+            <td>Ancho del marco</td>
+          </tr>
+          <tr>
+            <th scope="row">height</th>
+            <td>px</td>
+            <td>Alto del marco</td>
+          </tr>
+          <tr>
+            <th scope="row">title</th>
+            <td>texto</td>
+            <td>Descripción para accesibilidad (obligatorio)</td>
+          </tr>
+          <tr>
+            <th scope="row">loading</th>
+            <td>eager | lazy</td>
+            <td>Cuándo cargar el iframe</td>
+          </tr>
+          <tr>
+            <th scope="row">sandbox</th>
+            <td>permisos separados por espacio</td>
+            <td>Restringe lo que puede hacer el iframe</td>
+          </tr>
+          <tr>
+            <th scope="row">allow</th>
+            <td>permisos separados por ;</td>
+            <td>APIs del navegador permitidas</td>
+          </tr>
+          <tr>
+            <th scope="row">allowfullscreen</th>
+            <td>(booleano)</td>
+            <td>Permite pantalla completa</td>
+          </tr>
+          <tr>
+            <th scope="row">referrerpolicy</th>
+            <td>no-referrer, origin, etc.</td>
+            <td>Qué info de tu página se envía</td>
+          </tr>
+          <tr>
+            <th scope="row">name</th>
+            <td>texto</td>
+            <td>Nombre del iframe (para target de links)</td>
+          </tr>
+          <tr>
+            <th scope="row">srcdoc</th>
+            <td>HTML inline</td>
+            <td>HTML directo en vez de una URL</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- BUENAS PRÁCTICAS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Buenas prácticas</h2>
+      <ol>
+        <li><strong>Siempre poner <code>title</code></strong> para accesibilidad.</li>
+        <li><strong>Usar <code>loading="lazy"</code></strong> en iframes que no se ven al cargar.</li>
+        <li><strong>Usar <code>sandbox</code></strong> cuando incrustes contenido que no controlás.</li>
+        <li><strong>No incrustar sitios que no confías</strong>: el iframe puede ejecutar código.</li>
+        <li><strong>Usar las URLs de embed</strong>, no las URLs normales (YouTube, Vimeo, Maps, Spotify).</li>
+        <li><strong>No abusar de iframes</strong>: cada uno carga una página completa. Muchos iframes = página lenta.
+        </li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <hr>
+    <p><small>
+        Referencia: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe">MDN —
+          &lt;iframe&gt;</a><br>
+        Material educativo — Abril 2026
+      </small></p>
+  </footer>
+
+</body>
+
+</html>

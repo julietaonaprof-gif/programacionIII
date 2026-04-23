@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía Completa — Etiqueta &lt;video&gt; en HTML</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Guía Completa de <code>&lt;video&gt;</code> en HTML</h1>
+    <p>
+      La etiqueta <code>&lt;video&gt;</code> permite reproducir video directamente
+      en la página web sin plugins externos (antes se necesitaba Flash).<br>
+      📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video">MDN — &lt;video&gt;</a>
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <!-- 1. VIDEO BÁSICO CON CONTROLES -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>1. Video básico con controles</h2>
+      <p>
+        <code>controls</code> muestra el reproductor nativo del navegador:
+        play/pausa, barra de progreso, volumen, pantalla completa, velocidad, PiP.<br>
+        <code>width</code> y <code>height</code> definen el tamaño del reproductor.
+      </p>
+
+      <!--
+        <video> — Reproductor de video.
+        controls: muestra los controles nativos.
+        width/height: tamaño en píxeles. Si solo ponés uno, el otro
+                      se calcula automáticamente manteniendo la proporción.
+        El texto entre las etiquetas es fallback para navegadores viejos.
+      -->
+      <video controls width="640" height="360">
+        <source src="video/ejemplo.mp4" type="video/mp4">
+        Tu navegador no soporta la etiqueta video.
+      </video>
+
+      <pre><code>&lt;video controls width="640" height="360"&gt;
+  &lt;source src="video/ejemplo.mp4" type="video/mp4"&gt;
+  Tu navegador no soporta la etiqueta video.
+&lt;/video&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 2. MÚLTIPLES FORMATOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>2. Múltiples formatos con <code>&lt;source&gt;</code></h2>
+      <p>
+        Se ponen varios <code>&lt;source&gt;</code> con diferentes formatos.
+        El navegador usa el <strong>primero que soporte</strong>.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source">MDN — &lt;source&gt;</a>
+      </p>
+
+      <!--
+        <source> — Define una fuente de video.
+          src: ruta al archivo.
+          type: tipo MIME. Ayuda al navegador a decidir sin descargar.
+
+        Formatos principales de video:
+          video/mp4   → .mp4 (H.264) — El más compatible. Funciona en TODOS.
+          video/webm  → .webm (VP8/VP9/AV1) — Libre, buena compresión.
+          video/ogg   → .ogv (Theora) — Libre, pero obsoleto.
+
+        Codecs (se pueden especificar en el type):
+          video/mp4; codecs="avc1.42E01E, mp4a.40.2"  → H.264 + AAC
+          video/webm; codecs="vp9, opus"               → VP9 + Opus
+          video/webm; codecs="av01.0.05M.08"           → AV1 (el más nuevo)
+
+        El navegador recorre los <source> de arriba a abajo
+        y usa el primero que pueda reproducir.
+      -->
+      <video controls width="640">
+        <!-- WebM primero (libre, mejor compresión) -->
+        <source src="video/ejemplo.webm" type="video/webm">
+        <!-- MP4 segundo (máxima compatibilidad) -->
+        <source src="video/ejemplo.mp4" type="video/mp4">
+        <!-- OGV tercero (fallback legacy) -->
+        <source src="video/ejemplo.ogv" type="video/ogg">
+        Tu navegador no soporta video.
+      </video>
+
+      <pre><code>&lt;video controls width="640"&gt;
+  &lt;source src="video/ejemplo.webm" type="video/webm"&gt;
+  &lt;source src="video/ejemplo.mp4" type="video/mp4"&gt;
+  &lt;source src="video/ejemplo.ogv" type="video/ogg"&gt;
+  Tu navegador no soporta video.
+&lt;/video&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 3. POSTER (imagen de preview) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>3. Imagen de preview — <code>poster</code></h2>
+      <p>
+        <code>poster</code> muestra una imagen antes de que el usuario le dé play.
+        Sin poster, el navegador muestra el primer frame del video (o negro si no cargó).
+      </p>
+
+      <!--
+        poster: URL de la imagen que se muestra antes de reproducir.
+        Se recomienda usar la misma resolución que el video.
+        Formatos: .jpg, .png, .webp.
+        Es solo visual: no afecta al video en sí.
+      -->
+      <video controls width="640" height="360" poster="img/preview-video.jpg">
+        <source src="video/ejemplo.mp4" type="video/mp4">
+      </video>
+
+      <pre><code>&lt;video controls width="640" height="360"
+       poster="img/preview-video.jpg"&gt;
+  &lt;source src="video/ejemplo.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+
+      <video src="video/ejemplo.mp4" controls width="640"></video>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 4. AUTOPLAY -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>4. Reproducción automática — <code>autoplay</code></h2>
+      <p>
+        <code>autoplay</code> intenta reproducir el video automáticamente.<br>
+        <strong>IMPORTANTE:</strong> los navegadores bloquean autoplay con sonido.
+        Solo funciona si también tiene <code>muted</code>.
+      </p>
+
+      <!--
+        autoplay: reproduce automáticamente al cargar.
+        muted: arranca sin sonido.
+
+        REGLA DE LOS NAVEGADORES:
+        - autoplay + muted = FUNCIONA (siempre)
+        - autoplay solo   = BLOQUEADO (en la mayoría de navegadores)
+
+        Esto existe para proteger al usuario de videos ruidosos.
+        Es una política del navegador, no un error de HTML.
+
+        📖 https://developer.mozilla.org/en-US/docs/Web/Media/Autoplay_guide
+      -->
+
+      <!-- FUNCIONA: autoplay + muted -->
+      <p><strong>Funciona</strong> — autoplay + muted:</p>
+      <video controls autoplay muted width="480">
+        <source src="video/intro.mp4" type="video/mp4">
+      </video>
+
+      <br><br>
+
+      <!-- BLOQUEADO: autoplay sin muted -->
+      <p><strong>Bloqueado por el navegador</strong> — autoplay sin muted:</p>
+      <video controls autoplay width="480">
+        <source src="video/intro.mp4" type="video/mp4">
+      </video>
+
+      <pre><code>&lt;!-- FUNCIONA: autoplay + muted --&gt;
+&lt;video controls autoplay muted width="480"&gt;
+  &lt;source src="video/intro.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+&lt;!-- BLOQUEADO: autoplay sin muted --&gt;
+&lt;video controls autoplay width="480"&gt;
+  &lt;source src="video/intro.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 5. LOOP -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>5. Repetir en bucle — <code>loop</code></h2>
+      <p>
+        <code>loop</code> hace que el video se repita cuando termina.
+        Típico para videos de fondo o animaciones decorativas.
+      </p>
+
+      <!--
+        loop: cuando el video termina, vuelve a empezar.
+        Combinado con autoplay + muted: video de fondo silencioso en loop.
+      -->
+      <video controls loop width="480">
+        <source src="video/animacion.mp4" type="video/mp4">
+      </video>
+
+      <br><br>
+
+      <!-- Video de fondo típico: autoplay + muted + loop, sin controls -->
+      <p><strong>Video de fondo</strong> (autoplay + muted + loop, sin controls):</p>
+      <video autoplay muted loop width="480" playsinline>
+        <source src="video/fondo-hero.mp4" type="video/mp4">
+      </video>
+
+      <pre><code>&lt;!-- Video de fondo: autoplay + muted + loop, sin controls --&gt;
+&lt;video autoplay muted loop playsinline width="100%"&gt;
+  &lt;source src="video/fondo-hero.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 6. PLAYSINLINE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>6. Reproducir en línea — <code>playsinline</code></h2>
+      <p>
+        En iOS (iPhone), los videos se abren en pantalla completa por defecto.
+        <code>playsinline</code> fuerza a que se reproduzca dentro de la página.
+      </p>
+
+      <!--
+        playsinline: en iOS, reproduce el video dentro de la página
+        en vez de abrirlo en pantalla completa.
+
+        Sin playsinline en iPhone:
+          → El video se abre en el reproductor nativo a pantalla completa.
+        Con playsinline en iPhone:
+          → El video se reproduce dentro de la página, donde está.
+
+        FUNDAMENTAL para videos de fondo en móviles.
+        En desktop no tiene efecto.
+      -->
+      <video controls playsinline width="480" poster="img/preview.jpg">
+        <source src="video/demo.mp4" type="video/mp4">
+      </video>
+
+      <pre><code>&lt;!-- Esencial para que funcione en iPhone sin abrir fullscreen --&gt;
+&lt;video controls playsinline width="480"&gt;
+  &lt;source src="video/demo.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+&lt;!-- Video de fondo en móviles: NECESITA playsinline --&gt;
+&lt;video autoplay muted loop playsinline&gt;
+  &lt;source src="video/fondo.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 7. PRELOAD -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>7. Precarga — <code>preload</code></h2>
+      <p>
+        <code>preload</code> indica al navegador cuánto del video
+        descargar anticipadamente.
+      </p>
+
+      <!--
+        preload tiene 3 valores:
+
+        "auto"     → Descarga TODO el video anticipadamente.
+                     Bueno para videos cortos que el usuario seguro va a ver.
+                     Malo para videos pesados o si hay varios en la página.
+
+        "metadata" → Solo descarga metadatos (duración, dimensiones, primer frame).
+                     NO descarga el video en sí.
+                     Es el DEFAULT en la mayoría de navegadores.
+
+        "none"     → No descarga NADA hasta que el usuario aprete play.
+                     Ideal para páginas con muchos videos.
+                     Si hay poster, se muestra el poster.
+                     Si no hay poster, se muestra negro.
+
+        NOTA: si el video tiene autoplay, el navegador ignora preload.
+      -->
+      <p><strong>preload="auto"</strong> — Descarga todo:</p>
+      <video controls preload="auto" width="480">
+        <source src="video/corto.mp4" type="video/mp4">
+      </video>
+
+      <br><br>
+
+      <p><strong>preload="metadata"</strong> — Solo metadatos:</p>
+      <video controls preload="metadata" width="480">
+        <source src="video/medio.mp4" type="video/mp4">
+      </video>
+
+      <br><br>
+
+      <p><strong>preload="none"</strong> — Nada hasta play (con poster):</p>
+      <video controls preload="none" width="480" poster="img/poster-video.jpg">
+        <source src="video/pesado.mp4" type="video/mp4">
+      </video>
+
+      <pre><code>&lt;video controls preload="auto"&gt;...&lt;/video&gt;     &lt;!-- Descarga todo --&gt;
+&lt;video controls preload="metadata"&gt;...&lt;/video&gt; &lt;!-- Solo metadatos --&gt;
+&lt;video controls preload="none"&gt;...&lt;/video&gt;     &lt;!-- Nada hasta play --&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 8. SUBTÍTULOS CON <track> -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>8. Subtítulos y pistas de texto — <code>&lt;track&gt;</code></h2>
+      <p>
+        <code>&lt;track&gt;</code> agrega subtítulos, descripciones o capítulos al video.
+        Los archivos de subtítulos usan formato <strong>WebVTT</strong> (.vtt).<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track">MDN — &lt;track&gt;</a>
+      </p>
+
+      <!--
+        <track> — Pista de texto para el video.
+
+        Atributos:
+          src:     ruta al archivo .vtt (WebVTT)
+          kind:    tipo de pista:
+                     "subtitles"    → traducción o transcripción del diálogo
+                     "captions"     → subtítulos + descripción de sonidos
+                                      (para personas sordas)
+                     "descriptions" → descripción de lo que se ve
+                                      (para personas ciegas)
+                     "chapters"     → marcadores de capítulos
+                     "metadata"     → datos para scripts (no visible)
+          srclang: idioma de la pista (código ISO: "es", "en", "pt")
+          label:   nombre visible en el menú de subtítulos
+          default: marca esta pista como activa por defecto
+
+        El archivo .vtt tiene este formato:
+        ─────────────────────
+        WEBVTT
+
+        00:00:01.000 --> 00:00:04.000
+      Bienvenidos a nuestra clase de HTML.
+
+      00:00:05.000 --> 00:00:08.000
+      Hoy vamos a aprender sobre tablas.
+      ─────────────────────
+
+      📖 https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API
+      -->
+
+      <!-- Video con subtítulos en 2 idiomas -->
+      <video controls width="640">
+        <source src="video/clase.mp4" type="video/mp4">
+
+        <!-- Subtítulos en español (activados por defecto) -->
+        <track src="subs/clase-es.vtt" kind="subtitles" srclang="es" label="Español" default>
+
+        <!-- Subtítulos en inglés -->
+        <track src="subs/clase-en.vtt" kind="subtitles" srclang="en" label="English">
+      </video>
+
+      <pre><code>&lt;video controls width="640"&gt;
+  &lt;source src="video/clase.mp4" type="video/mp4"&gt;
+
+  &lt;!-- Subtítulos español (default) --&gt;
+  &lt;track src="subs/clase-es.vtt"
+         kind="subtitles"
+         srclang="es"
+         label="Español"
+         default&gt;
+
+  &lt;!-- Subtítulos inglés --&gt;
+  &lt;track src="subs/clase-en.vtt"
+         kind="subtitles"
+         srclang="en"
+         label="English"&gt;
+&lt;/video&gt;</code></pre>
+
+      <br>
+
+      <!-- Video con captions (para sordos) + descripciones (para ciegos) + capítulos -->
+      <h3>Ejemplo completo: captions + descriptions + chapters</h3>
+      <video controls width="640">
+        <source src="video/documental.mp4" type="video/mp4">
+
+        <!--
+          captions: subtítulos + sonidos ambientales
+          "[aplausos]", "[música suave]", "[teléfono sonando]"
+          Pensado para personas sordas.
+        -->
+        <track src="subs/captions-es.vtt" kind="captions" srclang="es" label="Español (CC)" default>
+
+        <!--
+          descriptions: describe lo que se ve en pantalla.
+          "Un hombre camina por una playa al atardecer"
+          Pensado para personas ciegas. Se puede leer con lector de pantalla.
+        -->
+        <track src="subs/descriptions-es.vtt" kind="descriptions" srclang="es" label="Audiodescripción">
+
+        <!--
+          chapters: marcadores de capítulos.
+          Permite saltar a secciones del video.
+          No todos los navegadores los muestran visualmente.
+        -->
+        <track src="subs/chapters-es.vtt" kind="chapters" srclang="es" label="Capítulos">
+      </video>
+
+      <pre><code>&lt;!-- Archivo captions-es.vtt (para sordos) --&gt;
+WEBVTT
+
+00:00:01.000 --> 00:00:03.000
+[música suave de piano]
+
+00:00:04.000 --> 00:00:07.000
+Bienvenidos al documental.
+
+00:00:08.000 --> 00:00:10.000
+[sonido de olas]
+
+─────────────────────
+
+&lt;!-- Archivo chapters-es.vtt --&gt;
+WEBVTT
+
+00:00:00.000 --> 00:05:00.000
+Introducción
+
+00:05:00.000 --> 00:15:00.000
+Desarrollo
+
+00:15:00.000 --> 00:20:00.000
+Conclusión</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 9. VIDEO SIN CONTROLES (para JS) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>9. Video sin controles — Controlado por JavaScript</h2>
+      <p>
+        Sin <code>controls</code>, el video se ve pero el usuario no puede interactuar.
+        Se controla 100% desde JavaScript.
+      </p>
+
+      <!--
+        Sin "controls": el video se muestra pero sin botones.
+        Se controla con JavaScript:
+
+        Métodos:
+          .play()          → reproduce
+          .pause()         → pausa
+          .load()          → recarga desde el inicio
+          .requestFullscreen() → pantalla completa (con prefijos)
+
+        Propiedades (leer/escribir):
+          .currentTime     → posición en segundos
+          .volume          → volumen (0.0 a 1.0)
+          .muted           → true/false
+          .playbackRate    → velocidad (0.5 = lento, 1 = normal, 2 = rápido)
+          .loop            → true/false
+
+        Propiedades (solo lectura):
+          .duration        → duración total en segundos
+          .paused          → ¿está pausado?
+          .ended           → ¿terminó?
+          .videoWidth      → ancho real del video
+          .videoHeight     → alto real del video
+          .currentSrc      → URL del source actual
+          .readyState      → estado de carga (0 a 4)
+          .networkState    → estado de red (0 a 3)
+          .buffered        → rangos descargados
+
+        Eventos:
+          "play"            → empezó a reproducir
+          "pause"           → se pausó
+          "ended"           → terminó
+          "timeupdate"      → la posición cambió
+          "loadedmetadata"  → metadatos cargados (duración disponible)
+          "loadeddata"      → primer frame cargado
+          "canplay"         → puede empezar a reproducir
+          "canplaythrough"  → puede reproducir sin parar
+          "waiting"         → esperando datos (buffering)
+          "seeking"         → buscando posición
+          "seeked"          → terminó de buscar posición
+          "volumechange"    → cambió el volumen
+          "ratechange"      → cambió la velocidad
+          "fullscreenchange" → entró/salió de pantalla completa
+          "error"           → error al cargar
+      -->
+      <video id="mi-video" width="480" preload="metadata" poster="img/poster.jpg">
+        <source src="video/ejemplo.mp4" type="video/mp4">
+      </video>
+
+      <br>
+
+      <div>
+        <button type="button" onclick="document.getElementById('mi-video').play()">
+          ▶ Play
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').pause()">
+          ⏸ Pausa
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').currentTime = 0">
+          ⏮ Reiniciar
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').currentTime += 10">
+          ⏩ +10s
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').currentTime -= 10">
+          ⏪ -10s
+        </button>
+        <button type="button"
+          onclick="document.getElementById('mi-video').volume = Math.min(1, document.getElementById('mi-video').volume + 0.1)">
+          🔊 +Vol
+        </button>
+        <button type="button"
+          onclick="document.getElementById('mi-video').volume = Math.max(0, document.getElementById('mi-video').volume - 0.1)">
+          🔉 -Vol
+        </button>
+        <button type="button"
+          onclick="document.getElementById('mi-video').muted = !document.getElementById('mi-video').muted">
+          🔇 Mute
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').playbackRate = 2.0">
+          ⏩ x2
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').playbackRate = 1.0">
+          ▶ x1
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').playbackRate = 0.5">
+          🐢 x0.5
+        </button>
+        <button type="button" onclick="document.getElementById('mi-video').requestFullscreen()">
+          🖥 Fullscreen
+        </button>
+      </div>
+
+      <pre><code>&lt;video id="mi-video" width="480"&gt;
+  &lt;source src="video/ejemplo.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+&lt;button onclick="document.getElementById('mi-video').play()"&gt;Play&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-video').pause()"&gt;Pausa&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-video').currentTime += 10"&gt;+10s&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-video').playbackRate = 2"&gt;x2&lt;/button&gt;
+&lt;button onclick="document.getElementById('mi-video').requestFullscreen()"&gt;Full&lt;/button&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 10. VIDEO RESPONSIVE -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>10. Video responsive (se adapta al ancho)</h2>
+      <p>
+        Para que el video se adapte al ancho del contenedor sin CSS,
+        podés usar <code>width="100%"</code> sin especificar height.
+      </p>
+
+      <!--
+        width="100%": el video ocupa todo el ancho disponible.
+        El alto se calcula automáticamente manteniendo la proporción (aspect ratio).
+        Es la forma más simple de hacer un video responsive sin CSS.
+      -->
+      <video controls width="100%" preload="metadata">
+        <source src="video/responsive.mp4" type="video/mp4">
+      </video>
+
+      <pre><code>&lt;!-- Se adapta al ancho del contenedor --&gt;
+&lt;video controls width="100%"&gt;
+  &lt;source src="video/responsive.mp4" type="video/mp4"&gt;
+&lt;/video&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 11. INCRUSTAR YOUTUBE / VIMEO (iframe) -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>11. Incrustar YouTube / Vimeo — <code>&lt;iframe&gt;</code></h2>
+      <p>
+        YouTube y Vimeo <strong>no se incrustan con <code>&lt;video&gt;</code></strong>.
+        Usan <code>&lt;iframe&gt;</code> con su propia URL de embed.<br>
+        📖 <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe">MDN — &lt;iframe&gt;</a>
+      </p>
+
+      <!--
+        IMPORTANTE: <video> es para archivos de video propios (.mp4, .webm).
+        YouTube, Vimeo, Dailymotion, etc. usan <iframe> con URLs especiales.
+
+        Para obtener el código de embed:
+          YouTube: botón "Compartir" → "Insertar"
+          Vimeo: botón "Share" → copiar código embed
+
+        Atributos importantes del iframe:
+          src:             URL del embed (NO la URL normal del video)
+          width/height:    tamaño del reproductor
+          title:           descripción para accesibilidad (OBLIGATORIO)
+          allow:           permisos que le das al iframe
+          allowfullscreen: permite pantalla completa
+          loading="lazy":  solo carga cuando el usuario hace scroll hasta ahí
+      -->
+
+      <h3>YouTube</h3>
+      <!--
+        URL normal:  https://www.youtube.com/watch?v=VIDEO_ID
+        URL embed:   https://www.youtube.com/embed/VIDEO_ID
+
+        Parámetros opcionales en la URL:
+          ?autoplay=1     → reproduce automáticamente
+          &mute=1         → empieza silenciado
+          &start=30       → empieza en el segundo 30
+          &end=120        → termina en el segundo 120
+          &loop=1         → se repite
+          &controls=0     → oculta los controles
+          &rel=0          → no muestra videos relacionados al final
+          &cc_load_policy=1 → activa subtítulos automáticamente
+      -->
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video de YouTube"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy">
+      </iframe>
+
+      <pre><code>&lt;!-- YouTube --&gt;
+&lt;iframe width="560" height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="Descripción del video"
+        allow="accelerometer; autoplay; clipboard-write;
+               encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- YouTube con parámetros --&gt;
+&lt;iframe width="560" height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID?start=30&amp;autoplay=1&amp;mute=1"
+        title="Video desde el segundo 30"
+        allowfullscreen&gt;
+&lt;/iframe&gt;</code></pre>
+
+      <br>
+
+      <h3>Vimeo</h3>
+      <!--
+        URL normal: https://vimeo.com/VIDEO_ID
+        URL embed:  https://player.vimeo.com/video/VIDEO_ID
+      -->
+      <iframe width="560" height="315" src="https://player.vimeo.com/video/347119375" title="Video de Vimeo"
+        allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy">
+      </iframe>
+
+      <pre><code>&lt;!-- Vimeo --&gt;
+&lt;iframe width="560" height="315"
+        src="https://player.vimeo.com/video/VIDEO_ID"
+        title="Video de Vimeo"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen&gt;
+&lt;/iframe&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 12. ACCESIBILIDAD -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>12. Accesibilidad en video</h2>
+      <p>
+        Un video no es accesible por sí solo. Hay que proveer alternativas
+        para personas sordas, ciegas o con dificultades cognitivas.
+      </p>
+
+      <!--
+        Buenas prácticas de accesibilidad para video:
+
+        1. Subtítulos (captions): OBLIGATORIOS para personas sordas.
+           Usar kind="captions" (no "subtitles") para incluir también
+           descripciones de sonidos [aplausos], [música], etc.
+
+        2. Audiodescripción: para personas ciegas.
+           Describe lo que se ve en pantalla cuando no hay diálogo.
+           Usar kind="descriptions" en <track>.
+
+        3. Transcripción completa: el texto de todo lo que se dice y se ve.
+           Sirve para sordos, ciegos, y también para SEO.
+
+        4. No depender solo del video para información importante.
+
+        5. No usar autoplay (molesta a usuarios de lectores de pantalla).
+
+        6. Siempre poner title en iframes de YouTube/Vimeo.
+      -->
+      <video controls width="640" aria-label="Clase 1: Introducción a HTML, duración 20 minutos"
+        aria-describedby="transcripcion-video">
+        <source src="video/clase1.mp4" type="video/mp4">
+
+        <!-- Captions para sordos (con sonidos ambientales) -->
+        <track src="subs/captions-es.vtt" kind="captions" srclang="es" label="Español (CC)" default>
+
+        <!-- Audiodescripción para ciegos -->
+        <track src="subs/descriptions-es.vtt" kind="descriptions" srclang="es" label="Audiodescripción">
+      </video>
+
+      <!-- Transcripción colapsable -->
+      <details id="transcripcion-video">
+        <summary>Ver transcripción completa</summary>
+        <p>
+          [Intro musical]<br>
+          Bienvenidos a la primera clase del curso de HTML.<br>
+          [El profesor se para frente a la pizarra]<br>
+          Hoy vamos a ver qué es HTML y para qué sirve...<br>
+          [Transcripción completa del video]
+        </p>
+      </details>
+
+      <pre><code>&lt;video controls width="640"
+       aria-label="Clase 1: Intro a HTML"
+       aria-describedby="transcripcion"&gt;
+  &lt;source src="video/clase1.mp4" type="video/mp4"&gt;
+  &lt;track src="subs/captions-es.vtt" kind="captions"
+         srclang="es" label="Español (CC)" default&gt;
+  &lt;track src="subs/descriptions-es.vtt" kind="descriptions"
+         srclang="es" label="Audiodescripción"&gt;
+&lt;/video&gt;
+
+&lt;details id="transcripcion"&gt;
+  &lt;summary&gt;Ver transcripción&lt;/summary&gt;
+  &lt;p&gt;Texto completo...&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- 13. GALERÍA DE VIDEOS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>13. Galería de videos (múltiples en una página)</h2>
+      <p>
+        Con varios videos en la misma página, usar <code>preload="none"</code>
+        y <code>poster</code> para no descargar todo a la vez.
+      </p>
+
+      <article>
+        <h3>Clase 1 — Introducción</h3>
+        <p>Duración: 20 min | 15/04/2026</p>
+        <video controls preload="none" width="480" poster="img/poster-clase1.jpg">
+          <source src="video/clase1.mp4" type="video/mp4">
+          <track src="subs/clase1-es.vtt" kind="captions" srclang="es" label="Español" default>
+        </video>
+      </article>
+
+      <article>
+        <h3>Clase 2 — Tablas y formularios</h3>
+        <p>Duración: 35 min | 16/04/2026</p>
+        <video controls preload="none" width="480" poster="img/poster-clase2.jpg">
+          <source src="video/clase2.mp4" type="video/mp4">
+          <track src="subs/clase2-es.vtt" kind="captions" srclang="es" label="Español" default>
+        </video>
+      </article>
+
+      <pre><code>&lt;article&gt;
+  &lt;h3&gt;Clase 1 — Introducción&lt;/h3&gt;
+  &lt;p&gt;Duración: 20 min&lt;/p&gt;
+  &lt;video controls preload="none" width="480"
+         poster="img/poster-clase1.jpg"&gt;
+    &lt;source src="video/clase1.mp4" type="video/mp4"&gt;
+    &lt;track src="subs/clase1-es.vtt" kind="captions"
+           srclang="es" label="Español" default&gt;
+  &lt;/video&gt;
+&lt;/article&gt;</code></pre>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- TABLA RESUMEN -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Resumen de atributos de <code>&lt;video&gt;</code></h2>
+
+      <table border="1" cellpadding="5">
+        <caption>Todos los atributos de la etiqueta video</caption>
+        <thead>
+          <tr>
+            <th scope="col">Atributo</th>
+            <th scope="col">Valores</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">src</th>
+            <td>URL</td>
+            <td>Ruta al archivo de video (alternativa a &lt;source&gt;)</td>
+          </tr>
+          <tr>
+            <th scope="row">controls</th>
+            <td>(booleano)</td>
+            <td>Muestra controles nativos (play, volumen, fullscreen)</td>
+          </tr>
+          <tr>
+            <th scope="row">autoplay</th>
+            <td>(booleano)</td>
+            <td>Reproduce automáticamente (bloqueado sin muted)</td>
+          </tr>
+          <tr>
+            <th scope="row">muted</th>
+            <td>(booleano)</td>
+            <td>Arranca silenciado</td>
+          </tr>
+          <tr>
+            <th scope="row">loop</th>
+            <td>(booleano)</td>
+            <td>Se repite al terminar</td>
+          </tr>
+          <tr>
+            <th scope="row">poster</th>
+            <td>URL de imagen</td>
+            <td>Imagen de preview antes de reproducir</td>
+          </tr>
+          <tr>
+            <th scope="row">preload</th>
+            <td>auto | metadata | none</td>
+            <td>Cuánto descargar anticipadamente</td>
+          </tr>
+          <tr>
+            <th scope="row">width</th>
+            <td>píxeles o %</td>
+            <td>Ancho del reproductor</td>
+          </tr>
+          <tr>
+            <th scope="row">height</th>
+            <td>píxeles</td>
+            <td>Alto del reproductor</td>
+          </tr>
+          <tr>
+            <th scope="row">playsinline</th>
+            <td>(booleano)</td>
+            <td>Reproduce dentro de la página en iOS</td>
+          </tr>
+          <tr>
+            <th scope="row">crossorigin</th>
+            <td>anonymous | use-credentials</td>
+            <td>Configuración CORS para video externo</td>
+          </tr>
+          <tr>
+            <th scope="row">disablepictureinpicture</th>
+            <td>(booleano)</td>
+            <td>Desactiva Picture-in-Picture</td>
+          </tr>
+          <tr>
+            <th scope="row">disableremoteplayback</th>
+            <td>(booleano)</td>
+            <td>Desactiva Chromecast / AirPlay</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br>
+
+      <table border="1" cellpadding="5">
+        <caption>Atributos de &lt;track&gt;</caption>
+        <thead>
+          <tr>
+            <th scope="col">Atributo</th>
+            <th scope="col">Valores</th>
+            <th scope="col">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">src</th>
+            <td>URL (.vtt)</td>
+            <td>Ruta al archivo WebVTT</td>
+          </tr>
+          <tr>
+            <th scope="row">kind</th>
+            <td>subtitles | captions | descriptions | chapters | metadata</td>
+            <td>Tipo de pista</td>
+          </tr>
+          <tr>
+            <th scope="row">srclang</th>
+            <td>Código ISO (es, en, pt)</td>
+            <td>Idioma de la pista</td>
+          </tr>
+          <tr>
+            <th scope="row">label</th>
+            <td>Texto</td>
+            <td>Nombre visible en el menú</td>
+          </tr>
+          <tr>
+            <th scope="row">default</th>
+            <td>(booleano)</td>
+            <td>Activa esta pista por defecto</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br>
+
+      <table border="1" cellpadding="5">
+        <caption>Formatos de video soportados</caption>
+        <thead>
+          <tr>
+            <th scope="col">Formato</th>
+            <th scope="col">MIME Type</th>
+            <th scope="col">Chrome</th>
+            <th scope="col">Firefox</th>
+            <th scope="col">Safari</th>
+            <th scope="col">Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">MP4 (H.264)</th>
+            <td>video/mp4</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>El más compatible. Siempre incluir.</td>
+          </tr>
+          <tr>
+            <th scope="row">WebM (VP9)</th>
+            <td>video/webm</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>No</td>
+            <td>Mejor compresión que H.264.</td>
+          </tr>
+          <tr>
+            <th scope="row">WebM (AV1)</th>
+            <td>video/webm</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>Sí*</td>
+            <td>El más nuevo. Safari desde v17+.</td>
+          </tr>
+          <tr>
+            <th scope="row">OGG (Theora)</th>
+            <td>video/ogg</td>
+            <td>Sí</td>
+            <td>Sí</td>
+            <td>No</td>
+            <td>Obsoleto. No usar para proyectos nuevos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <!-- ============================================================ -->
+    <!-- BUENAS PRÁCTICAS -->
+    <!-- ============================================================ -->
+    <section>
+      <h2>Buenas prácticas</h2>
+      <ol>
+        <li><strong>Siempre poner <code>controls</code></strong> a menos que controles el video con JS.</li>
+        <li><strong>Proveer al menos MP4 (H.264)</strong> como formato. Es universal.</li>
+        <li><strong>Siempre poner <code>poster</code></strong> para que el usuario vea de qué se trata antes de
+          reproducir.</li>
+        <li><strong>Usar <code>preload="none"</code></strong> si hay varios videos en la página.</li>
+        <li><strong>Agregar <code>playsinline</code></strong> si el video debe reproducirse dentro de la página en iOS.
+        </li>
+        <li><strong>No usar <code>autoplay</code> con sonido</strong>. Los navegadores lo bloquean.</li>
+        <li><strong>Siempre poner subtítulos</strong> con <code>&lt;track kind="captions"&gt;</code> para accesibilidad.
+        </li>
+        <li><strong>Ofrecer una transcripción</strong> del video para personas sordas y para SEO.</li>
+        <li><strong>Para YouTube/Vimeo usar <code>&lt;iframe&gt;</code></strong>, no <code>&lt;video&gt;</code>.</li>
+        <li><strong>Especificar <code>type</code></strong> en cada <code>&lt;source&gt;</code> para que el navegador
+          elija sin descargar.</li>
+        <li><strong>Usar <code>loading="lazy"</code></strong> en iframes de video para mejorar la performance.</li>
+        <li><strong>Poner <code>title</code></strong> en todo iframe de video para accesibilidad.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    <hr>
+    <p><small>
+        Referencia:
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video">MDN — &lt;video&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track">MDN — &lt;track&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe">MDN — &lt;iframe&gt;</a> |
+        <a href="https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Video_codecs">MDN — Codecs de video</a>
+        <br>Material educativo — Abril 2026
+      </small></p>
+  </footer>
+
+</body>
+
+</html>
