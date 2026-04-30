@@ -1,0 +1,27 @@
+/* Pseudoelementos */
+
+p::first-letter {
+  font-size: 30px;
+  color: red;
+}
+
+p::first-line {
+  font-weight: bold;
+}
+
+p::before {
+  content: "👉 ";
+}
+
+p::after {
+  content: " ✔";
+}
+
+::selection {
+  background: yellow;
+  color: black;
+}
+
+input::placeholder {
+  color: gray;
+}

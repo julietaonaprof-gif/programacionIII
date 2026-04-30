@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  EJEMPLO: Propiedad width en CSS — versión extendida
+  ============================================================
+  Todas las formas de usar width:
+  1. Píxeles (fijo)
+  2. Porcentaje (% del padre)
+  3. vw (% de la ventana)
+  4. max-width (límite máximo)
+  5. min-width (límite mínimo)
+  6. auto (default, el navegador decide)
+  7. fit-content (se adapta al contenido)
+  8. min-content (lo mínimo posible según contenido)
+  9. max-content (lo máximo posible según contenido)
+  10. em y rem (relativo a la tipografía)
+  11. calc() (cálculos)
+  12. clamp() (responsive con mínimos y máximos)
+
+  Fuente oficial: W3C CSS Box Sizing Module
+  https://www.w3.org/TR/css-sizing-3/
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Width en CSS — todos los valores</title>
+  <style>
+    /* Estilos generales, ignoralos */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+    }
+
+    h1,
+    h2 {
+      color: #1a4d7a;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Cajas base */
+    .caja {
+      background: #1a4d7a;
+      color: white;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    /* Contenedor padre visible para ejemplos con % */
+    .padre {
+      background: #f4f1ec;
+      padding: 1rem;
+      border: 2px dashed #e8941e;
+      margin: 1rem 0;
+    }
+
+    /* ============================================================
+       1. PÍXELES — tamaño fijo absoluto
+       ============================================================ */
+    .w-px {
+      width: 200px;
+    }
+
+    /* ============================================================
+       2. PORCENTAJE — relativo al contenedor padre
+       ============================================================ */
+    .w-50 {
+      width: 50%;
+    }
+
+    .w-100 {
+      width: 100%;
+    }
+
+    /* ============================================================
+       3. VW — relativo a la ventana del navegador
+       ============================================================
+       1vw = 1% del ancho de la ventana.
+       Ignora el contenedor padre.
+       ============================================================ */
+    .w-vw {
+      width: 50vw;
+    }
+
+    /* ============================================================
+       4. MAX-WIDTH — límite máximo
+       ============================================================ */
+    .w-max {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    /* ============================================================
+       5. MIN-WIDTH — límite mínimo
+       ============================================================ */
+    .w-min {
+      width: 20%;
+      min-width: 250px;
+    }
+
+    /* ============================================================
+       6. AUTO — el navegador decide (default)
+       ============================================================
+       - En elementos de BLOQUE (div, p, h1): ocupa todo
+         el ancho disponible (como 100%).
+       - En elementos INLINE-BLOCK o flex items: se ajusta
+         al contenido.
+
+       Es el valor POR DEFECTO de width si no decís nada.
+       ============================================================ */
+    .w-auto {
+      width: auto;
+      /* Como es un <div> (bloque), ocupa todo el ancho */
+    }
+
+    /* ============================================================
+       7. FIT-CONTENT — se adapta al contenido
+       ============================================================
+       La caja mide EXACTAMENTE lo que ocupa su contenido:
+       ni más ni menos.
+
+       Útil para que un título tenga un fondo que lo
+       "abrace" sin estirarse a todo el ancho del padre.
+
+       Podés pasarle un máximo:
+       width: fit-content(300px);
+       → ajusta al contenido, pero sin pasar de 300px.
+       ============================================================ */
+    .w-fit {
+      width: fit-content;
+      background: #c0392b;
+    }
+
+    /* ============================================================
+       8. MIN-CONTENT — lo más angosto posible
+       ============================================================
+       El ancho mínimo donde el contenido no causa overflow.
+
+       Para texto: el ancho de la palabra MÁS LARGA.
+       Imaginá que todas las palabras se apilan verticalmente.
+       ============================================================ */
+    .w-min-content {
+      width: min-content;
+      background: #27ae60;
+    }
+
+    /* ============================================================
+       9. MAX-CONTENT — lo más ancho posible
+       ============================================================
+       El contenido se extiende SIN saltos de línea.
+       Si el texto es largo, puede salirse del padre.
+       ============================================================ */
+    .w-max-content {
+      width: max-content;
+      background: #8e44ad;
+    }
+
+    /* ============================================================
+       10. EM y REM — relativo a la tipografía
+       ============================================================
+       - em: relativo al font-size del elemento o su padre.
+       - rem: relativo al font-size del <html> (16px default).
+
+       Útil si querés que los elementos escalen junto con
+       el tamaño del texto.
+
+       Ejemplo: width: 20rem = 20 × 16px = 320px
+       ============================================================ */
+    .w-rem {
+      width: 20rem;
+    }
+
+    /* ============================================================
+       11. CALC() — cálculos entre unidades
+       ============================================================
+       Permite mezclar unidades: calc(100% - 40px)
+       → "todo el ancho menos 40 píxeles de margen"
+
+       Útil para layouts donde tenés una parte fija y
+       otra flexible.
+       ============================================================ */
+    .w-calc {
+      width: calc(100% - 80px);
+      margin: 0 auto;
+      /* centrado */
+    }
+
+    /* ============================================================
+       12. CLAMP() — responsive con mínimo, ideal y máximo
+       ============================================================
+       clamp(min, ideal, max)
+
+       - Nunca más chico que "min"
+       - Nunca más grande que "max"
+       - En el medio, usa el "ideal" (suele ser vw)
+
+       Es la forma MODERNA de hacer responsive SIN media
+       queries. Redimensioná la ventana y mirá cómo se adapta.
+       ============================================================ */
+    .w-clamp {
+      width: clamp(200px, 50vw, 500px);
+      background: #e67e22;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Propiedad <code>width</code> en CSS — todos los valores</h1>
+  <p>
+    Desde las formas más simples hasta las modernas.
+  </p>
+
+  <hr>
+
+  <!-- 1 -->
+  <h2>1. Píxeles (fijo)</h2>
+  <p><code>width: 200px;</code> — siempre 200px, sin importar nada:</p>
+  <div class="caja w-px">200px fijo</div>
+
+  <hr>
+
+  <!-- 2 -->
+  <h2>2. Porcentaje (del padre)</h2>
+  <p><code>width: 50%;</code> — la mitad del contenedor padre:</p>
+  <div class="padre">
+    <div class="caja w-50">50% del padre</div>
+    <div class="caja w-100">100% del padre</div>
+  </div>
+
+  <hr>
+
+  <!-- 3 -->
+  <h2>3. vw (de la ventana)</h2>
+  <p><code>width: 50vw;</code> — la mitad de la VENTANA (ignora al padre):</p>
+  <div class="caja w-vw">50vw</div>
+
+  <hr>
+
+  <!-- 4 -->
+  <h2>4. <code>max-width</code> (límite máximo)</h2>
+  <p><code>width: 100%; max-width: 300px;</code> — crece pero no más de 300px:</p>
+  <div class="caja w-max">max 300px</div>
+
+  <hr>
+
+  <!-- 5 -->
+  <h2>5. <code>min-width</code> (límite mínimo)</h2>
+  <p><code>width: 20%; min-width: 250px;</code> — mínimo 250px:</p>
+  <div class="caja w-min">mín 250px</div>
+
+  <hr>
+
+  <!-- 6 -->
+  <h2>6. <code>auto</code> (el navegador decide)</h2>
+  <p>Es el valor <b>por defecto</b>. En un <code>&lt;div&gt;</code>, ocupa todo el ancho:</p>
+  <div class="caja w-auto">width: auto (= todo el ancho en bloque)</div>
+  <p class="nota">
+    Detalle: <code>auto</code> se comporta distinto según el tipo de
+    elemento. En bloque ocupa todo; en inline-block se adapta al
+    contenido.
+  </p>
+
+  <hr>
+
+  <!-- 7 -->
+  <h2>7. <code>fit-content</code> (se adapta al contenido)</h2>
+  <p>La caja ocupa SOLO lo que mide su contenido:</p>
+  <div class="caja w-fit">fit-content</div>
+  <p class="nota">
+    Ideal para títulos con fondo, badges o etiquetas que
+    necesitan "abrazar" el texto.
+  </p>
+
+  <hr>
+
+  <!-- 8 -->
+  <h2>8. <code>min-content</code> (lo más angosto posible)</h2>
+  <p>El ancho mínimo donde el contenido no causa overflow:</p>
+  <div class="caja w-min-content">min-content estira palabra a palabra</div>
+  <p class="nota">
+    El texto se parte en la palabra más larga. Útil para
+    layouts donde querés ancho mínimo natural.
+  </p>
+
+  <hr>
+
+  <!-- 9 -->
+  <h2>9. <code>max-content</code> (lo más ancho posible)</h2>
+  <p>El contenido se extiende sin saltos, aunque se salga:</p>
+  <div class="caja w-max-content">max-content nunca corta el texto en varias líneas</div>
+  <p class="nota">
+    Ojo: puede desbordar el contenedor si el texto es largo.
+  </p>
+
+  <hr>
+
+  <!-- 10 -->
+  <h2>10. <code>rem</code> (relativo a la tipografía)</h2>
+  <p><code>width: 20rem;</code> = 20 × 16px = 320px:</p>
+  <div class="caja w-rem">20rem</div>
+  <p class="nota">
+    Si el usuario cambia el tamaño de fuente en el navegador,
+    la caja escala con él. Bueno para accesibilidad.
+  </p>
+
+  <hr>
+
+  <!-- 11 -->
+  <h2>11. <code>calc()</code> (cálculos entre unidades)</h2>
+  <p><code>width: calc(100% - 80px);</code> — todo menos 80px:</p>
+  <div class="caja w-calc">calc(100% - 80px)</div>
+  <p class="nota">
+    Permite mezclar unidades. Se usa mucho cuando tenés
+    márgenes fijos pero el resto tiene que ser flexible.
+  </p>
+
+  <hr>
+
+  <!-- 12 -->
+  <h2>12. <code>clamp()</code> (responsive moderno)</h2>
+  <p><code>width: clamp(200px, 50vw, 500px);</code> — entre 200 y 500px, ideal 50vw. Redimensioná la ventana:</p>
+  <div class="caja w-clamp">clamp responsive</div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- RESUMEN -->
+  <!-- ============================================================ -->
+  <h2>Resumen de todos los valores</h2>
+
+  <h3>Valores absolutos (fijos)</h3>
+  <ul>
+    <li><code>200px</code> — píxeles.</li>
+    <li><code>20rem</code>, <code>10em</code> — relativo a tipografía.</li>
+  </ul>
+
+  <h3>Valores relativos al padre</h3>
+  <ul>
+    <li><code>50%</code> — porcentaje del contenedor.</li>
+  </ul>
+
+  <h3>Valores relativos a la ventana</h3>
+  <ul>
+    <li><code>50vw</code> — % del ancho del viewport.</li>
+    <li><code>50vh</code> — % del alto del viewport (para height).</li>
+  </ul>
+
+  <h3>Palabras clave</h3>
+  <ul>
+    <li><code>auto</code> — el navegador decide (default).</li>
+    <li><code>fit-content</code> — se adapta al contenido.</li>
+    <li><code>min-content</code> — lo mínimo posible.</li>
+    <li><code>max-content</code> — lo máximo posible.</li>
+  </ul>
+
+  <h3>Límites</h3>
+  <ul>
+    <li><code>max-width</code> — límite máximo.</li>
+    <li><code>min-width</code> — límite mínimo.</li>
+  </ul>
+
+  <h3>Funciones modernas</h3>
+  <ul>
+    <li><code>calc(100% - 40px)</code> — cálculos.</li>
+    <li><code>clamp(min, ideal, max)</code> — responsive con límites.</li>
+    <li><code>min(100%, 500px)</code> — el menor de los dos.</li>
+    <li><code>max(50%, 300px)</code> — el mayor de los dos.</li>
+  </ul>
+
+  <hr>
+
+  <h2>Reglas prácticas</h2>
+  <ul>
+    <li>
+      <b>Para contenido responsive:</b>
+      <code>width: 100%; max-width: 800px;</code> es el patrón más usado.
+    </li>
+    <li>
+      <b>Para cajas que abracen su contenido</b> (como badges):
+      <code>width: fit-content;</code>.
+    </li>
+    <li>
+      <b>Para tipografía responsive sin media queries:</b>
+      <code>clamp()</code>.
+    </li>
+    <li>
+      <b>Para layouts con partes fijas y flexibles:</b>
+      <code>calc()</code>.
+    </li>
+  </ul>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>W3C CSS Box Sizing: <a href="https://www.w3.org/TR/css-sizing-3/">w3.org/TR/css-sizing-3/</a></li>
+    <li>MDN — width: <a
+        href="https://developer.mozilla.org/es/docs/Web/CSS/width">developer.mozilla.org/es/docs/Web/CSS/width</a></li>
+  </ul>
+
+</body>
+
+</html>

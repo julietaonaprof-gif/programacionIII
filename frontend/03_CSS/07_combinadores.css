@@ -1,0 +1,24 @@
+/* Descendiente */
+div p {
+  color: blue;
+}
+
+/* Hijo directo */
+div>p {
+  font-weight: bold;
+}
+
+/* Hermano adyacente */
+h1+p {
+  color: red;
+}
+
+/* Hermanos generales */
+h1~p {
+  font-style: italic;
+}
+
+/* Combinado */
+section article p {
+  line-height: 2;
+}

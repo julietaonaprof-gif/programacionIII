@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  PSEUDO-SELECTORES con código HTML y CSS visible
+  ============================================================
+  Cada ejemplo muestra:
+  - El CÓDIGO HTML usado
+  - El CÓDIGO CSS aplicado
+  - El RESULTADO en vivo
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pseudo-selectores con código visible</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+
+    h1,
+    h2 {
+      color: #1a4d7a;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    /* Bloques de código */
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 0.5rem 0;
+    }
+
+    .etiqueta-codigo {
+      display: inline-block;
+      background: #e8941e;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px 4px 0 0;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+
+    .etiqueta-codigo.css {
+      background: #1a4d7a;
+    }
+
+    .etiqueta-codigo.resultado {
+      background: #27ae60;
+    }
+
+    .resultado-demo {
+      background: #f4f1ec;
+      border: 2px solid #e8941e;
+      padding: 1rem;
+      border-radius: 0 6px 6px 6px;
+      margin-bottom: 2rem;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .ok {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .fail {
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    /* ============================================================
+       ESTILOS DE LOS EJEMPLOS
+       (reutilizados de la versión anterior)
+       ============================================================ */
+
+    /* Hover */
+    .hover-demo {
+      padding: 0.5rem;
+      display: inline-block;
+      margin: 0.3rem;
+      background: #eee;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .hover-demo:hover {
+      background: #1a4d7a;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* first-child / last-child */
+    .lista-demo>*:first-child {
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    .lista-demo>*:last-child {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    /* nth-child */
+    .tabla-demo {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .tabla-demo tr:nth-child(even) {
+      background: #f4f1ec;
+    }
+
+    .tabla-demo td,
+    .tabla-demo th {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+    }
+
+    /* ::before / ::after */
+    .con-icono::before {
+      content: "⭐ ";
+      color: #e8941e;
+    }
+
+    .con-sufijo::after {
+      content: " ←";
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    /* Formularios */
+    input[type="text"],
+    input[type="email"] {
+      padding: 0.5rem;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      margin: 0.3rem 0;
+      width: 280px;
+    }
+
+    input:focus {
+      outline: 3px solid #e8941e;
+      outline-offset: 2px;
+    }
+
+    input:disabled {
+      background: #eee;
+      cursor: not-allowed;
+    }
+
+    input:required {
+      border-left: 4px solid #c0392b;
+    }
+
+    input:invalid:not(:placeholder-shown) {
+      border-color: #c0392b;
+      background: #ffe8e8;
+    }
+
+    input::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
+    input:checked+label {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    /* Listas */
+    .lista-con-marker li {
+      list-style: disc;
+    }
+
+    .lista-con-marker li::marker {
+      color: #e8941e;
+      font-size: 1.5rem;
+    }
+
+    /* first-letter / first-line */
+    .parrafo-capital::first-letter {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #c0392b;
+      float: left;
+      line-height: 1;
+      padding-right: 0.1em;
+    }
+
+    .parrafo-primera-linea::first-line {
+      font-weight: bold;
+      color: #1a4d7a;
+    }
+
+    /* Void element fallo */
+    img.intento-pseudo::before {
+      content: "Esto no se va a ver";
+      color: red;
+    }
+
+    /* Tabla comparativa */
+    table.comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    table.comparativa th,
+    table.comparativa td {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    table.comparativa th {
+      background: #1a4d7a;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Pseudo-selectores con código visible</h1>
+  <p>
+    Cada ejemplo muestra el <b>HTML</b>, el <b>CSS</b> aplicado,
+    y el <b>resultado</b> en vivo.
+  </p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2 style="color:#27ae60;">✅ Grupo 1: funcionan en cualquier tag</h2>
+
+  <!-- HOVER -->
+  <h3>1.1 — <code>:hover</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;div class="hover-demo"&gt;Soy un DIV&lt;/div&gt;
+&lt;span class="hover-demo"&gt;Soy un SPAN&lt;/span&gt;
+&lt;h4 class="hover-demo"&gt;Soy un H4&lt;/h4&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.hover-demo:hover {
+  background: #1a4d7a;
+  color: white;
+  cursor: pointer;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO (pasá el mouse por encima)</div>
+  <div class="resultado-demo">
+    <div class="hover-demo">Soy un DIV</div>
+    <span class="hover-demo">Soy un SPAN</span>
+    <h4 class="hover-demo">Soy un H4</h4>
+  </div>
+
+  <!-- FIRST/LAST CHILD -->
+  <h3>1.2 — <code>:first-child</code> y <code>:last-child</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;div class="lista-demo"&gt;
+  &lt;p&gt;Soy el primer párrafo.&lt;/p&gt;
+  &lt;p&gt;Soy un párrafo del medio.&lt;/p&gt;
+  &lt;p&gt;Soy el último párrafo.&lt;/p&gt;
+&lt;/div&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.lista-demo &gt; *:first-child {
+  color: #c0392b;
+  font-weight: bold;
+}
+.lista-demo &gt; *:last-child {
+  color: #27ae60;
+  font-weight: bold;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo lista-demo">
+    <p>Soy el primer párrafo.</p>
+    <p>Soy un párrafo del medio.</p>
+    <p>Soy el último párrafo.</p>
+  </div>
+
+  <!-- NTH-CHILD -->
+  <h3>1.3 — <code>:nth-child(even)</code> — zebra striping</h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;table class="tabla-demo"&gt;
+  &lt;tr&gt;&lt;th&gt;Nombre&lt;/th&gt;&lt;th&gt;Edad&lt;/th&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Ana&lt;/td&gt;&lt;td&gt;25&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Juan&lt;/td&gt;&lt;td&gt;32&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Lucía&lt;/td&gt;&lt;td&gt;28&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;Carlos&lt;/td&gt;&lt;td&gt;45&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.tabla-demo tr:nth-child(even) {
+  background: #f4f1ec;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <table class="tabla-demo">
+      <tr>
+        <th>Nombre</th>
+        <th>Edad</th>
+      </tr>
+      <tr>
+        <td>Ana</td>
+        <td>25</td>
+      </tr>
+      <tr>
+        <td>Juan</td>
+        <td>32</td>
+      </tr>
+      <tr>
+        <td>Lucía</td>
+        <td>28</td>
+      </tr>
+      <tr>
+        <td>Carlos</td>
+        <td>45</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ::BEFORE / ::AFTER -->
+  <h3>1.4 — <code>::before</code> y <code>::after</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;p class="con-icono"&gt;Soy un párrafo con estrella antes&lt;/p&gt;
+&lt;div class="con-icono"&gt;Soy un div con estrella antes&lt;/div&gt;
+&lt;h4 class="con-sufijo"&gt;Soy un h4 con flecha después&lt;/h4&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.con-icono::before {
+  content: "⭐ ";
+  color: #e8941e;
+}
+.con-sufijo::after {
+  content: " ←";
+  color: #c0392b;
+  font-weight: bold;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <p class="con-icono">Soy un párrafo con estrella antes</p>
+    <div class="con-icono">Soy un div con estrella antes</div>
+    <h4 class="con-sufijo">Soy un h4 con flecha después</h4>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2 style="color:#e67e22;">⚠️ Grupo 2: solo en formularios</h2>
+
+  <!-- FOCUS -->
+  <h3>2.1 — <code>:focus</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;input type="text" placeholder="Hacé click acá"&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>input:focus {
+  outline: 3px solid #e8941e;
+  outline-offset: 2px;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO (hacé click en el input)</div>
+  <div class="resultado-demo">
+    <input type="text" placeholder="Hacé click y mirá el borde naranja">
+  </div>
+
+  <!-- PLACEHOLDER -->
+  <h3>2.2 — <code>::placeholder</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;input type="text" placeholder="Soy un placeholder"&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>input::placeholder {
+  color: #999;
+  font-style: italic;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <input type="text" placeholder="Soy un placeholder gris e itálico">
+  </div>
+
+  <!-- DISABLED -->
+  <h3>2.3 — <code>:disabled</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;input type="text" value="Input deshabilitado" disabled&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>input:disabled {
+  background: #eee;
+  cursor: not-allowed;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <input type="text" value="Input deshabilitado" disabled>
+  </div>
+
+  <!-- REQUIRED -->
+  <h3>2.4 — <code>:required</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;input type="text" placeholder="Campo obligatorio" required&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>input:required {
+  border-left: 4px solid #c0392b;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <input type="text" placeholder="Campo obligatorio" required>
+  </div>
+
+  <!-- INVALID -->
+  <h3>2.5 — <code>:invalid</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;input type="email" placeholder="mail@ejemplo.com"&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>input:invalid:not(:placeholder-shown) {
+  border-color: #c0392b;
+  background: #ffe8e8;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO (escribí un email mal)</div>
+  <div class="resultado-demo">
+    <input type="email" placeholder="mail@ejemplo.com">
+  </div>
+
+  <!-- CHECKED -->
+  <h3>2.6 — <code>:checked</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;input type="checkbox" id="c1"&gt;
+&lt;label for="c1"&gt;Marcame&lt;/label&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>input:checked + label {
+  color: #27ae60;
+  font-weight: bold;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <input type="checkbox" id="c1">
+    <label for="c1">Marcame y el label cambia de color</label>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2 style="color:#e67e22;">⚠️ Grupo 3: solo en enlaces</h2>
+
+  <h3>3.1 — <code>:link</code>, <code>:visited</code>, <code>:hover</code>, <code>:active</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;a href="https://wikipedia.org"&gt;Enlace a Wikipedia&lt;/a&gt;
+&lt;a href="#"&gt;Enlace de ejemplo&lt;/a&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>a:link    { color: #1a4d7a; }         /* sin visitar */
+a:visited { color: #8e44ad; }         /* ya visitado */
+a:hover   { text-decoration: none; }  /* mouse encima */
+a:active  { color: #c0392b; }         /* clickeado */</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <p><a href="https://wikipedia.org">Enlace a Wikipedia</a> (violeta si ya lo visitaste)</p>
+    <p><a href="#">Pasá el mouse por encima</a> (se quita el subrayado)</p>
+  </div>
+
+  <p class="nota">
+    Orden recomendado: <b>LVHA</b> (Link, Visited, Hover, Active).
+    Si los ponés en otro orden, el <code>:hover</code> puede no funcionar.
+  </p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2 style="color:#e67e22;">⚠️ Grupo 4: solo en listas</h2>
+
+  <h3>4.1 — <code>::marker</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;ul class="lista-con-marker"&gt;
+  &lt;li&gt;Item con marker personalizado&lt;/li&gt;
+  &lt;li&gt;Otro item&lt;/li&gt;
+  &lt;li&gt;Un tercero&lt;/li&gt;
+&lt;/ul&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.lista-con-marker li {
+  list-style: disc;
+}
+.lista-con-marker li::marker {
+  color: #e8941e;
+  font-size: 1.5rem;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <ul class="lista-con-marker">
+      <li>Item con marker personalizado (naranja y grande)</li>
+      <li>Otro item</li>
+      <li>Un tercero</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2 style="color:#e67e22;">⚠️ Grupo 5: solo en bloques</h2>
+
+  <!-- FIRST-LETTER -->
+  <h3>5.1 — <code>::first-letter</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;p class="parrafo-capital"&gt;
+  Lorem ipsum dolor sit amet...
+&lt;/p&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.parrafo-capital::first-letter {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #c0392b;
+  float: left;
+  line-height: 1;
+  padding-right: 0.1em;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <p class="parrafo-capital">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      La primera letra se agranda y sale como una "capital" estilo libro.
+    </p>
+  </div>
+
+  <!-- FIRST-LINE -->
+  <h3>5.2 — <code>::first-line</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;p class="parrafo-primera-linea"&gt;
+  Esta es la primera línea...
+&lt;/p&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>.parrafo-primera-linea::first-line {
+  font-weight: bold;
+  color: #1a4d7a;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <p class="parrafo-primera-linea">
+      Esta es la primera línea del párrafo, que aparece en negrita y azul.
+      Todo el resto del texto queda en formato normal, aunque el texto
+      sigue y sigue sin aplicar estilo especial a estas líneas.
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2 style="color:#c0392b;">❌ Dónde NO funcionan los pseudo-elementos</h2>
+
+  <h3>Intento fallido: <code>::before</code> en una <code>&lt;img&gt;</code></h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;img class="intento-pseudo" src="foto.jpg"&gt;</pre>
+
+  <div class="etiqueta-codigo css">CSS</div>
+  <pre>img.intento-pseudo::before {
+  content: "Esto no se va a ver";
+  color: red;
+}</pre>
+
+  <div class="etiqueta-codigo resultado">RESULTADO</div>
+  <div class="resultado-demo">
+    <img class="intento-pseudo"
+      src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50'><rect width='100' height='50' fill='%231a4d7a'/><text x='50' y='30' text-anchor='middle' fill='white'>IMG</text></svg>"
+      alt="Imagen">
+    <p class="fail">
+      El <code>::before</code> no se ve. Las imágenes son void elements.
+    </p>
+  </div>
+
+  <h3>Solución correcta: envolver en un contenedor</h3>
+
+  <div class="etiqueta-codigo">HTML</div>
+  <pre>&lt;figure class="con-icono"&gt;
+  &lt;img src="foto.jpg"&gt;
+&lt;/figure&gt;</pre>
+
+  <p>Ahora <code>::before</code> se aplica al <code>&lt;figure&gt;</code> (que sí lo acepta) y envuelve la imagen
+    correctamente.</p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h2>Tabla resumen</h2>
+
+  <table class="comparativa">
+    <thead>
+      <tr>
+        <th>Pseudo-selector</th>
+        <th>¿Dónde funciona?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>:hover</code>, <code>:focus</code>, <code>:active</code></td>
+        <td class="ok">Cualquier tag visible</td>
+      </tr>
+      <tr>
+        <td><code>:first-child</code>, <code>:last-child</code>, <code>:nth-child()</code></td>
+        <td class="ok">Cualquier tag que sea hijo</td>
+      </tr>
+      <tr>
+        <td><code>:not()</code>, <code>:is()</code>, <code>:has()</code></td>
+        <td class="ok">Cualquier tag</td>
+      </tr>
+      <tr>
+        <td><code>::before</code>, <code>::after</code></td>
+        <td class="ok">Casi todos <span class="fail">(NO en void: img, input, br)</span></td>
+      </tr>
+      <tr>
+        <td><code>:checked</code></td>
+        <td class="fail">Solo checkbox, radio, option</td>
+      </tr>
+      <tr>
+        <td><code>:disabled</code>, <code>:enabled</code></td>
+        <td class="fail">Solo elementos de formulario</td>
+      </tr>
+      <tr>
+        <td><code>:required</code>, <code>:valid</code>, <code>:invalid</code></td>
+        <td class="fail">Solo inputs de formulario</td>
+      </tr>
+      <tr>
+        <td><code>:link</code>, <code>:visited</code></td>
+        <td class="fail">Solo <code>&lt;a&gt;</code> con href</td>
+      </tr>
+      <tr>
+        <td><code>::placeholder</code></td>
+        <td class="fail">Solo <code>&lt;input&gt;</code> y <code>&lt;textarea&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>::first-letter</code>, <code>::first-line</code></td>
+        <td class="fail">Solo elementos de bloque</td>
+      </tr>
+      <tr>
+        <td><code>::marker</code></td>
+        <td class="fail">Solo <code>&lt;li&gt;</code> con list-style</td>
+      </tr>
+      <tr>
+        <td><code>::selection</code></td>
+        <td class="ok">Cualquier tag con texto seleccionable</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>W3C Selectors: <a href="https://www.w3.org/TR/selectors-4/">w3.org/TR/selectors-4/</a></li>
+    <li>W3C Pseudo-Elements: <a href="https://www.w3.org/TR/css-pseudo-4/">w3.org/TR/css-pseudo-4/</a></li>
+    <li>MDN Pseudo-classes: <a
+        href="https://developer.mozilla.org/es/docs/Web/CSS/Pseudo-classes">developer.mozilla.org/es/docs/Web/CSS/Pseudo-classes</a>
+    </li>
+    <li>MDN Pseudo-elements: <a
+        href="https://developer.mozilla.org/es/docs/Web/CSS/Pseudo-elements">developer.mozilla.org/es/docs/Web/CSS/Pseudo-elements</a>
+    </li>
+  </ul>
+
+</body>
+
+</html>

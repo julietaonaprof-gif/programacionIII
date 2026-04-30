@@ -1,0 +1,43 @@
+/* Selectores por clase */
+
+.container {
+  width: 80%;
+  margin: auto;
+}
+
+.card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.texto-rojo {
+  color: red;
+}
+
+.texto-grande {
+  font-size: 24px;
+}
+
+.boton {
+  background: blue;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.boton-secundario {
+  background: gray;
+}
+
+.flex {
+  display: flex;
+}
+
+.centrado {
+  text-align: center;
+}
+
+.oculto {
+  display: none;
+}

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  EJEMPLO: Propiedad height en CSS — todos los valores
+  ============================================================
+  Funciona igual que width pero para el alto:
+  1. Píxeles
+  2. Porcentaje (¡con truco!)
+  3. vh (% de la ventana)
+  4. max-height
+  5. min-height (la MÁS recomendada)
+  6. auto
+  7. fit-content
+  8. min-content
+  9. max-content
+  10. rem
+  11. calc()
+  12. clamp()
+
+  ADVERTENCIA: height fijo suele causar problemas porque el
+  contenido puede ser más grande y salirse. Cuando tengas
+  duda, usá min-height (que permite crecer) en vez de height.
+
+  Fuente oficial: W3C CSS Box Sizing Module
+  https://www.w3.org/TR/css-sizing-3/
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Height en CSS — todos los valores</title>
+  <style>
+    /* Estilos generales, ignoralos */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+    }
+
+    h1,
+    h2 {
+      color: #1a4d7a;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #e8941e;
+      padding: 0.8rem 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    /* Cajas base (con ancho fijo para ver bien el ALTO) */
+    .caja {
+      background: #1a4d7a;
+      color: white;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 300px;
+      /* ancho fijo para enfocarnos en el alto */
+    }
+
+    /* ============================================================
+       1. PÍXELES — alto fijo absoluto
+       ============================================================
+       Cuidado: si el contenido es más grande que el height,
+       se sale de la caja (overflow). Para evitar eso se suele
+       combinar con overflow: hidden o auto.
+       ============================================================ */
+    .h-px {
+      height: 100px;
+    }
+
+    /* ============================================================
+       2. PORCENTAJE — relativo al PADRE (con truco)
+       ============================================================
+       ATENCIÓN: para que height: % funcione, el PADRE tiene
+       que tener una altura definida. Si el padre no tiene
+       altura, los porcentajes se ignoran.
+
+       Esto es distinto a width: % que siempre funciona.
+       ============================================================ */
+    .padre-con-altura {
+      height: 300px;
+      /* necesario para que % funcione en el hijo */
+      background: #f4f1ec;
+      padding: 1rem;
+      border: 2px dashed #e8941e;
+      margin: 1rem 0;
+    }
+
+    .h-50 {
+      height: 50%;
+      /* 50% de 300px = 150px */
+    }
+
+    /* ============================================================
+       3. VH — relativo a la VENTANA del navegador
+       ============================================================
+       1vh = 1% del ALTO de la ventana.
+       Ignora al padre, se basa en la ventana.
+
+       50vh = la mitad de la pantalla del usuario.
+       100vh = pantalla completa (muy usado en hero sections).
+       ============================================================ */
+    .h-vh {
+      height: 30vh;
+    }
+
+    /* ============================================================
+       4. MAX-HEIGHT — límite máximo
+       ============================================================
+       Útil para contenedores que pueden crecer pero no
+       demasiado. Suele combinarse con overflow: auto para
+       que aparezca scroll si el contenido pasa.
+       ============================================================ */
+    .h-max {
+      max-height: 150px;
+      overflow: auto;
+      /* scroll si el contenido pasa de 150px */
+    }
+
+    /* ============================================================
+       5. MIN-HEIGHT — la MÁS usada en la práctica
+       ============================================================
+       Garantiza un alto mínimo pero permite crecer si el
+       contenido lo necesita. EVITA el problema del overflow.
+
+       En la práctica, min-height se usa MÁS que height.
+       ============================================================ */
+    .h-min {
+      min-height: 200px;
+    }
+
+    /* ============================================================
+       6. AUTO — default, se adapta al contenido
+       ============================================================
+       Es el valor POR DEFECTO: el elemento mide exactamente
+       lo que ocupa su contenido. Ni más, ni menos.
+       ============================================================ */
+    .h-auto {
+      height: auto;
+    }
+
+    /* ============================================================
+       7. FIT-CONTENT — se adapta al contenido
+       ============================================================
+       En height, su comportamiento es muy similar a "auto".
+       Se usa más para width que para height en la práctica.
+       ============================================================ */
+    .h-fit {
+      height: fit-content;
+      background: #c0392b;
+    }
+
+    /* ============================================================
+       8. MIN-CONTENT — lo más bajo posible
+       ============================================================
+       El alto mínimo donde el contenido no se corta.
+       ============================================================ */
+    .h-min-content {
+      height: min-content;
+      background: #27ae60;
+    }
+
+    /* ============================================================
+       9. MAX-CONTENT — lo más alto posible
+       ============================================================
+       Similar a auto para height.
+       ============================================================ */
+    .h-max-content {
+      height: max-content;
+      background: #8e44ad;
+    }
+
+    /* ============================================================
+       10. REM — relativo a la tipografía
+       ============================================================
+       1rem = 16px (por defecto).
+       10rem = 160px.
+       ============================================================ */
+    .h-rem {
+      height: 10rem;
+    }
+
+    /* ============================================================
+       11. CALC() — cálculos
+       ============================================================
+       Muy útil para "pantalla completa menos el header":
+       height: calc(100vh - 60px);
+       ============================================================ */
+    .h-calc {
+      height: calc(50vh - 50px);
+    }
+
+    /* ============================================================
+       12. CLAMP() — responsive con límites
+       ============================================================
+       clamp(min, ideal, max)
+       Redimensioná la ventana y mirá cómo cambia.
+       ============================================================ */
+    .h-clamp {
+      height: clamp(100px, 20vh, 250px);
+      background: #e67e22;
+    }
+
+    /* ============================================================
+       TRUCO — centrar con height + flex
+       ============================================================
+       Una caja de 100vh es ideal para "hero sections" que
+       ocupan toda la pantalla inicial.
+       ============================================================ */
+    .hero {
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Propiedad <code>height</code> en CSS — todos los valores</h1>
+  <p>Funciona como <code>width</code> pero para el alto. Hay algunos trucos importantes.</p>
+
+  <div class="warning">
+    ⚠️ <b>Advertencia:</b> <code>height</code> fijo puede causar problemas
+    si el contenido crece más que el valor. En muchos casos es mejor
+    usar <code>min-height</code>, que garantiza un mínimo pero deja
+    que el elemento crezca si hace falta.
+  </div>
+
+  <hr>
+
+  <!-- 1 -->
+  <h2>1. Píxeles (fijo)</h2>
+  <p><code>height: 100px;</code> — siempre 100px:</p>
+  <div class="caja h-px">100px fijo</div>
+
+  <hr>
+
+  <!-- 2 -->
+  <h2>2. Porcentaje (del padre — con truco)</h2>
+  <p><code>height: 50%;</code> — pero <b>el padre tiene que tener altura</b>:</p>
+  <div class="padre-con-altura">
+    <div class="caja h-50">50% del padre (150px)</div>
+  </div>
+  <p class="nota">
+    Si el contenedor padre NO tiene altura definida, el <code>50%</code>
+    no funciona y se comporta como <code>auto</code>. Es una de las
+    diferencias más confusas respecto a <code>width</code>.
+  </p>
+
+  <hr>
+
+  <!-- 3 -->
+  <h2>3. vh (de la ventana)</h2>
+  <p><code>height: 30vh;</code> — 30% del alto de la ventana. Redimensioná verticalmente:</p>
+  <div class="caja h-vh">30vh</div>
+
+  <hr>
+
+  <!-- 4 -->
+  <h2>4. <code>max-height</code> (límite máximo)</h2>
+  <p><code>max-height: 150px;</code> + <code>overflow: auto;</code> = scroll si pasa:</p>
+  <div class="caja h-max" style="flex-direction: column; align-items: flex-start;">
+    <p>Línea 1 — Lorem ipsum dolor sit amet</p>
+    <p>Línea 2 — consectetur adipiscing elit</p>
+    <p>Línea 3 — sed do eiusmod tempor incididunt</p>
+    <p>Línea 4 — ut labore et dolore magna aliqua</p>
+    <p>Línea 5 — Ut enim ad minim veniam</p>
+    <p>Línea 6 — quis nostrud exercitation</p>
+  </div>
+
+  <hr>
+
+  <!-- 5 -->
+  <h2>5. <code>min-height</code> (la MÁS recomendada)</h2>
+  <p><code>min-height: 200px;</code> — mínimo 200px, pero puede crecer:</p>
+  <div class="caja h-min">min-height: 200px</div>
+  <p class="nota">
+    Esta es la que más vas a usar. En cards, secciones, hero
+    sections: preferí <code>min-height</code> a <code>height</code>.
+  </p>
+
+  <hr>
+
+  <!-- 6 -->
+  <h2>6. <code>auto</code> (default)</h2>
+  <p>Sin height definido, la caja mide lo que ocupa su contenido:</p>
+  <div class="caja h-auto">height: auto (contenido)</div>
+
+  <hr>
+
+  <!-- 7 -->
+  <h2>7. <code>fit-content</code></h2>
+  <p>Casi igual a <code>auto</code> para height:</p>
+  <div class="caja h-fit">fit-content</div>
+
+  <hr>
+
+  <!-- 8 -->
+  <h2>8. <code>min-content</code></h2>
+  <p>Lo más bajo posible manteniendo el contenido legible:</p>
+  <div class="caja h-min-content">min-content</div>
+
+  <hr>
+
+  <!-- 9 -->
+  <h2>9. <code>max-content</code></h2>
+  <p>Se adapta al contenido completo (similar a auto):</p>
+  <div class="caja h-max-content">max-content</div>
+
+  <hr>
+
+  <!-- 10 -->
+  <h2>10. <code>rem</code> (relativo a tipografía)</h2>
+  <p><code>height: 10rem;</code> = 160px:</p>
+  <div class="caja h-rem">10rem</div>
+
+  <hr>
+
+  <!-- 11 -->
+  <h2>11. <code>calc()</code></h2>
+  <p><code>height: calc(50vh - 50px);</code> — media pantalla menos 50px:</p>
+  <div class="caja h-calc">calc(50vh - 50px)</div>
+  <p class="nota">
+    Muy útil para "contenido que ocupa toda la pantalla menos la altura del header".
+  </p>
+
+  <hr>
+
+  <!-- 12 -->
+  <h2>12. <code>clamp()</code> (responsive con límites)</h2>
+  <p><code>height: clamp(100px, 20vh, 250px);</code> — entre 100 y 250px:</p>
+  <div class="caja h-clamp">clamp responsive</div>
+
+  <hr>
+
+  <!-- HERO -->
+  <h2>Truco clásico: hero section de pantalla completa</h2>
+  <p><code>height: 100vh;</code> + flex centrado — ocupa toda la pantalla visible:</p>
+  <div class="hero">
+    HERO 100vh
+  </div>
+
+  <hr>
+
+  <!-- RESUMEN -->
+  <h2>Resumen de todos los valores</h2>
+
+  <h3>Valores absolutos</h3>
+  <ul>
+    <li><code>100px</code> — píxeles.</li>
+    <li><code>10rem</code>, <code>5em</code> — relativos a tipografía.</li>
+  </ul>
+
+  <h3>Relativos al padre</h3>
+  <ul>
+    <li><code>50%</code> — porcentaje (requiere padre con altura).</li>
+  </ul>
+
+  <h3>Relativos a la ventana</h3>
+  <ul>
+    <li><code>50vh</code> — % del alto del viewport.</li>
+    <li><code>100vh</code> — pantalla completa.</li>
+  </ul>
+
+  <h3>Palabras clave</h3>
+  <ul>
+    <li><code>auto</code> — se adapta al contenido (default).</li>
+    <li><code>fit-content</code>, <code>min-content</code>, <code>max-content</code>.</li>
+  </ul>
+
+  <h3>Límites</h3>
+  <ul>
+    <li><code>max-height</code> — tope superior.</li>
+    <li><code>min-height</code> — <b>el que más vas a usar</b>.</li>
+  </ul>
+
+  <h3>Funciones modernas</h3>
+  <ul>
+    <li><code>calc()</code> — cálculos.</li>
+    <li><code>clamp(min, ideal, max)</code> — responsive con límites.</li>
+    <li><code>min()</code>, <code>max()</code> — el menor/mayor de varios.</li>
+  </ul>
+
+  <hr>
+
+  <h2>Diferencias importantes entre <code>height</code> y <code>width</code></h2>
+
+  <h3>1. Comportamiento por defecto</h3>
+  <ul>
+    <li><b>width: auto</b> en un &lt;div&gt; → ocupa todo el ancho.</li>
+    <li><b>height: auto</b> en un &lt;div&gt; → mide lo que ocupa el contenido (bien poquito).</li>
+  </ul>
+
+  <h3>2. Porcentajes</h3>
+  <ul>
+    <li><b>width: %</b> → funciona siempre (el ancho del padre suele estar definido).</li>
+    <li><b>height: %</b> → solo funciona si el padre tiene altura definida. Si no, se ignora.</li>
+  </ul>
+
+  <h3>3. Prioridad en el uso</h3>
+  <ul>
+    <li>Para <b>width</b>, se usa mucho width directo + max-width.</li>
+    <li>Para <b>height</b>, se prefiere <b>min-height</b> a height directo.</li>
+  </ul>
+
+  <hr>
+
+  <h2>Reglas prácticas</h2>
+  <ul>
+    <li>
+      <b>Si dudás entre height o min-height, usá min-height.</b>
+      Así tu contenido nunca se corta.
+    </li>
+    <li>
+      <b>Para hero sections:</b>
+      <code>min-height: 100vh;</code>.
+    </li>
+    <li>
+      <b>Para contenido con scroll interno:</b>
+      <code>max-height: 400px; overflow: auto;</code>.
+    </li>
+    <li>
+      <b>Para pantalla completa menos el header:</b>
+      <code>min-height: calc(100vh - 60px);</code>.
+    </li>
+    <li>
+      <b>Para que % funcione:</b>
+      asegurate de que el padre tenga altura definida.
+    </li>
+  </ul>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>W3C CSS Box Sizing: <a href="https://www.w3.org/TR/css-sizing-3/">w3.org/TR/css-sizing-3/</a></li>
+    <li>MDN — height: <a
+        href="https://developer.mozilla.org/es/docs/Web/CSS/height">developer.mozilla.org/es/docs/Web/CSS/height</a>
+    </li>
+    <li>MDN — min-height: <a
+        href="https://developer.mozilla.org/es/docs/Web/CSS/min-height">developer.mozilla.org/es/docs/Web/CSS/min-height</a>
+    </li>
+  </ul>
+
+</body>
+
+</html>

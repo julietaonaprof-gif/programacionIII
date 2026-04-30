@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  TEMA 3: BOX MODEL (Modelo de caja)
+  ============================================================
+  EL CONCEPTO MÁS IMPORTANTE DE CSS. Todo elemento HTML es
+  una CAJA RECTANGULAR con 4 áreas:
+
+  ┌──────────────────────────────────────┐ ← límite de margen
+  │           MARGIN                     │
+  │  ┌────────────────────────────────┐  │ ← límite de borde
+  │  │         BORDER                 │  │
+  │  │  ┌──────────────────────────┐  │  │ ← límite de relleno
+  │  │  │       PADDING            │  │  │
+  │  │  │  ┌────────────────────┐  │  │  │ ← límite de contenido
+  │  │  │  │    CONTENT         │  │  │  │
+  │  │  │  │ (texto, imagen...) │  │  │  │
+  │  │  │  └────────────────────┘  │  │  │
+  │  │  └──────────────────────────┘  │  │
+  │  └────────────────────────────────┘  │
+  └──────────────────────────────────────┘
+
+  Fuente oficial: W3C CSS Box Model Module
+  https://www.w3.org/TR/css-box-4/
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Box Model en CSS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+
+    h1,
+    h2 {
+      color: #1a4d7a;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #e8941e;
+      padding: 0.8rem 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    /* Fondo punteado para que se vea dónde está el padre */
+    .contenedor-demo {
+      background: #f4f1ec;
+      padding: 1rem;
+      border: 1px dashed #e8941e;
+      margin: 1rem 0;
+    }
+
+    /* ============================================================
+       EJEMPLO 1 — Las 4 áreas del box model
+       ============================================================
+       Esta caja muestra visualmente las 4 partes:
+       - background-color pinta content + padding
+       - border dibuja el borde
+       - margin queda fuera (el espacio exterior)
+       ============================================================ */
+    .caja-visual {
+      /* Content */
+      width: 200px;
+      height: 80px;
+
+      /* Padding (relleno interno) */
+      padding: 20px;
+      background-color: #1a4d7a;
+      /* pinta content + padding */
+
+      /* Border */
+      border: 8px solid #e8941e;
+
+      /* Margin (espacio exterior) */
+      margin: 30px;
+
+      /* Estilo extra */
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* ============================================================
+       EJEMPLO 2 — Padding (relleno interno)
+       ============================================================
+       Padding = espacio ENTRE el contenido y el borde.
+       Se pinta con el background del elemento.
+
+       Sintaxis:
+       - padding: 20px;                → los 4 lados igual
+       - padding: 20px 10px;            → vertical / horizontal
+       - padding: 10px 20px 30px 40px;  → arriba / derecha / abajo / izquierda
+       - padding-top / padding-right / padding-bottom / padding-left
+       ============================================================ */
+    .padding-demo {
+      background: #c0392b;
+      color: white;
+      font-weight: bold;
+      margin: 0.5rem 0;
+      width: 300px;
+    }
+
+    .p1 {
+      padding: 10px;
+    }
+
+    .p2 {
+      padding: 30px 10px;
+    }
+
+    /* vertical / horizontal */
+    .p3 {
+      padding: 5px 20px 40px 60px;
+    }
+
+    /* top right bottom left */
+
+    /* ============================================================
+       EJEMPLO 3 — Border (borde)
+       ============================================================
+       3 propiedades en una: grosor, estilo, color.
+
+       Estilos:
+       - solid   → línea continua
+       - dashed  → rayitas
+       - dotted  → puntos
+       - double  → dos líneas
+       - groove / ridge / inset / outset → efectos 3D (poco usados)
+       ============================================================ */
+    .border-demo {
+      background: #fff;
+      padding: 0.5rem 1rem;
+      margin: 0.3rem 0;
+      width: 300px;
+    }
+
+    .b1 {
+      border: 2px solid #1a4d7a;
+    }
+
+    .b2 {
+      border: 3px dashed #c0392b;
+    }
+
+    .b3 {
+      border: 4px dotted #27ae60;
+    }
+
+    .b4 {
+      border: 5px double #8e44ad;
+    }
+
+    /* Borde solo en un lado */
+    .b5 {
+      border-left: 6px solid #e8941e;
+    }
+
+    /* ============================================================
+       EJEMPLO 4 — Margin (margen externo)
+       ============================================================
+       Margin = espacio entre esta caja y sus vecinos.
+       No se pinta (es transparente).
+
+       Truco famoso: margin: 0 auto; → centra horizontalmente.
+       ============================================================ */
+    .margin-demo {
+      background: #1a4d7a;
+      color: white;
+      padding: 0.5rem;
+      width: 200px;
+    }
+
+    .m1 {
+      margin: 10px;
+    }
+
+    .m2 {
+      margin: 40px;
+    }
+
+    .m-centrado {
+      margin: 20px auto;
+      /* centra horizontalmente */
+    }
+
+    /* ============================================================
+       EJEMPLO 5 — box-sizing: CONTENT-BOX vs BORDER-BOX
+       ============================================================
+       Esta es LA propiedad clave del box model.
+
+       content-box (default):
+         width/height aplican SOLO al content.
+         El tamaño REAL del elemento = width + padding + border.
+         → si width: 200px, padding: 20px, border: 5px
+         → tamaño real: 200 + 40 + 10 = 250px
+
+       border-box:
+         width/height incluyen padding y border.
+         El tamaño REAL del elemento = width exactamente.
+         → si width: 200px, padding: 20px, border: 5px
+         → tamaño real: 200px (el content se achica a 150px)
+
+       CASI TODOS los proyectos modernos usan border-box porque
+       es mucho más predecible. Se aplica globalmente así:
+         * { box-sizing: border-box; }
+       ============================================================ */
+    .content-box-ejemplo {
+      box-sizing: content-box;
+      /* default */
+      width: 200px;
+      padding: 20px;
+      border: 5px solid black;
+      background: #e8941e;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    .border-box-ejemplo {
+      box-sizing: border-box;
+      width: 200px;
+      padding: 20px;
+      border: 5px solid black;
+      background: #1a4d7a;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    /* ============================================================
+       EJEMPLO 6 — overflow (qué hacer con el contenido que se sale)
+       ============================================================
+       Si el contenido es más grande que la caja, ¿qué pasa?
+
+       Valores:
+       - visible  → se sale (default, puede solapar otras cosas)
+       - hidden   → se corta, no se ve el excedente
+       - scroll   → siempre muestra barras de scroll (aunque no haga falta)
+       - auto     → scroll solo cuando hace falta (recomendado)
+       ============================================================ */
+    .overflow-demo {
+      width: 200px;
+      height: 80px;
+      background: #f4f1ec;
+      border: 2px solid #1a4d7a;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+
+    .ov-visible {
+      overflow: visible;
+    }
+
+    .ov-hidden {
+      overflow: hidden;
+    }
+
+    .ov-scroll {
+      overflow: scroll;
+    }
+
+    .ov-auto {
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Box Model — Modelo de caja</h1>
+  <p>
+    Todo elemento HTML es una <b>caja rectangular</b> con 4 áreas:
+    content, padding, border y margin. Entender esto es la base
+    de todo el layout en CSS.
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 1 -->
+  <h2>1. Las 4 áreas visualizadas</h2>
+  <p>Esta caja tiene las 4 áreas bien marcadas:</p>
+  <div class="contenedor-demo">
+    <div class="caja-visual">
+      CONTENT<br>
+      (width: 200px<br>
+      height: 80px)
+    </div>
+  </div>
+  <p class="nota">
+    El <b>fondo naranja punteado</b> es el padre. La caja azul es
+    el elemento. Entre la caja y el padre ves el <b>margin</b>
+    (30px). El <b>borde naranja</b> es el <b>border</b> (8px). El
+    espacio azul alrededor del texto es el <b>padding</b> (20px).
+    El texto en sí es el <b>content</b>.
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 2 -->
+  <h2>2. Padding (relleno interno)</h2>
+  <p>Espacio entre el contenido y el borde. Se pinta con el background:</p>
+  <div class="padding-demo p1">padding: 10px (igual en los 4 lados)</div>
+  <div class="padding-demo p2">padding: 30px 10px (vertical / horizontal)</div>
+  <div class="padding-demo p3">padding: 5px 20px 40px 60px (top / right / bottom / left)</div>
+
+  <hr>
+
+  <!-- EJEMPLO 3 -->
+  <h2>3. Border (borde)</h2>
+  <p>Sintaxis: <code>border: grosor estilo color;</code></p>
+  <div class="border-demo b1">border: 2px solid (línea)</div>
+  <div class="border-demo b2">border: 3px dashed (rayas)</div>
+  <div class="border-demo b3">border: 4px dotted (puntos)</div>
+  <div class="border-demo b4">border: 5px double (doble línea)</div>
+  <div class="border-demo b5">border-left solo (6px)</div>
+
+  <hr>
+
+  <!-- EJEMPLO 4 -->
+  <h2>4. Margin (margen externo)</h2>
+  <p>Espacio entre la caja y sus vecinos. No se pinta:</p>
+  <div class="contenedor-demo">
+    <div class="margin-demo m1">margin: 10px</div>
+    <div class="margin-demo m2">margin: 40px (más separación)</div>
+    <div class="margin-demo m-centrado">margin: 20px auto (centrado horizontal)</div>
+  </div>
+  <p class="nota">
+    Truco clásico: <code>margin: 0 auto;</code> centra un elemento
+    horizontalmente dentro de su padre (siempre que tenga un ancho
+    definido).
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 5 -->
+  <h2>5. ⭐ <code>box-sizing</code>: la propiedad más importante</h2>
+
+  <div class="warning">
+    <b>Esto es LO MÁS IMPORTANTE del box model.</b> Determina
+    si width/height incluyen padding y border, o no.
+  </div>
+
+  <p>Las dos cajas de abajo tienen <b>exactamente el mismo CSS</b> (width: 200px, padding: 20px, border: 5px). La única
+    diferencia es <code>box-sizing</code>:</p>
+
+  <div class="content-box-ejemplo">
+    CONTENT-BOX<br>
+    Tamaño real: 250px
+  </div>
+
+  <div class="border-box-ejemplo">
+    BORDER-BOX<br>
+    Tamaño real: 200px
+  </div>
+
+  <h3>La diferencia en números</h3>
+  <ul>
+    <li>
+      <b><code>content-box</code> (default):</b> el ancho real es
+      width + padding izq/der + border izq/der = 200 + 40 + 10 =
+      <b>250px</b>.
+    </li>
+    <li>
+      <b><code>border-box</code>:</b> el ancho real es exactamente
+      width = <b>200px</b>. El content se achica a 150px para
+      compensar padding y border.
+    </li>
+  </ul>
+
+  <div class="warning">
+    <b>Recomendación universal:</b> poné esto al principio de tu
+    CSS y olvidate de los bugs de tamaño:
+    <pre style="background:#fff; padding:0.5rem; border-radius:4px;">* {
+  box-sizing: border-box;
+}</pre>
+  </div>
+
+  <hr>
+
+  <!-- EJEMPLO 6 -->
+  <h2>6. <code>overflow</code> — cuando el contenido se sale</h2>
+  <p>Todas estas cajas son de 200×80px con mucho texto adentro. Mirá cómo cambia el comportamiento:</p>
+
+  <h3>visible (default): se sale</h3>
+  <div class="overflow-demo ov-visible">
+    Texto muy largo que no entra en la caja y se desborda visiblemente por fuera sin respetar los límites marcados.
+  </div>
+
+  <h3>hidden: se corta</h3>
+  <div class="overflow-demo ov-hidden">
+    Texto muy largo que no entra en la caja pero queda cortado al llegar al borde sin mostrarse.
+  </div>
+
+  <h3>scroll: barras siempre</h3>
+  <div class="overflow-demo ov-scroll">
+    Texto muy largo con scroll. Aparecen barras aunque no hagan falta en el otro eje.
+  </div>
+
+  <h3>auto: scroll solo si hace falta (recomendado)</h3>
+  <div class="overflow-demo ov-auto">
+    Texto muy largo con overflow auto. La barra aparece solo cuando es necesaria, por lo que la caja se mantiene más
+    limpia.
+  </div>
+
+  <hr>
+
+  <h2>Resumen</h2>
+  <ul>
+    <li><b>Content</b> — el contenido (texto, imagen...). Controlado por <code>width</code> y <code>height</code>.</li>
+    <li><b>Padding</b> — relleno interno. Se pinta con el background.</li>
+    <li><b>Border</b> — el borde. <code>grosor estilo color</code>.</li>
+    <li><b>Margin</b> — espacio externo, transparente.</li>
+    <li><b>box-sizing: border-box</b> — incluye padding y border en el width. RECOMENDADO.</li>
+    <li><b>overflow</b> — qué hacer con el contenido que se sale (<code>auto</code> es el más útil).</li>
+  </ul>
+
+  <h2>Reglas prácticas</h2>
+  <ul>
+    <li>Poné <code>* { box-sizing: border-box; }</code> al inicio de tu CSS. Siempre.</li>
+    <li>Para centrar un elemento con ancho fijo: <code>margin: 0 auto;</code></li>
+    <li>Si un elemento tiene contenido variable, usá <code>overflow: auto;</code></li>
+    <li>Para eliminar el margin/padding default del navegador: <code>* { margin: 0; padding: 0; }</code> (reset básico).
+    </li>
+  </ul>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>W3C — CSS Box Model: <a href="https://www.w3.org/TR/css-box-4/">w3.org/TR/css-box-4/</a></li>
+    <li>MDN — Box Model: <a
+        href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/Box_model">developer.mozilla.org/es/docs/.../Box_model</a>
+    </li>
+    <li>MDN — box-sizing: <a
+        href="https://developer.mozilla.org/es/docs/Web/CSS/box-sizing">developer.mozilla.org/es/docs/Web/CSS/box-sizing</a>
+    </li>
+  </ul>
+
+</body>
+
+</html>

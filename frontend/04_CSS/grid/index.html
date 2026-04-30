@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Ejemplos CSS Grid</title>
+
+  <style>
+    body {
+      font-family: Arial;
+    }
+
+    h2 {
+      margin-top: 40px;
+    }
+
+    /* 🧩 GRID 1 — columnas iguales */
+    .grid1 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .grid1 div {
+      background: steelblue;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* 🧩 GRID 2 — filas y columnas */
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 100px 200px;
+      gap: 10px;
+    }
+
+    .grid2 div {
+      background: orange;
+      padding: 20px;
+    }
+
+    /* 🧩 GRID 3 — posicionamiento */
+    .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 100px 100px;
+      gap: 10px;
+    }
+
+    .grid3 div {
+      background: purple;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .item1 {
+      grid-column: 1 / 3;
+    }
+
+    .item2 {
+      grid-row: 2 / 3;
+    }
+
+    .item3 {
+      grid-column: 3 / 4;
+      grid-row: 1 / 3;
+    }
+
+    /* 🧩 GRID 4 — layout web */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 3fr 1fr;
+      grid-template-rows: 80px 1fr 60px;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    header {
+      grid-column: 1 / 4;
+      background: red;
+      color: white;
+      padding: 10px;
+    }
+
+    nav {
+      background: blue;
+      color: white;
+      padding: 10px;
+    }
+
+    main {
+      background: green;
+      color: white;
+      padding: 10px;
+    }
+
+    aside {
+      background: orange;
+      padding: 10px;
+    }
+
+    footer {
+      grid-column: 1 / 4;
+      background: black;
+      color: white;
+      padding: 10px;
+    }
+
+    /* 📱 RESPONSIVE */
+    @media (max-width: 600px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      header,
+      footer {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Ejemplos de CSS Grid</h1>
+
+  <h2>1. Columnas iguales</h2>
+  <div class="grid1">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+  </div>
+
+  <h2>2. Filas y columnas</h2>
+  <div class="grid2">
+    <div>A</div>
+    <div>B</div>
+    <div>C</div>
+    <div>D</div>
+  </div>
+
+  <h2>3. Posicionamiento</h2>
+  <div class="grid3">
+    <div class="item1">1</div>
+    <div class="item2">2</div>
+    <div class="item3">3</div>
+  </div>
+
+  <h2>4. Layout tipo web</h2>
+  <div class="layout">
+    <header>Header</header>
+    <nav>Menu</nav>
+    <main>Contenido</main>
+    <aside>Sidebar</aside>
+    <footer>Footer</footer>
+  </div>
+
+</body>
+
+</html>

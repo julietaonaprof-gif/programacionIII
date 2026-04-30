@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  EJEMPLO: Propiedades de texto en CSS — versión ampliada
+  ============================================================
+  Esta es la continuación del archivo anterior. Los primeros
+  10 pasos son los mismos que ya viste (color, font-family,
+  font-size, font-weight, font-style, text-decoration,
+  text-align, line-height, letter-spacing, word-spacing,
+  text-transform, text-indent, text-shadow, ::first-letter,
+  ::first-line).
+
+  Ahora agregamos del Paso 11 al 19 las otras propiedades
+  útiles que quedaron pendientes.
+
+  Fuentes oficiales:
+  - CSS Fonts Module:       https://www.w3.org/TR/css-fonts-4/
+  - CSS Text Module:        https://www.w3.org/TR/css-text-3/
+  - CSS Text Decor Module:  https://www.w3.org/TR/css-text-decor-4/
+  - CSS Writing Modes:      https://www.w3.org/TR/css-writing-modes-4/
+  - CSS Multi-column:       https://www.w3.org/TR/css-multicol-1/
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Propiedades de texto en CSS — versión ampliada</title>
+
+  <style>
+    /* ============================================================
+       ESTILOS GENERALES
+       ============================================================ */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.5;
+    }
+
+    h1,
+    h2 {
+      color: #1a4d7a;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .ejemplo {
+      background: #f4f1ec;
+      padding: 1rem;
+      border-left: 4px solid #e8941e;
+      margin: 1rem 0;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* ============================================================
+       PASO 1 al 10 — RESUMIDOS
+       Ya los vimos en el archivo anterior. Acá los aplico en
+       los ejemplos iniciales de repaso.
+       ============================================================ */
+    .paso1 {
+      color: #c0392b;
+    }
+
+    .paso2 {
+      font-family: "Georgia", serif;
+    }
+
+    .paso3 {
+      font-size: 1.5rem;
+    }
+
+    .paso4 {
+      font-weight: 700;
+    }
+
+    .paso5 {
+      font-style: italic;
+      text-decoration: underline wavy #c0392b 2px;
+    }
+
+    .paso6 {
+      text-align: justify;
+      line-height: 1.8;
+    }
+
+    .paso7 {
+      letter-spacing: 0.15em;
+      word-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    .paso8 {
+      text-transform: capitalize;
+      text-indent: 3em;
+    }
+
+    .paso9 {
+      color: white;
+      background: #222;
+      padding: 0.5em;
+      font-size: 2rem;
+      font-weight: bold;
+      text-shadow: 0 0 5px #fff, 0 0 15px #00eaff, 0 0 25px #00eaff;
+    }
+
+    .paso10 {
+      font-family: "Georgia", serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #2a2a2a;
+      text-align: justify;
+      text-indent: 2em;
+    }
+
+    .paso10::first-letter {
+      font-size: 3.5rem;
+      font-weight: bold;
+      color: #c0392b;
+      float: left;
+      line-height: 1;
+      padding-right: 0.1em;
+      margin-top: 0.05em;
+    }
+
+    .paso10::first-line {
+      font-variant: small-caps;
+      font-weight: bold;
+    }
+
+    /* ============================================================
+       PASO 11 — font-variant (versalitas y ligaduras)
+       ============================================================
+       font-variant habilita características tipográficas
+       especiales que MUCHAS fuentes incluyen pero rara vez
+       se usan.
+
+       Valores más útiles:
+       - small-caps       → VERSALITAS (mayúsculas pequeñas,
+                            ideales para acrónimos y elegante).
+       - all-small-caps   → todo en versalitas.
+       - oldstyle-nums    → números "de texto" (con descenders
+                            como la 'g'), más elegantes en
+                            textos literarios.
+       - tabular-nums     → números con el MISMO ancho cada
+                            uno (para alinear columnas de
+                            datos financieros).
+       - no-common-ligatures → desactiva ligaduras (la fusión
+                               de 'fi', 'fl', etc.).
+
+       En CSS moderno, font-variant es un shorthand de
+       font-variant-caps, font-variant-numeric, etc.
+    */
+    .paso11 {
+      font-variant: small-caps;
+      font-size: 1.2rem;
+    }
+
+    .paso11-nums {
+      font-variant-numeric: tabular-nums;
+      font-family: "Georgia", serif;
+    }
+
+    /* ============================================================
+       PASO 12 — white-space (control de espacios)
+       ============================================================
+       Por defecto, el HTML colapsa los espacios múltiples en
+       uno solo y los saltos de línea los ignora. white-space
+       cambia ese comportamiento:
+
+       - normal    → default. Colapsa espacios, ignora saltos.
+       - nowrap    → no parte el texto en líneas, aunque no
+                     entre (sale del contenedor).
+       - pre       → respeta espacios Y saltos de línea tal
+                     cual están en el HTML (como <pre>).
+       - pre-wrap  → respeta espacios y saltos, pero también
+                     permite cortar líneas si no caben. El
+                     más útil en la práctica.
+       - pre-line  → colapsa espacios múltiples PERO respeta
+                     los saltos de línea.
+    */
+    .paso12-nowrap {
+      white-space: nowrap;
+      background: #ffe;
+      padding: 0.5em;
+      overflow: auto;
+      /* para ver el scroll horizontal */
+    }
+
+    .paso12-pre {
+      white-space: pre-wrap;
+      background: #eef;
+      padding: 0.5em;
+      font-family: monospace;
+    }
+
+    /* ============================================================
+       PASO 13 — word-break y overflow-wrap
+       ============================================================
+       Qué hacer con palabras MUY LARGAS que no entran en el
+       contenedor (URLs, emails, palabras de química, etc.).
+
+       word-break:
+       - normal     → default, corta solo donde es normal.
+       - break-all  → corta EN CUALQUIER letra si hace falta
+                      (puede quedar feo pero evita overflow).
+       - keep-all   → no corta entre caracteres CJK (chino,
+                      japonés, coreano).
+
+       overflow-wrap (antes llamado word-wrap):
+       - normal      → default, solo corta en espacios.
+       - break-word  → corta la palabra si no hay otra forma
+                       de evitar el overflow. MÁS
+                       RECOMENDADO que word-break: break-all
+                       porque es más inteligente.
+       - anywhere    → como break-word pero considera mejor
+                       los anchos para el layout.
+    */
+    .paso13 {
+      width: 200px;
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      overflow-wrap: break-word;
+    }
+
+    /* ============================================================
+       PASO 14 — text-overflow (puntos suspensivos)
+       ============================================================
+       Aparece el famoso "..." cuando un texto no entra.
+
+       REQUISITOS para que funcione:
+       1. El elemento tiene que tener overflow: hidden.
+       2. El elemento tiene que tener white-space: nowrap.
+       3. El elemento tiene que ser de bloque o inline-block
+          con un ancho definido.
+
+       Los tres van juntos o no funciona.
+
+       Valores:
+       - clip      → default, simplemente corta (sin aviso).
+       - ellipsis  → muestra "..." al final.
+       - string    → un string custom (ej: text-overflow: "»";)
+                     soporte limitado.
+    */
+    .paso14 {
+      width: 300px;
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ============================================================
+       PASO 15 — hyphens (guiones automáticos)
+       ============================================================
+       Corta las palabras al final de la línea con un guión,
+       como en los libros impresos. Muy útil en textos
+       justificados para evitar los "ríos" de espacios.
+
+       Valores:
+       - none    → nunca cortar con guión.
+       - manual  → solo donde haya un guión explícito (&shy;
+                   o ­ en Unicode).
+       - auto    → automático, el navegador decide.
+
+       IMPORTANTE: para "auto" el navegador necesita saber el
+       idioma del texto. Por eso el atributo lang="es" en el
+       <html> es crítico acá. Sin él, "auto" no funciona bien.
+
+       Soporte: todos los navegadores modernos (con prefijos
+       en Safari viejo).
+    */
+    .paso15 {
+      width: 250px;
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      /* Safari */
+    }
+
+    /* ============================================================
+       PASO 16 — direction y writing-mode
+       ============================================================
+       direction: controla la dirección del texto.
+       - ltr (left-to-right): default, para español, inglés,
+         francés, etc.
+       - rtl (right-to-left): árabe, hebreo, persa.
+
+       writing-mode: cambia la ORIENTACIÓN de la escritura
+       (horizontal vs vertical).
+       - horizontal-tb → default, horizontal de arriba abajo.
+       - vertical-rl   → vertical, de derecha a izquierda
+                         (japonés tradicional).
+       - vertical-lr   → vertical, de izquierda a derecha
+                         (mongol).
+
+       text-orientation (junto con writing-mode vertical):
+       - mixed         → rota caracteres latinos 90°, deja
+                         los CJK al derecho.
+       - upright       → todos los caracteres al derecho
+                         (útil para diseños creativos
+                         occidentales).
+
+       Uso moderno: writing-mode se usa MUCHO en diseño
+       creativo occidental, no solo para idiomas asiáticos.
+       Pensá en títulos verticales en landing pages modernas.
+    */
+    .paso16-rtl {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .paso16-vertical {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      height: 180px;
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      background: #fff8e1;
+    }
+
+    /* ============================================================
+       PASO 17 — text-align avanzado y text-wrap (moderno)
+       ============================================================
+       text-wrap es una propiedad MODERNA (desde 2023-2024)
+       que da control avanzado sobre cómo se parten las líneas.
+
+       Valores:
+       - wrap        → default, corta donde entre.
+       - nowrap      → nunca corta (como white-space: nowrap).
+       - balance     → BALANCEA las líneas para que todas
+                       tengan longitud parecida. IDEAL PARA
+                       TÍTULOS de 2-3 líneas (evita que la
+                       última línea tenga una palabra huérfana).
+       - pretty      → similar a balance pero para párrafos
+                       largos: evita "huérfanas" al final.
+                       Pequeño impacto en performance.
+       - stable      → para contenido editable que no debe
+                       re-reflowear.
+
+       Soporte: balance en Chrome desde 114, Firefox 121,
+       Safari 17.5+. pretty un poco más reciente.
+
+       Aunque no tenga soporte total, se puede usar porque
+       los navegadores viejos lo ignoran y el texto se ve
+       normal (progressive enhancement).
+    */
+    .paso17 {
+      width: 300px;
+      border: 1px solid #ccc;
+      padding: 0.8em;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-wrap: balance;
+    }
+
+    /* ============================================================
+       PASO 18 — @font-face + fuentes variables
+       ============================================================
+       @font-face permite cargar CUALQUIER fuente que tengas
+       en tu servidor (o de un CDN). Es cómo funcionan los
+       sitios con tipografías personalizadas.
+
+       Sintaxis básica:
+         @font-face {
+           font-family: 'MiFuente';
+           src: url('mifuente.woff2') format('woff2');
+           font-weight: 400;
+           font-style: normal;
+           font-display: swap;
+         }
+
+       font-display controla qué hace el navegador mientras
+       descarga la fuente:
+       - block (default): texto invisible hasta que cargue.
+       - swap: muestra fuente fallback y la reemplaza (lo
+         más usado, mejor UX).
+       - fallback: breve invisible, luego fallback, nunca
+         reemplaza si tarda.
+       - optional: la usa solo si carga rápido.
+
+       Formatos:
+       - woff2 → el moderno, comprimido, soporte universal.
+       - woff  → viejo, menos eficiente.
+       - ttf/otf → originales, pesan más.
+
+       EJEMPLO: NO VAMOS a cargar una fuente real acá porque
+       requeriría un archivo externo, pero dejo el código
+       comentado para que veas cómo sería.
+
+       Para probar tipografías sin complicarte, usá Google
+       Fonts: te dan el código <link> listo.
+
+       Ejemplo con Google Fonts (sacado de fonts.google.com):
+         <link rel="preconnect" href="https://fonts.googleapis.com">
+         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+         body { font-family: 'Inter', sans-serif; }
+    */
+    /*
+    @font-face {
+      font-family: 'MiFuente';
+      src: url('mifuente.woff2') format('woff2');
+      font-weight: 100 900;  // rango para fuentes variables
+      font-display: swap;
+    }
+    .paso18 { font-family: 'MiFuente', sans-serif; }
+    */
+
+    /* ============================================================
+       PASO 19 — Columnas tipo periódico (CSS Multi-column)
+       ============================================================
+       Aunque no es estrictamente una "propiedad de texto",
+       afecta mucho cómo se lee el texto. Divide un bloque en
+       varias columnas automáticamente, como un diario.
+
+       Propiedades:
+       - column-count      → cantidad fija de columnas.
+       - column-width      → ancho ideal de cada columna; el
+                             navegador calcula cuántas caben.
+       - columns           → shorthand: columns: 20em 3;
+       - column-gap        → espacio entre columnas.
+       - column-rule       → línea divisoria (como border).
+       - column-span: all  → un elemento que cruza TODAS las
+                             columnas (útil para títulos).
+    */
+    .paso19 {
+      column-count: 3;
+      column-gap: 2em;
+      column-rule: 1px solid #ccc;
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+    }
+
+    /* ============================================================
+       PASO 20 — Trucos modernos: gradiente de texto,
+                 clamp() para responsive
+       ============================================================
+       1) GRADIENTE DE TEXTO
+       Usamos background (con gradiente), luego:
+         background-clip: text;
+         color: transparent;
+
+       Esto "recorta" el fondo a la forma del texto.
+       Soporte universal hoy en día.
+
+       2) FONT-SIZE RESPONSIVE CON clamp()
+       clamp(min, preferido, max) da un tamaño que escala con
+       el viewport pero con mínimos y máximos garantizados.
+
+       Ejemplo: clamp(1rem, 2.5vw, 2rem)
+       - En mobile: nunca menos de 1rem.
+       - En pantallas medianas: crece según el ancho.
+       - En desktop grande: nunca más de 2rem.
+
+       Es la solución moderna al "tipografía responsive" y
+       reemplaza varios @media queries.
+    */
+    .paso20-gradiente {
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, #ff6a00, #ee0979, #3a1c71);
+      background-clip: text;
+      -webkit-background-clip: text;
+      /* Safari */
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      /* Safari */
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Propiedades de texto en CSS — versión ampliada</h1>
+  <p>
+    Partimos de los 10 pasos anteriores (resumidos abajo) y
+    agregamos del <b>Paso 11 al 20</b> las propiedades que
+    faltaban: versalitas, espacios, cortes de línea, ellipsis,
+    guiones automáticos, dirección del texto, vertical writing,
+    text-wrap moderno, @font-face, columnas y trucos actuales.
+  </p>
+
+  <hr>
+
+  <!-- REPASO RÁPIDO DE PASOS 1-10 -->
+  <h2>Repaso rápido: Pasos 1 al 10</h2>
+  <div class="ejemplo">
+    <p class="paso1">Paso 1 — <code>color</code> en rojo oscuro.</p>
+    <p class="paso2">Paso 2 — <code>font-family</code> en Georgia.</p>
+    <p class="paso3">Paso 3 — <code>font-size: 1.5rem</code>.</p>
+    <p class="paso4">Paso 4 — <code>font-weight: 700</code>.</p>
+    <p class="paso5">Paso 5 — cursiva con subrayado ondulado.</p>
+    <p class="paso6">Paso 6 — justificado con line-height 1.8.</p>
+    <p class="paso7">Paso 7 — espaciado amplio y uppercase.</p>
+    <p class="paso8">paso 8 — capitalize y text-indent.</p>
+    <p class="paso9">PASO 9 — NEÓN</p>
+    <p class="paso10">Paso 10 — Lorem ipsum dolor sit amet con letra capital y primera línea en versalitas...</p>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- PASO 11 -->
+  <h2>Paso 11 — <code>font-variant</code> (versalitas y números)</h2>
+  <p>Versalitas (mayúsculas pequeñas) y números tabulares:</p>
+  <div class="ejemplo">
+    <p class="paso11">Este texto usa small-caps: la primera letra va en mayúscula grande, el resto en versalitas.</p>
+    <p class="paso11-nums">
+      Números normales: 123456789<br>
+      Números tabulares (todos del mismo ancho): 123456789<br>
+      Ideal para columnas de precios: $1,234 / $5,678 / $9,012
+    </p>
+    <p class="nota">
+      Nota: algunas de estas features dependen de la fuente
+      tipográfica. Georgia y fuentes similares lo soportan
+      bien; tipografías básicas pueden ignorarlo.
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- PASO 12 -->
+  <h2>Paso 12 — <code>white-space</code> (control de espacios)</h2>
+  <p><code>nowrap</code>: el texto no parte en líneas aunque no entre:</p>
+  <div class="ejemplo">
+    <div class="paso12-nowrap">
+      Este texto está todo en una sola línea y provoca scroll horizontal porque no se permite cortar aunque no entre en
+      el contenedor.
+    </div>
+  </div>
+
+  <p><code>pre-wrap</code>: respeta espacios y saltos de línea del HTML:</p>
+  <div class="ejemplo">
+    <div class="paso12-pre">Línea 1 con varios espacios.
+      Línea 2 con salto respetado.
+      Línea 3 indentada con tabs.</div>
+  </div>
+
+  <hr>
+
+  <!-- PASO 13 -->
+  <h2>Paso 13 — <code>word-break</code> y <code>overflow-wrap</code></h2>
+  <p>Evita que palabras largas rompan el layout:</p>
+  <div class="ejemplo">
+    <div class="paso13">
+      Mira esta URL larguísima: https://ejemplo-muy-largo.com/ruta/super/extensa/pagina.html — si no tuviera
+      overflow-wrap, saldría del contenedor.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PASO 14 -->
+  <h2>Paso 14 — <code>text-overflow: ellipsis</code> (puntos suspensivos)</h2>
+  <p>El clásico "..." para texto cortado:</p>
+  <div class="ejemplo">
+    <p class="paso14">Este es un título muy muy muy largo que no cabe en una sola línea</p>
+    <p class="nota">Requiere: <code>overflow: hidden</code> + <code>white-space: nowrap</code> + ancho fijo.</p>
+  </div>
+
+  <hr>
+
+  <!-- PASO 15 -->
+  <h2>Paso 15 — <code>hyphens: auto</code> (guiones automáticos)</h2>
+  <p>El navegador corta palabras con guión al final de línea, como en los libros:</p>
+  <div class="ejemplo">
+    <div class="paso15">
+      Este texto en español tiene hyphens automáticos: palabras largas como inconstitucionalmente o
+      electroencefalografía se pueden cortar con guiones automáticamente.
+    </div>
+    <p class="nota">Requiere <code>lang="es"</code> en el &lt;html&gt;.</p>
+  </div>
+
+  <hr>
+
+  <!-- PASO 16 -->
+  <h2>Paso 16 — <code>direction</code> y <code>writing-mode</code></h2>
+  <p>Texto de derecha a izquierda (estilo árabe/hebreo):</p>
+  <div class="ejemplo">
+    <p class="paso16-rtl">Este texto simula el sentido de lectura de idiomas RTL como el árabe.</p>
+  </div>
+
+  <p>Texto vertical (estilo japonés o diseño creativo):</p>
+  <div class="ejemplo">
+    <div class="paso16-vertical">
+      Texto en modo vertical — se lee de arriba abajo y columnas de derecha a izquierda.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PASO 17 -->
+  <h2>Paso 17 — <code>text-wrap: balance</code> (moderno)</h2>
+  <p>Ideal para títulos: equilibra la longitud de las líneas automáticamente.</p>
+  <div class="ejemplo">
+    <h3 class="paso17">Un título que se balancea para evitar viudas</h3>
+    <p class="nota">
+      Sin <code>text-wrap: balance</code>, la última palabra
+      a menudo cae sola. Con esta propiedad moderna, el
+      navegador distribuye mejor el texto. Chrome 114+,
+      Firefox 121+, Safari 17.5+.
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- PASO 18 -->
+  <h2>Paso 18 — <code>@font-face</code> y Google Fonts</h2>
+  <p>
+    Para cargar tipografías personalizadas. El ejemplo va solo
+    en el CSS (comentado), porque requiere archivos de fuente
+    externos. La forma más rápida hoy es usar Google Fonts:
+  </p>
+  <div class="ejemplo">
+    <p><b>En el HTML:</b></p>
+    <pre style="background:#fff; padding:0.5em; overflow:auto;">&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"&gt;</pre>
+    <p><b>En el CSS:</b></p>
+    <pre style="background:#fff; padding:0.5em; overflow:auto;">body { font-family: 'Inter', sans-serif; }</pre>
+    <p class="nota">
+      Con esas tres líneas ya podés usar cualquiera de las
+      ~1500 fuentes de Google Fonts gratis y sin complicarte.
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- PASO 19 -->
+  <h2>Paso 19 — Columnas estilo periódico (<code>column-count</code>)</h2>
+  <p>Dividir un texto largo en varias columnas:</p>
+  <div class="ejemplo">
+    <div class="paso19">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Sed do eiusmod tempor incididunt ut labore et dolore magna
+      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+      ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      Duis aute irure dolor in reprehenderit in voluptate velit
+      esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+      occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum. Sed ut perspiciatis
+      unde omnis iste natus error sit voluptatem accusantium
+      doloremque laudantium.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PASO 20 -->
+  <h2>Paso 20 — Trucos modernos: gradiente + <code>clamp()</code> responsive</h2>
+  <p>Título con gradiente de color y tamaño que se adapta al viewport:</p>
+  <div class="ejemplo">
+    <h3 class="paso20-gradiente">CSS MODERNO ROCKS</h3>
+    <p class="nota">
+      Redimensioná la ventana del navegador: el tamaño del
+      título cambia suavemente entre 1.5rem (mobile) y 3rem
+      (desktop) gracias a <code>clamp()</code>. El gradiente
+      se logra con <code>background-clip: text</code>.
+    </p>
+  </div>
+
+  <hr>
+
+</body>
+
+</html>

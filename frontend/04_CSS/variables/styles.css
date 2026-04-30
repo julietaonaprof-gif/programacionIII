@@ -1,0 +1,89 @@
+/* ============================================
+   1. DECLARACIÓN
+   Las variables se definen con -- y van dentro
+   de un selector. :root significa "toda la página".
+   ============================================ */
+:root {
+  --color-primary: #ff3d8b;
+  /* el color principal de la marca */
+  --color-bg: #fef8ec;
+  /* fondo de la página */
+  --color-text: #14101f;
+  /* color del texto */
+  --space: 16px;
+  /* unidad base de espaciado */
+  --radius: 12px;
+  /* redondeo de las esquinas */
+  --font: system-ui, sans-serif;
+}
+
+/* ============================================
+   2. USO
+   Las usamos con var(--nombre).
+   Si cambiás una sola variable arriba, todos
+   los lugares donde se usa van a actualizarse.
+   ============================================ */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font);
+  padding: calc(var(--space) * 2);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+h1 {
+  color: var(--color-primary);
+  margin-bottom: var(--space);
+}
+
+.intro {
+  margin-bottom: calc(var(--space) * 2);
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+.intro code {
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* La card también usa las variables */
+.card {
+  background: white;
+  padding: var(--space);
+  border-radius: var(--radius);
+  margin-bottom: var(--space);
+  border: 2px solid var(--color-text);
+  box-shadow: 4px 4px 0 var(--color-text);
+}
+
+.card h2 {
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.card p {
+  margin-bottom: var(--space);
+}
+
+/* Y el botón también */
+.btn {
+  background: var(--color-primary);
+  color: white;
+  border: 2px solid var(--color-text);
+  padding: 8px var(--space);
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Con color por defecto si no encuentra la variable --color-text */
+.btn:hover {
+  background: var(--color-text, yellow);
+}

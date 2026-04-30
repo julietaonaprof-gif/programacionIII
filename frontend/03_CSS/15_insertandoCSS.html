@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  EJEMPLO: Las 3 formas de aplicar CSS a HTML
+  ============================================================
+  Este archivo demuestra las TRES formas oficiales de aplicar
+  CSS a una página HTML, usándolas todas juntas en la misma
+  página para que veas cómo se combinan (y cómo se pelean).
+
+  Las tres formas son:
+  1. EXTERNO (<link>) — la más recomendada
+  2. INTERNO (<style>) — para casos específicos
+  3. EN LÍNEA (style="...") — desaconsejado en general
+
+  Fuentes oficiales:
+  - MDN: https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/What_css_is
+  - W3C CSS Specification: https://www.w3.org/TR/CSS/
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Las 3 formas de aplicar CSS</title>
+
+  <!--
+    ============================================================
+    FORMA 1 — CSS EXTERNO (con <link>)
+    ============================================================
+    Enlaza un archivo .css separado. Es la forma MÁS USADA en
+    la práctica porque:
+
+    - El navegador CACHEA el archivo: carga una vez y se usa
+      en todas las páginas que lo enlacen.
+    - Separación clara: HTML = contenido, CSS = estilo.
+    - Mantenimiento: un cambio en el CSS afecta todas las
+      páginas del sitio.
+
+    Atributos del <link>:
+    - rel="stylesheet"   → obligatorio, indica que es CSS.
+    - href="..."         → ruta al archivo .css (relativa o absoluta).
+    - type="text/css"    → opcional en HTML5 (se asume).
+    - media="screen"     → opcional, para qué dispositivo aplica.
+
+    ESTA LÍNEA CARGA estilos.css QUE TIENE QUE ESTAR EN LA
+    MISMA CARPETA QUE ESTE HTML.
+  -->
+  <link rel="stylesheet" href="estilos.css">
+
+  <!--
+    ============================================================
+    FORMA 2 — CSS INTERNO (con <style>)
+    ============================================================
+    Los estilos se escriben DIRECTAMENTE dentro de una etiqueta
+    <style> en el <head> del HTML.
+
+    Cuándo conviene:
+    - Prototipos rápidos o ejemplos (como este).
+    - Emails HTML (donde el CSS externo a veces no funciona).
+    - Estilos específicos SOLO de esta página.
+    - Archivos HTML que se comparten solos (como este ejemplo).
+
+    Cuándo NO conviene:
+    - Proyectos con varias páginas (repetís el mismo CSS en cada una).
+    - Cuando querés aprovechar la caché del navegador.
+  -->
+  <style>
+    /*
+      Desde acá pisamos el color del .demo que venía del CSS
+      externo. ¿Qué color va a ganar? Depende de la ESPECIFICIDAD
+      y el ORDEN. Como este <style> viene DESPUÉS del <link>,
+      y ambos tienen la misma especificidad (una clase),
+      el que gana es este: el color va a ser VERDE, no azul.
+    */
+    .demo {
+      color: green;
+      border-left-color: green;
+      background-color: #e8fae8;
+    }
+
+    /* Otra regla solo para este HTML */
+    .cajita-interno {
+      padding: 1rem;
+      background: #fffaf0;
+      border: 2px dashed #e8941e;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Las 3 formas de aplicar CSS</h1>
+  <p>
+    Este archivo aplica las tres formas oficiales al mismo
+    elemento para que veas cómo interactúan.
+  </p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- FORMA 1 — EJEMPLO -->
+  <!-- ============================================================ -->
+  <h2>Forma 1 — CSS Externo (<code>&lt;link&gt;</code>)</h2>
+  <p>
+    El archivo <code>estilos.css</code> se enlaza desde el
+    <code>&lt;head&gt;</code>. Ahí le dimos a <code>.demo</code>
+    un <b>color azul</b> y <b>fondo celeste</b>.
+  </p>
+
+  <div class="explicacion">
+    <p><b>En el HTML:</b></p>
+    <pre>&lt;link rel="stylesheet" href="estilos.css"&gt;</pre>
+
+    <p><b>En estilos.css:</b></p>
+    <pre>.demo {
+  color: blue;
+  background-color: #e8f0fe;
+  border-left: 4px solid blue;
+}</pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- FORMA 2 — EJEMPLO -->
+  <!-- ============================================================ -->
+  <h2>Forma 2 — CSS Interno (<code>&lt;style&gt;</code>)</h2>
+  <p>
+    Los estilos van dentro de la etiqueta <code>&lt;style&gt;</code>
+    en el <code>&lt;head&gt;</code>. Acá dentro pisamos el
+    estilo externo y le dimos a <code>.demo</code> <b>color verde</b>.
+  </p>
+
+  <div class="explicacion">
+    <p><b>En el HTML (dentro del head):</b></p>
+    <pre>&lt;style&gt;
+  .demo {
+    color: green;
+    background-color: #e8fae8;
+    border-left-color: green;
+  }
+&lt;/style&gt;</pre>
+  </div>
+
+  <div class="cajita-interno">
+    <p>Esta caja está estilizada con CSS <b>interno</b>. El fondo color crema y el borde naranja punteado vienen de la
+      regla <code>.cajita-interno</code> que está en el <code>&lt;style&gt;</code> de arriba.</p>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- FORMA 3 — EJEMPLO -->
+  <!-- ============================================================ -->
+  <h2>Forma 3 — CSS en Línea (atributo <code>style</code>)</h2>
+  <p>
+    Se aplica directamente en el elemento con el atributo
+    <code>style="..."</code>. Es la más fuerte de las tres
+    (mayor especificidad), así que SIEMPRE gana sobre las
+    otras, salvo que otra regla use <code>!important</code>.
+  </p>
+
+  <div class="explicacion">
+    <p><b>En el HTML:</b></p>
+    <pre>&lt;p style="color: red; background-color: #ffe8e8;"&gt;
+  Texto con CSS inline
+&lt;/p&gt;</pre>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- LA "BATALLA": el mismo elemento con las 3 formas a la vez -->
+  <!-- ============================================================ -->
+  <h2>La batalla: las 3 formas peleando por el mismo párrafo</h2>
+  <p>Los tres párrafos de abajo usan <code>class="demo"</code>. Miralos:</p>
+
+  <!-- Párrafo 1: solo el estilo del CSS externo e interno actúan -->
+  <p class="demo">
+    PÁRRAFO 1 — Solo con class="demo".<br>
+    Acá NO hay style inline. El CSS interno (verde) le gana al externo (azul) porque viene después en el &lt;head&gt;.
+  </p>
+
+  <!--
+    Párrafo 2: le agregamos style inline
+    El inline GANA siempre porque tiene mayor especificidad.
+    color: red pisa al verde del interno y al azul del externo.
+  -->
+  <p class="demo" style="color: red; background-color: #ffe8e8; border-left-color: red;">
+    PÁRRAFO 2 — Con class="demo" <b>Y</b> style inline.<br>
+    Acá el inline (rojo) le gana a todo, porque tiene mayor especificidad que las clases.
+  </p>
+
+  <!--
+    Párrafo 3: el interno usa !important para ganarle al inline
+    !important rompe las reglas normales y GANA contra cualquier
+    otra cosa, salvo otro !important con más especificidad.
+    Por eso el párrafo se ve NARANJA: un !important en el CSS
+    interno vence incluso al inline.
+
+    ADVERTENCIA: !important es una "bomba atómica", úsalo
+    solo en casos extremos porque rompe la cascada y hace
+    muy difícil mantener el CSS después.
+  -->
+  <style>
+    .ganador-definitivo {
+      color: #e8941e !important;
+      background-color: #fff3e0 !important;
+      border-left-color: #e8941e !important;
+    }
+  </style>
+  <p class="demo ganador-definitivo" style="color: red; background-color: #ffe8e8;">
+    PÁRRAFO 3 — Con inline <b>Y</b> !important en el interno.<br>
+    Acá el <code>!important</code> rompe la jerarquía y gana él (naranja).
+  </p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- ORDEN DE PRIORIDAD -->
+  <!-- ============================================================ -->
+  <h2>¿Cuál gana cuando hay conflicto? La Cascada</h2>
+  <p>Orden de prioridad (de menor a mayor), según el W3C:</p>
+
+  <ol>
+    <li>Estilos por defecto del navegador (lo más débil).</li>
+    <li>CSS externo (<code>&lt;link&gt;</code>).</li>
+    <li>CSS interno (<code>&lt;style&gt;</code>).</li>
+    <li>CSS inline (<code>style="..."</code>).</li>
+    <li><code>!important</code> en cualquier lugar (gana SIEMPRE salvo contra otro !important con más especificidad).
+    </li>
+  </ol>
+
+  <p>
+    <b>Pero ojo:</b> el orden externo/interno/inline que di
+    arriba es una simplificación. En realidad, <b>entre externo
+      e interno no gana el tipo de declaración, gana el ORDEN
+      de aparición y la ESPECIFICIDAD</b>.
+  </p>
+
+  <p>
+    En este archivo, el CSS interno gana al externo solo porque
+    el <code>&lt;style&gt;</code> viene DESPUÉS del
+    <code>&lt;link&gt;</code>. Si lo pusieras antes, ganaría el
+    externo. Lo único que <b>siempre</b> gana por tipo es el
+    inline (por tener mayor especificidad), y por encima de
+    todo, <code>!important</code>.
+  </p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <!-- CUÁNDO USAR CADA UNA -->
+  <!-- ============================================================ -->
+  <h2>¿Cuándo usar cada forma?</h2>
+
+  <h3>CSS Externo — USO PRINCIPAL</h3>
+  <ul>
+    <li>Proyectos reales con varias páginas.</li>
+    <li>Sitios donde importa el rendimiento (caché).</li>
+    <li>Siempre que sea posible. Es el estándar.</li>
+  </ul>
+
+  <h3>CSS Interno — CASOS ESPECÍFICOS</h3>
+  <ul>
+    <li>Prototipos rápidos, ejemplos, demos (como este archivo).</li>
+    <li>Páginas únicas que no comparten estilos con otras.</li>
+    <li>Emails HTML (muchos clientes ignoran CSS externo).</li>
+    <li>Estilos críticos "above the fold" para performance avanzada.</li>
+  </ul>
+
+  <h3>CSS en Línea — EVITAR EN GENERAL</h3>
+  <ul>
+    <li>Solo para ajustes puntuales y muy específicos.</li>
+    <li>Cuando lo genera JavaScript dinámicamente.</li>
+    <li>En emails HTML (es casi obligatorio ahí).</li>
+    <li>NUNCA para estilos sistemáticos: mezcla contenido con presentación, es imposible de mantener y no se puede
+      cachear.</li>
+  </ul>
+
+  <hr>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>
+      W3C — Especificación CSS:
+      <a href="https://www.w3.org/TR/CSS/">w3.org/TR/CSS/</a>
+    </li>
+    <li>
+      MDN — Aplicar CSS a HTML:
+      <a href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/What_css_is">
+        developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/What_css_is
+      </a>
+    </li>
+    <li>
+      MDN — Cascada y herencia:
+      <a href="https://developer.mozilla.org/es/docs/Web/CSS/CSS_cascade/Cascade">
+        developer.mozilla.org/es/docs/Web/CSS/CSS_cascade/Cascade
+      </a>
+    </li>
+    <li>
+      MDN — Especificidad:
+      <a href="https://developer.mozilla.org/es/docs/Web/CSS/CSS_cascade/Specificity">
+        developer.mozilla.org/es/docs/Web/CSS/CSS_cascade/Specificity
+      </a>
+    </li>
+  </ul>
+
+</body>
+
+</html>

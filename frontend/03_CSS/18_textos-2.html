@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  EJEMPLO: Usar Google Fonts en HTML + CSS
+  ============================================================
+  Esta vez las fuentes SÍ están cargadas de verdad (no solo
+  comentadas). Vas a ver los cambios en pantalla al abrir el
+  archivo (siempre y cuando tengas conexión a internet, porque
+  Google Fonts se descargan desde sus servidores).
+
+  Fuente oficial: https://fonts.google.com
+  Documentación: https://developers.google.com/fonts/docs/getting_started
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Ejemplo real de Google Fonts</title>
+
+  <!--
+    ============================================================
+    PASO 1 — PRECONECTAR A LOS SERVIDORES DE GOOGLE
+    ============================================================
+    Estas dos líneas NO son obligatorias, pero son MUY
+    recomendadas. Le dicen al navegador "che, vas a necesitar
+    conectarte a este dominio pronto, andá preparando la
+    conexión". Eso acelera la carga de las fuentes unos 100-300ms.
+
+    - fonts.googleapis.com    → entrega el archivo CSS.
+    - fonts.gstatic.com       → entrega los archivos .woff2 reales.
+                                "crossorigin" es obligatorio para este.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!--
+    ============================================================
+    PASO 2 — CARGAR LAS FUENTES QUE QUEREMOS USAR
+    ============================================================
+    Este <link> es el importante. Le pide a Google una hoja CSS
+    con las fuentes que elegimos.
+
+    Cómo interpretar esta URL:
+
+      /css2?family=Inter:wght@400;700
+              |      |        |
+              |      |        └── Pesos que queremos: 400 y 700
+              |      └───────── Nombre de la fuente
+              └──────────────── API versión 2
+
+    Podés pedir VARIAS fuentes separadas por & family=:
+      family=Inter:wght@400;700
+      &family=Playfair+Display:ital,wght@0,700;1,400
+      &family=JetBrains+Mono:wght@400
+
+    Explicación de los parámetros:
+    - wght@400;700    → solo los pesos 400 (normal) y 700 (bold)
+    - ital,wght@0,400;1,400 → 0,400 = normal 400, 1,400 = itálica 400
+    - display=swap    → mientras carga la fuente, mostrá el
+                        fallback (el texto se ve desde el
+                        principio y "cambia" cuando termina de
+                        cargar). Es la mejor UX.
+
+    IMPORTANTE: pedí solo los pesos que realmente vas a usar.
+    Cada peso es un archivo descargable, así que pedir "wght@100;200;300;400;500;600;700;800;900"
+    es cargar 9 archivos que tu usuario se banca en la conexión.
+
+    Cómo obtener tu propia URL: andá a https://fonts.google.com,
+    elegí la fuente, tocá "Get font", después "Get embed code"
+    y copiás el <link>.
+  -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400&family=Lobster&family=Bebas+Neue&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       ESTILOS GENERALES
+       ============================================================ */
+    body {
+      /* Inter como tipografía principal */
+      font-family: 'Inter', sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+
+    h1,
+    h2 {
+      font-family: 'Playfair Display', serif;
+      color: #1a4d7a;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .ejemplo {
+      background: #f4f1ec;
+      padding: 1rem 1.5rem;
+      border-left: 4px solid #e8941e;
+      margin: 1rem 0;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #eef2f7;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* ============================================================
+       AHORA USAMOS LAS 5 FUENTES QUE CARGAMOS
+       ============================================================
+       Cada clase asigna una font-family distinta para que veas
+       los cambios en pantalla.
+    */
+
+    /* Inter — moderna, neutra, excelente para UI */
+    .fuente-inter {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .fuente-inter-bold {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    /* Playfair Display — serif elegante, para títulos y revistas */
+    .fuente-playfair {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+    }
+
+    .fuente-playfair-italic {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+    }
+
+    /* JetBrains Mono — monoespaciada, para código */
+    .fuente-jetbrains {
+      font-family: 'JetBrains Mono', monospace;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 1rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Lobster — cursiva decorativa, para logos o banners */
+    .fuente-lobster {
+      font-family: 'Lobster', cursive;
+      font-size: 2.5rem;
+      color: #c0392b;
+    }
+
+    /* Bebas Neue — condensada, impacto visual */
+    .fuente-bebas {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.05em;
+      color: #1a4d7a;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Cómo usar Google Fonts de verdad</h1>
+  <p>
+    Este archivo carga 5 tipografías desde Google Fonts y las
+    aplica para que veas la diferencia en pantalla. Necesitás
+    conexión a internet para que funcione (la primera vez).
+    Después el navegador las cachea.
+  </p>
+
+  <hr>
+
+  <h2>Paso 1 — Fuente principal: Inter</h2>
+  <p>Inter es una de las tipografías más populares para interfaces web. Todo el cuerpo de este documento ya la está
+    usando:</p>
+
+  <div class="ejemplo">
+    <p class="fuente-inter">Este párrafo está en Inter regular (peso 400). Es una tipografía sans-serif neutra, con
+      excelente legibilidad a todos los tamaños. Se usa en productos como GitHub, Mozilla y muchos dashboards modernos.
+    </p>
+    <p class="fuente-inter-bold">Este párrafo está en Inter bold (peso 700). Ideal para destacar información importante.
+    </p>
+  </div>
+
+  <hr>
+
+  <h2>Paso 2 — Títulos con Playfair Display</h2>
+  <p>Playfair Display es una serif moderna con contrastes fuertes, ideal para títulos editoriales. Los títulos de esta
+    página (<code>h1</code> y <code>h2</code>) ya la están usando:</p>
+
+  <div class="ejemplo">
+    <p class="fuente-playfair">Un título elegante en Playfair Display</p>
+    <p class="fuente-playfair-italic">Y la versión italic para subtítulos o citas</p>
+  </div>
+
+  <hr>
+
+  <h2>Paso 3 — Código con JetBrains Mono</h2>
+  <p>JetBrains Mono es una tipografía monoespaciada diseñada específicamente para código fuente. Tiene ligaduras
+    tipográficas (<code>=></code> se puede ver como una flecha real):</p>
+
+  <div class="ejemplo">
+    <pre class="fuente-jetbrains">function saludar(nombre) {
+  const mensaje = `Hola, ${nombre}!`;
+  return mensaje;
+}
+
+// Las flechas se ven bonitas: =>
+const sumar = (a, b) => a + b;</pre>
+  </div>
+
+  <hr>
+
+  <h2>Paso 4 — Decorativa: Lobster</h2>
+  <p>Lobster es una tipografía cursiva estilo vintage, perfecta para logos o banners de entrada:</p>
+
+  <div class="ejemplo">
+    <p class="fuente-lobster">Bienvenidos</p>
+    <p class="nota">Cuidado: estas fuentes decorativas NO se usan para cuerpo de texto, solo para títulos grandes o
+      logos. En tamaños chicos se vuelven ilegibles.</p>
+  </div>
+
+  <hr>
+
+  <h2>Paso 5 — Impacto visual: Bebas Neue</h2>
+  <p>Bebas Neue es una sans-serif condensada de alto impacto, muy usada en afiches, posters y titulares:</p>
+
+  <div class="ejemplo">
+    <p class="fuente-bebas">OFERTA ESPECIAL</p>
+  </div>
+
+  <hr>
+
+  <h2>Cómo funcionan las URLs de Google Fonts</h2>
+
+  <p>La URL que pusimos en el <code>&lt;link&gt;</code> es:</p>
+  <div class="ejemplo">
+    <pre class="fuente-jetbrains">https://fonts.googleapis.com/css2
+  ?family=Inter:wght@400;700
+  &amp;family=Playfair+Display:ital,wght@0,700;1,400
+  &amp;family=JetBrains+Mono:wght@400
+  &amp;family=Lobster
+  &amp;family=Bebas+Neue
+  &amp;display=swap</pre>
+  </div>
+
+  <h3>Desglose parámetro por parámetro</h3>
+  <ul>
+    <li><code>family=Inter:wght@400;700</code> — pide Inter en pesos 400 y 700.</li>
+    <li><code>family=Playfair+Display:ital,wght@0,700;1,400</code> — Playfair Display: normal en peso 700
+      (<code>0,700</code>) e italic en peso 400 (<code>1,400</code>).</li>
+    <li><code>family=JetBrains+Mono:wght@400</code> — solo peso 400.</li>
+    <li><code>family=Lobster</code> — sin especificar peso: trae el único que tiene.</li>
+    <li><code>family=Bebas+Neue</code> — igual.</li>
+    <li><code>display=swap</code> — mientras la fuente descarga, mostrar la fallback. Mejor UX.</li>
+  </ul>
+
+  <p><b>Los espacios en los nombres se reemplazan por <code>+</code></b>: "Playfair Display" → "Playfair+Display".</p>
+
+  <hr>
+
+  <h2>Consejos y buenas prácticas</h2>
+  <ul>
+    <li>
+      <b>Pedí solo los pesos que vas a usar.</b> Cada peso es
+      un archivo adicional que el usuario descarga. Si vas a
+      usar solo normal y bold, pedí <code>wght@400;700</code>,
+      no <code>wght@100..900</code>.
+    </li>
+    <li>
+      <b>Usá <code>display=swap</code> siempre.</b> Evita el
+      "flash de texto invisible" (FOIT) mientras carga.
+    </li>
+    <li>
+      <b>Siempre poné un fallback genérico</b> al final del
+      <code>font-family</code>: <code>'Inter', sans-serif</code>.
+      Así, si Google Fonts no responde, el usuario igual ve
+      algo parecido.
+    </li>
+    <li>
+      <b>No uses demasiadas fuentes</b>. Dos o tres máximo es
+      lo profesional: una para títulos, otra para cuerpo, y
+      opcionalmente una monoespaciada para código.
+    </li>
+    <li>
+      <b>Para mejor performance</b>, considerá alojar las
+      fuentes en tu propio servidor (autohospedarlas). Google
+      Fonts es conveniente pero agrega una dependencia externa
+      y una conexión DNS adicional.
+    </li>
+    <li>
+      <b>Considerá las fuentes variables</b>. En Google Fonts
+      aparecen con una etiqueta "Variable". Un solo archivo
+      contiene TODOS los pesos y estilos, así que resulta
+      más liviano que pedir 5 pesos por separado.
+    </li>
+  </ul>
+
+  <hr>
+
+  <h2>Alternativa: <code>@import</code> en CSS</h2>
+  <p>
+    Si no podés modificar el HTML, podés importar las fuentes
+    desde el propio CSS con <code>@import</code>. Debe ir en la
+    primera línea de tu hoja de estilos:
+  </p>
+
+  <div class="ejemplo">
+    <pre class="fuente-jetbrains">/* En tu archivo CSS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}</pre>
+  </div>
+
+  <p class="nota">
+    El método <code>&lt;link&gt;</code> en el HTML es más
+    performante que <code>@import</code> porque el navegador
+    descubre las fuentes antes y las carga en paralelo. Usá
+    <code>@import</code> solo si no tenés otra opción.
+  </p>
+
+  <hr>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>
+      Google Fonts:
+      <a href="https://fonts.google.com">fonts.google.com</a>
+    </li>
+    <li>
+      Guía oficial para desarrolladores:
+      <a href="https://developers.google.com/fonts/docs/getting_started">
+        developers.google.com/fonts/docs/getting_started
+      </a>
+    </li>
+    <li>
+      MDN — <code>@font-face</code>:
+      <a href="https://developer.mozilla.org/es/docs/Web/CSS/@font-face">
+        developer.mozilla.org/es/docs/Web/CSS/@font-face
+      </a>
+    </li>
+    <li>
+      MDN — <code>font-display</code>:
+      <a href="https://developer.mozilla.org/es/docs/Web/CSS/@font-face/font-display">
+        developer.mozilla.org/es/docs/Web/CSS/@font-face/font-display
+      </a>
+    </li>
+  </ul>
+
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+/* Selectores por atributos */
+
+input[type="text"] {
+  border: 1px solid black;
+}
+
+input[type="password"] {
+  border: 1px solid red;
+}
+
+a[target="_blank"] {
+  color: orange;
+}
+
+img[alt] {
+  border: 2px solid green;
+}
+
+input[placeholder] {
+  background: #f0f0f0;
+}
+
+/* Contiene */
+a[href*="google"] {
+  color: purple;
+}
+
+/* Empieza con */
+a[href^="https"] {
+  font-weight: bold;
+}
+
+/* Termina con */
+a[href$=".pdf"] {
+  color: red;
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  TEMA 2: UNIDADES DE MEDIDA EN CSS
+  ============================================================
+  CSS divide las unidades en DOS grupos:
+
+  ABSOLUTAS (fijas, no cambian):
+  - px, pt, in, cm, mm, pc
+
+  RELATIVAS (dependen de algo):
+  - em, rem, %, vw, vh, ex, ch
+
+  Fuente oficial: W3C CSS Values and Units Module
+  https://www.w3.org/TR/css-values-4/
+  ============================================================
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Unidades de medida en CSS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+    h1, h2 { color: #1a4d7a; }
+    h2 { margin-top: 2.5rem; }
+    hr { margin: 2rem 0; border: none; border-top: 1px solid #ccc; }
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+    .caja {
+      background: #1a4d7a;
+      color: white;
+      padding: 0.8rem;
+      margin: 0.3rem 0;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .caja:nth-child(even) { background: #e8941e; }
+
+    /* ============================================================
+       UNIDADES ABSOLUTAS
+       ============================================================
+       Su valor es FIJO, no cambia nunca según el contexto.
+       ============================================================ */
+    .w-px  { width: 200px; }    /* píxeles */
+    .w-pt  { width: 150pt; }    /* puntos tipográficos */
+    .w-in  { width: 2in; }      /* pulgadas */
+    .w-cm  { width: 5cm; }      /* centímetros */
+    .w-mm  { width: 30mm; }     /* milímetros */
+
+    /* ============================================================
+       UNIDADES RELATIVAS
+       ============================================================ */
+
+    /* em — relativa al font-size del elemento PADRE */
+    .padre-em {
+      font-size: 20px;   /* padre con font-size 20px */
+      padding: 1rem;
+      background: #f4f1ec;
+      border: 1px dashed #e8941e;
+    }
+    .hijo-em {
+      font-size: 1.5em;  /* 1.5 × 20 = 30px */
+      background: #1a4d7a;
+      color: white;
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+    }
+
+    /* rem — relativa al font-size del <html>, NO del padre */
+    .hijo-rem {
+      font-size: 1.5rem; /* 1.5 × 16 (default del html) = 24px */
+      background: #c0392b;
+      color: white;
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+    }
+
+    /* Porcentajes — relativo al contenedor */
+    .padre-porcentaje {
+      width: 500px;
+      padding: 1rem;
+      background: #f4f1ec;
+      border: 1px dashed #e8941e;
+    }
+    .hijo-50-porciento { width: 50%; }  /* 250px */
+    .hijo-25-porciento { width: 25%; }  /* 125px */
+
+    /* vw / vh — relativas a la ventana */
+    .w-vw {
+      width: 50vw;  /* 50% del ancho de la ventana */
+    }
+    .w-vh {
+      height: 20vh; /* 20% del alto de la ventana */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ch — relativa al ancho del carácter "0" */
+    .w-ch {
+      width: 40ch;  /* unos 40 caracteres de ancho */
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Unidades de medida en CSS</h1>
+  <p>CSS tiene dos familias: <b>absolutas</b> (fijas) y <b>relativas</b> (dependen del contexto).</p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h1 style="color:#c0392b;">Absolutas</h1>
+  <p>Su tamaño es fijo, no cambia según el contexto.</p>
+
+  <h2>Píxeles (<code>px</code>)</h2>
+  <p>La más usada de las absolutas. Se basa en el píxel físico de la pantalla:</p>
+  <div class="caja w-px">200px fijo</div>
+
+  <h2>Puntos (<code>pt</code>)</h2>
+  <p>1pt = 1/72 de pulgada. Ideal para impresión, no tanto para pantallas:</p>
+  <div class="caja w-pt">150pt</div>
+
+  <h2>Pulgadas (<code>in</code>), centímetros (<code>cm</code>) y milímetros (<code>mm</code>)</h2>
+  <p>Útiles solo para impresión. En pantalla no son precisos:</p>
+  <div class="caja w-in">2in (pulgadas)</div>
+  <div class="caja w-cm">5cm</div>
+  <div class="caja w-mm">30mm</div>
+
+  <p class="nota">
+    Regla práctica: en web usá casi siempre <code>px</code>. El resto
+    (<code>pt</code>, <code>in</code>, <code>cm</code>, <code>mm</code>)
+    es para hojas de estilo destinadas a impresión.
+  </p>
+
+  <hr>
+
+  <!-- ============================================================ -->
+  <h1 style="color:#27ae60;">Relativas</h1>
+  <p>Dependen de otra medida (el padre, el html, la ventana...).</p>
+
+  <!-- EM -->
+  <h2><code>em</code> — relativa al padre</h2>
+  <p>1em = el font-size del elemento padre. Si el padre mide 20px, 1.5em = 30px:</p>
+  <div class="padre-em">
+    Padre con font-size: 20px
+    <div class="hijo-em">Hijo con font-size: 1.5em → 30px</div>
+  </div>
+
+  <!-- REM -->
+  <h2><code>rem</code> — relativa al <code>&lt;html&gt;</code></h2>
+  <p>1rem = el font-size del &lt;html&gt; (por defecto 16px). No depende del padre:</p>
+  <div class="padre-em">
+    Padre con font-size: 20px
+    <div class="hijo-rem">Hijo con 1.5rem → 24px (ignora al padre)</div>
+  </div>
+  <p class="nota">
+    <code>rem</code> es la más recomendada hoy en día para tipografía,
+    porque es predecible y respeta las preferencias de accesibilidad
+    del usuario (si aumenta el tamaño de fuente en el navegador, todo
+    escala).
+  </p>
+
+  <!-- PORCENTAJE -->
+  <h2>Porcentaje (<code>%</code>)</h2>
+  <p>Relativo al contenedor padre. El padre mide 500px:</p>
+  <div class="padre-porcentaje">
+    Padre de 500px
+    <div class="caja hijo-50-porciento">50% del padre (250px)</div>
+    <div class="caja hijo-25-porciento">25% del padre (125px)</div>
+  </div>
+
+  <!-- VW / VH -->
+  <h2><code>vw</code> / <code>vh</code> — relativas a la ventana</h2>
+  <p><b>1vw</b> = 1% del ancho del navegador. <b>1vh</b> = 1% del alto. Redimensioná la ventana:</p>
+  <div class="caja w-vw">50vw (la mitad de la ventana)</div>
+  <div class="caja w-vh">20vh (20% del alto de la ventana)</div>
+
+  <!-- CH -->
+  <h2><code>ch</code> — ancho de carácter</h2>
+  <p>1ch = el ancho del carácter "0" en la fuente actual. Útil para columnas de texto de ancho "natural":</p>
+  <div class="caja w-ch">40ch (unos 40 caracteres)</div>
+
+  <hr>
+
+  <h2>Tabla resumen</h2>
+
+  <h3>Absolutas (fijas)</h3>
+  <ul>
+    <li><code>px</code> — píxeles. <b>La más usada en web.</b></li>
+    <li><code>pt</code> — puntos (impresión).</li>
+    <li><code>in</code>, <code>cm</code>, <code>mm</code>, <code>pc</code> — físicas (impresión).</li>
+  </ul>
+
+  <h3>Relativas</h3>
+  <ul>
+    <li><code>em</code> — relativa al padre.</li>
+    <li><code>rem</code> — relativa al &lt;html&gt;. <b>Recomendada para tipografía.</b></li>
+    <li><code>%</code> — porcentaje del contenedor.</li>
+    <li><code>vw</code> / <code>vh</code> — % del viewport (ventana).</li>
+    <li><code>ch</code> — ancho del carácter "0".</li>
+    <li><code>ex</code> — altura de la "x" (poco usada).</li>
+  </ul>
+
+  <h2>Cuándo usar cada una</h2>
+  <ul>
+    <li><b><code>px</code></b> → bordes finos, sombras, elementos que no deben escalar.</li>
+    <li><b><code>rem</code></b> → tamaño de fuente (recomendado sobre px por accesibilidad).</li>
+    <li><b><code>em</code></b> → padding/margin que deben escalar con la fuente del elemento.</li>
+    <li><b><code>%</code></b> → anchos de layouts responsive.</li>
+    <li><b><code>vw</code> / <code>vh</code></b> → hero sections, elementos que ocupan la pantalla.</li>
+    <li><b><code>pt</code>, <code>cm</code>, <code>mm</code></b> → solo en hojas de estilo para impresión.</li>
+  </ul>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>W3C — CSS Values and Units: <a href="https://www.w3.org/TR/css-values-4/">w3.org/TR/css-values-4/</a></li>
+    <li>MDN — CSS units: <a href="https://developer.mozilla.org/es/docs/Learn_web_development/Core/Styling_basics/Values_and_units">developer.mozilla.org/es/docs/.../Values_and_units</a></li>
+  </ul>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Media Queries Demo</title>
+
+  <style>
+    /* 📏 Tamaño */
+    @media (max-width: 600px) {}
+
+    @media (min-width: 768px) {}
+
+    @media (max-height: 800px) {}
+
+    @media (min-height: 500px) {}
+
+    /* 📐 Relación de aspecto */
+    @media (aspect-ratio: 16/9) {}
+
+    @media (min-aspect-ratio: 4/3) {}
+
+    @media (max-aspect-ratio: 1/1) {}
+
+    /* 📱 Orientación */
+    @media (orientation: portrait) {}
+
+    @media (orientation: landscape) {}
+
+    /* 🖥️ Tipo de medio */
+    @media screen {}
+
+    @media print {}
+
+    @media all {}
+
+    /* 🎯 Resolución */
+    @media (min-resolution: 2dppx) {}
+
+    @media (min-resolution: 300dpi) {}
+
+    /* 🖱️ Interacción */
+    @media (hover: hover) {}
+
+    @media (hover: none) {}
+
+    @media (pointer: fine) {}
+
+    @media (pointer: coarse) {}
+
+    @media (any-pointer: fine) {}
+
+    @media (any-pointer: coarse) {}
+
+    /* 🌙 Preferencias del usuario */
+    @media (prefers-color-scheme: dark) {}
+
+    @media (prefers-color-scheme: light) {}
+
+    @media (prefers-reduced-motion: reduce) {}
+
+    @media (prefers-contrast: more) {}
+
+    /* ♿ Accesibilidad */
+    @media (forced-colors: active) {}
+
+    @media (inverted-colors: inverted) {}
+
+    /* 🔗 Combinaciones (ejemplos reales) */
+    @media screen and (max-width: 768px) and (orientation: portrait) {}
+
+    @media (min-width: 600px) and (max-width: 1024px) {}
+
+    @media (hover: hover) and (pointer: fine) {}
+
+    @media (prefers-color-scheme: dark) and (min-width: 768px) {}
+
+    */
+
+    /* 🔹 Estilos base (mobile first) */
+    body {
+      font-family: Arial, sans-serif;
+      background: lightgray;
+      color: black;
+      text-align: center;
+    }
+
+    .box {
+      width: 100%;
+      padding: 20px;
+      background: steelblue;
+      color: white;
+      margin-top: 20px;
+    }
+
+    /* 📏 Pantallas grandes */
+    @media (min-width: 768px) {
+      body {
+        background: lightgreen;
+      }
+
+      .box {
+        width: 50%;
+        margin: 20px auto;
+      }
+    }
+
+    /* 📐 Rango de tamaños */
+    @media (min-width: 600px) and (max-width: 900px) {
+      .box {
+        background: orange;
+      }
+    }
+
+    /* 📱 Orientación */
+    @media (orientation: landscape) {
+      body {
+        border: 5px solid blue;
+      }
+    }
+
+    /* 🖥️ Tipo de dispositivo */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      .box {
+        border: 1px solid black;
+      }
+    }
+
+    /* 🎯 Resolución alta */
+    @media (min-resolution: 2dppx) {
+      .box {
+        border: 3px dashed red;
+      }
+    }
+
+    /* 🖱️ Hover disponible */
+    @media (hover: hover) {
+      .box:hover {
+        background: darkblue;
+      }
+    }
+
+    /* 👆 Pantallas táctiles */
+    @media (pointer: coarse) {
+      .box {
+        padding: 40px;
+      }
+    }
+
+    /* 🌙 Modo oscuro */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: black;
+        color: white;
+      }
+
+      .box {
+        background: gray;
+      }
+    }
+
+    /* 🔊 Reducir animaciones */
+    .anim {
+      animation: mover 2s infinite alternate;
+    }
+
+    @keyframes mover {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Demo de Media Queries</h1>
+
+  <div class="box anim">
+    Probá cambiar el tamaño de la pantalla 😄
+  </div>
+
+</body>
+
+</html>

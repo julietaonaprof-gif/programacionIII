@@ -1,0 +1,48 @@
+/* Estados */
+
+a:hover {
+  color: red;
+}
+
+a:active {
+  color: green;
+}
+
+input:focus {
+  outline: 2px solid blue;
+}
+
+/* Estructura */
+li:first-child {
+  font-weight: bold;
+}
+
+li:last-child {
+  color: gray;
+}
+
+li:nth-child(2) {
+  color: red;
+}
+
+li:nth-child(odd) {
+  background: #eee;
+}
+
+li:nth-child(even) {
+  background: #ddd;
+}
+
+/* Negación */
+p:not(.importante) {
+  color: gray;
+}
+
+/* Formularios */
+input:checked {
+  accent-color: green;
+}
+
+input:disabled {
+  background: #ccc;
+}

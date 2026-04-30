@@ -1,0 +1,26 @@
+/* Selectores por ID */
+
+#header {
+  background: black;
+  color: white;
+  padding: 20px;
+}
+
+#footer {
+  background: #222;
+  color: #ccc;
+  text-align: center;
+}
+
+#main {
+  padding: 40px;
+}
+
+#logo {
+  width: 120px;
+}
+
+#menu {
+  display: flex;
+  gap: 10px;
+}

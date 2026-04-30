@@ -1,0 +1,40 @@
+/* Múltiples selectores */
+h1,
+h2,
+h3 {
+  font-family: Arial;
+}
+
+/* Elemento + clase */
+div.container {
+  padding: 20px;
+}
+
+/* Varias clases */
+.boton.primario {
+  background: blue;
+}
+
+.boton.secundario {
+  background: gray;
+}
+
+/* Combinaciones complejas */
+div.card>p.texto:hover {
+  color: purple;
+}
+
+/* :has (moderno) */
+div:has(img) {
+  border: 2px solid green;
+}
+
+/* :is (reduce repetición) */
+:is(h1, h2, h3) {
+  margin-bottom: 10px;
+}
+
+/* :where (sin especificidad) */
+:where(section, article) {
+  padding: 20px;
+}

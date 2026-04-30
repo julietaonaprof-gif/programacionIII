@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  EJEMPLO: Propiedades background en CSS — paso a paso
+  ============================================================
+  12 pasos progresivos con la propiedad background, desde
+  un simple color hasta efectos avanzados combinando gradientes,
+  imágenes y múltiples fondos en un mismo elemento.
+
+  Fuente oficial: W3C CSS Backgrounds and Borders Module L3
+  https://www.w3.org/TR/css-backgrounds-3/
+
+  NOTA: los ejemplos con imágenes usan SVG inline como "data URI"
+  para que todo funcione sin archivos externos. Así podés abrir
+  el HTML con doble clic y ver todo en pantalla.
+  ============================================================
+-->
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Backgrounds en CSS — paso a paso</title>
+  <style>
+    /* ============================================================
+       ESTILOS GENERALES (no son parte del ejemplo)
+       ============================================================ */
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+
+    h1,
+    h2 {
+      color: #1a4d7a;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Caja demo que vamos a usar en cada paso */
+    .caja {
+      width: 100%;
+      height: 150px;
+      margin: 1rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ============================================================
+       PASO 1 — background-color (color de fondo)
+       ============================================================
+       La propiedad más básica: un color sólido de fondo.
+
+       Formatos aceptados (igual que para "color"):
+       - Nombre: red, blue, tomato, rebeccapurple...
+       - Hex: #ff6600, #f60 (corto), #ff660080 (con alpha)
+       - rgb()/rgba(): rgb(255, 102, 0) o rgba(255, 102, 0, 0.5)
+       - hsl()/hsla(): hsl(24, 100%, 50%)
+       - Modernos: oklch(), lab(), color-mix()
+
+       Valor especial:
+       - transparent → sin color (default)
+       - currentColor → usa el color del texto
+    */
+    .paso1 {
+      background-color: #e8941e;
+    }
+
+    /* ============================================================
+       PASO 2 — background-image (imagen de fondo)
+       ============================================================
+       Le pone una imagen de fondo. La sintaxis es:
+
+         background-image: url("ruta.jpg");
+
+       La URL puede ser:
+       - Relativa: "imagen.jpg" o "./carpeta/imagen.jpg"
+       - Absoluta: "https://ejemplo.com/imagen.jpg"
+       - Data URI: "data:image/svg+xml;utf8,..."
+         (incrusta la imagen en el CSS, útil para iconos chicos)
+
+       En el ejemplo uso un SVG inline como data URI para que no
+       haga falta descargar nada desde internet.
+
+       IMPORTANTE: por default, si la imagen es más chica que la
+       caja, se repite en MOSAICO. Lo vemos en el paso 3.
+    */
+    .paso2 {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><circle cx='30' cy='30' r='20' fill='%231a4d7a'/></svg>");
+    }
+
+    /* ============================================================
+       PASO 3 — background-repeat (cómo se repite)
+       ============================================================
+       Controla la repetición en mosaico de la imagen.
+
+       Valores:
+       - repeat    → repite en ambas direcciones (default).
+       - repeat-x  → solo horizontalmente.
+       - repeat-y  → solo verticalmente.
+       - no-repeat → una sola vez.
+       - space     → repite sin recortar, distribuyendo espacio.
+       - round     → repite escalando para que encaje.
+    */
+    .paso3a {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><rect width='40' height='40' fill='%23c0392b'/><circle cx='20' cy='20' r='10' fill='white'/></svg>");
+      background-repeat: no-repeat;
+      background-color: #2a2a2a;
+    }
+
+    .paso3b {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><rect width='40' height='40' fill='%23c0392b'/><circle cx='20' cy='20' r='10' fill='white'/></svg>");
+      background-repeat: repeat-x;
+      background-color: #2a2a2a;
+    }
+
+    /* ============================================================
+       PASO 4 — background-position (dónde se ubica)
+       ============================================================
+       Controla en qué parte de la caja se ubica la imagen.
+
+       Valores:
+       - Palabras: top, bottom, left, right, center
+         (se combinan: "top right", "bottom center")
+       - Valores específicos: 10px 20px, 50% 50%
+         (primer valor = X, segundo = Y)
+       - Mezcla: "center 20px", "right 10%"
+
+       El punto (0,0) es la esquina superior izquierda.
+       Si das un solo valor, el otro se asume "center".
+    */
+    .paso4 {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><circle cx='30' cy='30' r='25' fill='%23e8941e'/></svg>");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-color: #1a4d7a;
+    }
+
+    /* ============================================================
+       PASO 5 — background-size (tamaño de la imagen)
+       ============================================================
+       Controla el tamaño de la imagen en el fondo.
+
+       Valores:
+       - auto       → tamaño original de la imagen (default).
+       - 100% 50%   → 100% del ancho, 50% del alto.
+       - 200px 150px → tamaño específico.
+       - cover      → ESCALA la imagen para que CUBRA toda la
+                      caja. Puede recortarse si aspect ratios
+                      no coinciden. RECOMENDADO para fondos
+                      tipo "hero".
+       - contain    → ESCALA la imagen para que ENTRE ENTERA
+                      dentro de la caja. Puede dejar espacios
+                      vacíos.
+
+       cover y contain son los más usados en la práctica.
+    */
+    .paso5a {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23c0392b'/><stop offset='1' stop-color='%231a4d7a'/></linearGradient></defs><rect width='200' height='150' fill='url(%23g)'/><text x='100' y='85' text-anchor='middle' fill='white' font-size='24' font-family='Arial'>COVER</text></svg>");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .paso5b {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='150'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23c0392b'/><stop offset='1' stop-color='%231a4d7a'/></linearGradient></defs><rect width='200' height='150' fill='url(%23g)'/><text x='100' y='85' text-anchor='middle' fill='white' font-size='24' font-family='Arial'>CONTAIN</text></svg>");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #eee;
+    }
+
+    /* ============================================================
+       PASO 6 — background-attachment (fijo al hacer scroll)
+       ============================================================
+       Define si el fondo se mueve con el scroll o no.
+
+       Valores:
+       - scroll → el fondo scrollea con el contenido (default).
+       - fixed  → el fondo queda FIJO a la ventana. Clásico
+                  efecto "parallax" básico. Sigue en su lugar
+                  mientras el contenido se mueve por encima.
+       - local  → útil cuando el elemento tiene overflow:
+                  el fondo scrollea con el contenido interno.
+
+       IMPORTANTE: "fixed" tiene problemas de performance en
+       móviles. La mayoría de los navegadores móviles lo
+       ignoran. Para parallax real, se suele usar JavaScript.
+    */
+    .paso6 {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><defs><radialGradient id='g'><stop offset='0' stop-color='%23e8941e'/><stop offset='1' stop-color='%23c0392b'/></radialGradient></defs><rect width='400' height='400' fill='url(%23g)'/></svg>");
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      height: 250px;
+      /* más alta para que se note el efecto */
+    }
+
+    /* ============================================================
+       PASO 7 — GRADIENTES LINEALES
+       ============================================================
+       Los gradientes son imágenes generadas por CSS. Se usan
+       con background-image (NO background-color).
+
+       Sintaxis de linear-gradient:
+         linear-gradient(dirección, color1, color2, ...);
+
+       Dirección:
+       - to right          → de izquierda a derecha
+       - to bottom         → de arriba a abajo (default)
+       - to bottom right   → diagonal
+       - 45deg             → ángulo en grados (0 = arriba)
+       - 180deg            → igual a "to bottom"
+
+       Podés agregar:
+       - Múltiples colores (se reparten equitativamente)
+       - Posiciones específicas: linear-gradient(to right, red 0%, blue 50%, green 100%)
+       - Colores transparentes, rgba(), etc.
+    */
+    .paso7a {
+      background-image: linear-gradient(to right, #c0392b, #e8941e, #f1c40f);
+    }
+
+    .paso7b {
+      background-image: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .paso7c {
+      /* Con colores en posiciones específicas */
+      background-image: linear-gradient(to right,
+          #c0392b 0%,
+          #c0392b 33%,
+          #1a4d7a 33%,
+          #1a4d7a 66%,
+          #27ae60 66%);
+    }
+
+    /* ============================================================
+       PASO 8 — GRADIENTES RADIALES
+       ============================================================
+       Gradiente que va desde un punto central hacia afuera,
+       como una "luz".
+
+       Sintaxis:
+         radial-gradient(forma tamaño at posición, color1, color2)
+
+       Forma:
+       - circle   → círculo perfecto
+       - ellipse  → elipse (default)
+
+       Tamaño:
+       - closest-side, farthest-side, closest-corner,
+         farthest-corner (default)
+       - Valores específicos: 100px 50px
+
+       Posición:
+       - at center (default)
+       - at top right, at 20% 30%, etc.
+    */
+    .paso8a {
+      background-image: radial-gradient(circle at center,
+          #f1c40f, #e8941e, #c0392b);
+    }
+
+    .paso8b {
+      /* Tipo "foco de luz" en una esquina */
+      background-image: radial-gradient(circle at top left,
+          white, #1a4d7a 60%);
+    }
+
+    /* ============================================================
+       PASO 9 — GRADIENTES CÓNICOS (modernos)
+       ============================================================
+       Gradiente que gira alrededor de un punto, como los
+       "pie charts" o rueditas de color.
+
+       Sintaxis:
+         conic-gradient(from ángulo at posición, color1, color2, ...)
+
+       Soporte: todos los navegadores modernos desde ~2020.
+
+       Casos de uso:
+       - Gráficos de torta (pie charts)
+       - Efectos arcoíris
+       - Loading spinners
+       - Fondos abstractos
+    */
+    .paso9a {
+      /* Arcoíris */
+      background-image: conic-gradient(red, orange, yellow, green, blue, indigo, violet, red);
+    }
+
+    .paso9b {
+      /* Pie chart simulado */
+      background-image: conic-gradient(#c0392b 0deg 90deg,
+          #e8941e 90deg 180deg,
+          #27ae60 180deg 270deg,
+          #1a4d7a 270deg 360deg);
+      border-radius: 50%;
+      height: 200px;
+      width: 200px;
+      margin: 1rem auto;
+    }
+
+    /* ============================================================
+       PASO 10 — MÚLTIPLES BACKGROUNDS
+       ============================================================
+       ¡Uno de los trucos más poderosos! Un mismo elemento puede
+       tener VARIOS fondos apilados, separados por coma. El
+       PRIMERO va ARRIBA, el último al fondo.
+
+       Cada propiedad background-* también acepta varios valores
+       separados por coma, uno por cada fondo.
+
+       Esto permite combinar gradientes con imágenes, crear
+       efectos "overlay" (oscurecer una foto), patrones, etc.
+    */
+    .paso10 {
+      background-image:
+        /* Capa 1 (arriba): gradiente semi-transparente */
+        linear-gradient(135deg,
+          rgba(192, 57, 43, 0.7),
+          rgba(26, 77, 122, 0.7)),
+        /* Capa 2 (atrás): patrón de puntos */
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><circle cx='15' cy='15' r='3' fill='white'/></svg>");
+      background-color: #333;
+    }
+
+    /* ============================================================
+       PASO 11 — background SHORTHAND (propiedad corta)
+       ============================================================
+       En vez de escribir 8 propiedades por separado, podés
+       usar "background" como shorthand que las agrupa todas.
+
+       Orden recomendado:
+       background: color image position/size repeat attachment origin clip;
+
+       Ejemplo:
+       background: #333 url(foto.jpg) center/cover no-repeat fixed;
+
+       Detalles:
+       - Los valores se pueden OMITIR: los faltantes usan default.
+       - Position y size van SEPARADOS POR "/": center/cover.
+       - Si tenés múltiples fondos, separalos con coma.
+
+       Si te da pereza pensar en el orden, podés escribir las
+       propiedades individualmente: funciona igual.
+    */
+    .paso11 {
+      background:
+        #1a4d7a url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><circle cx='30' cy='30' r='15' fill='white' opacity='0.3'/></svg>") center repeat;
+    }
+
+    /* ============================================================
+       PASO 12 — TRUCOS MODERNOS: background-clip y patrones
+       ============================================================
+       background-clip: define hasta dónde llega el fondo.
+       - border-box  → hasta el borde (default).
+       - padding-box → hasta el padding (no cubre el borde).
+       - content-box → solo detrás del contenido.
+       - text        → ¡RECORTADO AL TEXTO! Efecto mágico
+                       que permite tipografías con gradiente,
+                       foto, patrón, lo que quieras.
+
+       Ver también: background-origin (dónde empieza a
+       pintarse el fondo) y background-blend-mode (cómo se
+       mezclan múltiples fondos).
+    */
+    .paso12-texto {
+      font-size: 4rem;
+      font-weight: 900;
+      text-align: center;
+      background-image: linear-gradient(90deg,
+          #ff6a00, #ee0979, #3a1c71);
+      background-clip: text;
+      -webkit-background-clip: text;
+      /* Safari */
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      /* Safari */
+    }
+
+    .paso12-patron {
+      /* Patrón de rayas diagonales solo con gradientes */
+      background: repeating-linear-gradient(45deg,
+          #1a4d7a,
+          #1a4d7a 10px,
+          #2c6ea0 10px,
+          #2c6ea0 20px);
+    }
+
+    .paso12-cuadros {
+      /* Patrón "tablero de ajedrez" con múltiples gradientes */
+      background-color: white;
+      background-image:
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 30px 30px;
+      background-position: 0 0, 0 15px, 15px -15px, 15px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Propiedades <code>background</code> en CSS</h1>
+  <p>
+    12 pasos progresivos, desde un simple color hasta efectos
+    avanzados combinando múltiples fondos y gradientes.
+  </p>
+  <p class="nota">
+    Las imágenes de ejemplo están incrustadas como SVG inline,
+    así que todo funciona con doble clic, sin archivos externos.
+  </p>
+
+  <hr>
+
+  <!-- PASO 1 -->
+  <h2>Paso 1 — <code>background-color</code></h2>
+  <p>Color sólido de fondo:</p>
+  <div class="caja paso1">background-color: #e8941e;</div>
+
+  <hr>
+
+  <!-- PASO 2 -->
+  <h2>Paso 2 — <code>background-image</code> (imagen de fondo)</h2>
+  <p>Una imagen (SVG). Por defecto se repite en mosaico:</p>
+  <div class="caja paso2"></div>
+
+  <hr>
+
+  <!-- PASO 3 -->
+  <h2>Paso 3 — <code>background-repeat</code></h2>
+  <p>Control de la repetición. Primero <code>no-repeat</code>:</p>
+  <div class="caja paso3a">no-repeat</div>
+
+  <p>Ahora <code>repeat-x</code> (solo horizontal):</p>
+  <div class="caja paso3b">repeat-x</div>
+
+  <hr>
+
+  <!-- PASO 4 -->
+  <h2>Paso 4 — <code>background-position</code></h2>
+  <p>La imagen centrada en la caja:</p>
+  <div class="caja paso4">background-position: center;</div>
+
+  <hr>
+
+  <!-- PASO 5 -->
+  <h2>Paso 5 — <code>background-size</code> (cover vs contain)</h2>
+  <p><code>cover</code>: cubre toda la caja (puede recortarse):</p>
+  <div class="caja paso5a"></div>
+
+  <p><code>contain</code>: entra completa (puede haber espacio):</p>
+  <div class="caja paso5b" style="color: #333; text-shadow: none;"></div>
+
+  <hr>
+
+  <!-- PASO 6 -->
+  <h2>Paso 6 — <code>background-attachment: fixed</code></h2>
+  <p>Hacé scroll con la ventana: el fondo queda FIJO mientras el resto se mueve.</p>
+  <div class="caja paso6">SCROLL PARA VER EL EFECTO</div>
+  <p class="nota">En móviles, este efecto a veces se ignora por performance.</p>
+
+  <hr>
+
+  <!-- PASO 7 -->
+  <h2>Paso 7 — Gradientes lineales (<code>linear-gradient</code>)</h2>
+  <p>Fuego horizontal:</p>
+  <div class="caja paso7a">linear-gradient(to right, ...)</div>
+
+  <p>Diagonal violeta:</p>
+  <div class="caja paso7b">linear-gradient(135deg, ...)</div>
+
+  <p>Con paradas específicas (efecto "banda"):</p>
+  <div class="caja paso7c">Bandas de colores</div>
+
+  <hr>
+
+  <!-- PASO 8 -->
+  <h2>Paso 8 — Gradientes radiales (<code>radial-gradient</code>)</h2>
+  <p>Del centro hacia afuera:</p>
+  <div class="caja paso8a">Sol</div>
+
+  <p>Desde una esquina (efecto "luz"):</p>
+  <div class="caja paso8b">Luz desde arriba a la izquierda</div>
+
+  <hr>
+
+  <!-- PASO 9 -->
+  <h2>Paso 9 — Gradientes cónicos (<code>conic-gradient</code>)</h2>
+  <p>Arcoíris:</p>
+  <div class="caja paso9a" style="text-shadow: 2px 2px 4px black;">Arcoíris</div>
+
+  <p>Pie chart simulado (solo con CSS):</p>
+  <div class="paso9b"></div>
+
+  <hr>
+
+  <!-- PASO 10 -->
+  <h2>Paso 10 — Múltiples backgrounds apilados</h2>
+  <p>Gradiente semi-transparente sobre un patrón de puntos:</p>
+  <div class="caja paso10">Fondo con 2 capas</div>
+  <p class="nota">Esta técnica es la base para el efecto "overlay" que se ve en muchos hero sections de sitios web
+    modernos.</p>
+
+  <hr>
+
+  <!-- PASO 11 -->
+  <h2>Paso 11 — <code>background</code> shorthand</h2>
+  <p>Todas las propiedades en una sola línea:</p>
+  <div class="caja paso11">background: color image pos repeat;</div>
+
+  <hr>
+
+</body>
+
+</html>

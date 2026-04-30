@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  TEMA 4: PROPIEDAD display
+  ============================================================
+  La propiedad display define CÓMO se comporta un elemento
+  en el flujo del documento: si ocupa toda una línea (block),
+  si se queda en la misma línea que otros (inline), o si
+  tiene una mezcla de ambos (inline-block).
+
+  También permite OCULTAR un elemento con display: none, o
+  activar sistemas modernos de layout (flex, grid).
+
+  Fuente oficial: W3C CSS Display Module
+  https://www.w3.org/TR/css-display-3/
+  ============================================================
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Propiedad display en CSS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+    h1, h2 { color: #1a4d7a; }
+    h2 { margin-top: 2.5rem; }
+    hr { margin: 2rem 0; border: none; border-top: 1px solid #ccc; }
+    .nota {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+    .contenedor {
+      background: #f4f1ec;
+      padding: 1rem;
+      border: 1px dashed #e8941e;
+      margin: 1rem 0;
+    }
+
+    /* Estilo base para todos los ejemplos */
+    .ej {
+      background: #1a4d7a;
+      color: white;
+      padding: 10px 20px;
+      margin: 5px;
+      font-weight: bold;
+      /* Intentamos aplicar width/height a todos para ver si los respetan */
+      width: 150px;
+      height: 40px;
+    }
+
+    /* ============================================================
+       1. DISPLAY: BLOCK
+       ============================================================
+       - Ocupa TODO el ancho disponible (100% del padre).
+       - Salta a la próxima línea (no convive con otros).
+       - RESPETA width, height, padding y margin en los 4 lados.
+
+       Elementos que por DEFAULT son block:
+       <div>, <p>, <h1>-<h6>, <ul>, <ol>, <li>, <section>,
+       <article>, <nav>, <header>, <footer>, <form>.
+       ============================================================ */
+    .block {
+      display: block;
+    }
+
+    /* ============================================================
+       2. DISPLAY: INLINE
+       ============================================================
+       - Ocupa SOLO el ancho de su contenido.
+       - Convive con otros en la misma línea.
+       - IGNORA width y height.
+       - Padding y margin: solo los HORIZONTALES funcionan bien.
+         (Los verticales "existen" pero no afectan al layout.)
+
+       Elementos que por DEFAULT son inline:
+       <span>, <a>, <strong>, <em>, <b>, <i>, <img>, <code>.
+       ============================================================ */
+    .inline {
+      display: inline;
+      background: #c0392b;
+    }
+
+    /* ============================================================
+       3. DISPLAY: INLINE-BLOCK (lo mejor de los dos)
+       ============================================================
+       - Se queda en la misma línea como inline.
+       - RESPETA width, height, padding y margin completos
+         como block.
+
+       Muy útil para botones, items de menú, tarjetas chicas,
+       elementos que van uno al lado del otro pero necesitan
+       tamaño específico.
+       ============================================================ */
+    .inline-block {
+      display: inline-block;
+      background: #27ae60;
+    }
+
+    /* ============================================================
+       4. DISPLAY: NONE (ocultar)
+       ============================================================
+       - El elemento NO se renderiza.
+       - No ocupa espacio en la página.
+       - Es como si no existiera (pero sigue en el DOM).
+
+       Diferencia con visibility: hidden:
+       - display: none    → no ocupa espacio.
+       - visibility: hidden → oculto pero deja el espacio vacío.
+       ============================================================ */
+    .oculto {
+      display: none;
+    }
+    .invisible {
+      visibility: hidden;  /* para comparar */
+    }
+
+    /* ============================================================
+       5. DISPLAY: FLEX y GRID (mencionados)
+       ============================================================
+       Los dos sistemas modernos de layout. Los cubrimos en
+       detalle en otro archivo, pero los menciono acá porque
+       también son valores de "display".
+       ============================================================ */
+    .flex-demo {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .flex-demo .item {
+      background: #8e44ad;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .grid-demo {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .grid-demo .item {
+      background: #e67e22;
+      color: white;
+      padding: 0.5rem;
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    /* Tabla comparativa */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    th {
+      background: #1a4d7a;
+      color: white;
+    }
+    td.si { background: #d4edda; color: #155724; font-weight: bold; }
+    td.no { background: #f8d7da; color: #721c24; font-weight: bold; }
+    td.parcial { background: #fff3cd; color: #856404; font-weight: bold; }
+  </style>
+</head>
+
+<body>
+
+  <h1>Propiedad <code>display</code> en CSS</h1>
+  <p>
+    Define cómo se comporta un elemento: si ocupa toda una línea,
+    si convive con otros en la misma, y si respeta width/height.
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 1 -->
+  <h2>1. <code>display: block</code></h2>
+  <p>Ocupa todo el ancho disponible, salta línea, respeta width y height:</p>
+  <div class="contenedor">
+    <span class="ej block">BLOCK 1</span>
+    <span class="ej block">BLOCK 2</span>
+    <span class="ej block">BLOCK 3</span>
+  </div>
+  <p class="nota">
+    Son <code>&lt;span&gt;</code> (que normalmente son inline),
+    pero les forcé <code>display: block</code>. Cada uno ocupa
+    toda la línea.
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 2 -->
+  <h2>2. <code>display: inline</code></h2>
+  <p>Se quedan en la misma línea. Ignoran width y height:</p>
+  <div class="contenedor">
+    <div class="ej inline">INLINE 1</div>
+    <div class="ej inline">INLINE 2</div>
+    <div class="ej inline">INLINE 3</div>
+  </div>
+  <p class="nota">
+    Son <code>&lt;div&gt;</code> (que normalmente son block),
+    pero les forcé <code>display: inline</code>. Aunque les puse
+    <code>width: 150px; height: 40px</code>, los IGNORA: el
+    tamaño depende solo de su contenido.
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 3 -->
+  <h2>3. <code>display: inline-block</code> (lo mejor de los dos)</h2>
+  <p>Se quedan en la misma línea como inline, PERO respetan width/height como block:</p>
+  <div class="contenedor">
+    <div class="ej inline-block">INLINE-BLOCK 1</div>
+    <div class="ej inline-block">INLINE-BLOCK 2</div>
+    <div class="ej inline-block">INLINE-BLOCK 3</div>
+  </div>
+  <p class="nota">
+    Acá sí respeta el <code>width: 150px; height: 40px</code>.
+    Útil para botones, menús, tarjetas pequeñas.
+  </p>
+
+  <hr>
+
+  <!-- EJEMPLO 4 -->
+  <h2>4. <code>display: none</code> (ocultar)</h2>
+  <p>Los elementos con <code>display: none</code> NO se renderizan ni ocupan espacio:</p>
+  <div class="contenedor">
+    <div class="ej block">Caja 1 (visible)</div>
+    <div class="ej block oculto">Caja 2 (display: none — ¡no aparece!)</div>
+    <div class="ej block">Caja 3 (visible, pegada a la 1)</div>
+  </div>
+  <p>Comparación con <code>visibility: hidden</code> (oculto pero ocupa espacio):</p>
+  <div class="contenedor">
+    <div class="ej block">Caja 1 (visible)</div>
+    <div class="ej block invisible">Caja 2 (visibility: hidden — hay hueco)</div>
+    <div class="ej block">Caja 3 (visible, con hueco antes)</div>
+  </div>
+
+  <hr>
+
+  <!-- EJEMPLO 5 -->
+  <h2>5. <code>display: flex</code></h2>
+  <p>Los hijos se alinean en una fila (una dimensión):</p>
+  <div class="flex-demo contenedor">
+    <div class="item">Flex 1</div>
+    <div class="item">Flex 2</div>
+    <div class="item">Flex 3</div>
+  </div>
+
+  <hr>
+
+  <!-- EJEMPLO 6 -->
+  <h2>6. <code>display: grid</code></h2>
+  <p>Los hijos se organizan en filas Y columnas:</p>
+  <div class="grid-demo contenedor">
+    <div class="item">Grid 1</div>
+    <div class="item">Grid 2</div>
+    <div class="item">Grid 3</div>
+    <div class="item">Grid 4</div>
+    <div class="item">Grid 5</div>
+    <div class="item">Grid 6</div>
+  </div>
+
+  <hr>
+
+  <h2>Tabla comparativa (block / inline / inline-block)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Propiedad</th>
+        <th>block</th>
+        <th>inline</th>
+        <th>inline-block</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ocupa toda la línea</td>
+        <td class="si">SÍ</td>
+        <td class="no">NO</td>
+        <td class="no">NO</td>
+      </tr>
+      <tr>
+        <td>Respeta <code>width</code></td>
+        <td class="si">SÍ</td>
+        <td class="no">NO</td>
+        <td class="si">SÍ</td>
+      </tr>
+      <tr>
+        <td>Respeta <code>height</code></td>
+        <td class="si">SÍ</td>
+        <td class="no">NO</td>
+        <td class="si">SÍ</td>
+      </tr>
+      <tr>
+        <td>Respeta <code>padding</code></td>
+        <td class="si">SÍ</td>
+        <td class="parcial">Solo horizontal</td>
+        <td class="si">SÍ</td>
+      </tr>
+      <tr>
+        <td>Respeta <code>margin</code></td>
+        <td class="si">SÍ</td>
+        <td class="parcial">Solo horizontal</td>
+        <td class="si">SÍ</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2>Elementos HTML por default</h2>
+
+  <h3>Elementos <b>block</b> por default</h3>
+  <ul>
+    <li><code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code> a <code>&lt;h6&gt;</code></li>
+    <li><code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code></li>
+    <li><code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;main&gt;</code></li>
+    <li><code>&lt;form&gt;</code>, <code>&lt;blockquote&gt;</code></li>
+  </ul>
+
+  <h3>Elementos <b>inline</b> por default</h3>
+  <ul>
+    <li><code>&lt;span&gt;</code>, <code>&lt;a&gt;</code></li>
+    <li><code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code></li>
+    <li><code>&lt;img&gt;</code>, <code>&lt;code&gt;</code>, <code>&lt;label&gt;</code></li>
+    <li><code>&lt;input&gt;</code>, <code>&lt;button&gt;</code>, <code>&lt;select&gt;</code></li>
+  </ul>
+
+  <h2>Todos los valores de <code>display</code></h2>
+  <ul>
+    <li><code>block</code> — ocupa toda la línea.</li>
+    <li><code>inline</code> — convive en la misma línea.</li>
+    <li><code>inline-block</code> — inline pero respeta width/height.</li>
+    <li><code>none</code> — oculta el elemento.</li>
+    <li><code>flex</code> — layout flexible unidimensional.</li>
+    <li><code>grid</code> — layout bidimensional (filas y columnas).</li>
+    <li><code>inline-flex</code>, <code>inline-grid</code> — versiones inline de los anteriores.</li>
+    <li><code>table</code>, <code>table-cell</code>, <code>table-row</code> — comportarse como tabla (raro).</li>
+    <li><code>contents</code> — el elemento desaparece pero sus hijos quedan (útil con flex/grid).</li>
+  </ul>
+
+  <h2>Cuándo usar cada uno</h2>
+  <ul>
+    <li><code>block</code> → contenedores, secciones, layout general.</li>
+    <li><code>inline</code> → decoración dentro de texto (<code>&lt;span&gt;</code>, <code>&lt;em&gt;</code>).</li>
+    <li><code>inline-block</code> → botones, menús en línea, tarjetas chicas. (Hoy se usa menos por flexbox.)</li>
+    <li><code>flex</code> → elementos en una sola línea/columna con alineación flexible.</li>
+    <li><code>grid</code> → layouts completos con filas y columnas.</li>
+    <li><code>none</code> → ocultar elementos temporalmente (muy usado con JavaScript para menús, modales, etc.).</li>
+  </ul>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li>W3C — CSS Display Module: <a href="https://www.w3.org/TR/css-display-3/">w3.org/TR/css-display-3/</a></li>
+    <li>MDN — display: <a href="https://developer.mozilla.org/es/docs/Web/CSS/display">developer.mozilla.org/es/docs/Web/CSS/display</a></li>
+  </ul>
+
+</body>
+</html>
