@@ -1,0 +1,486 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Books API REST",
+    "description": "Colección para probar la API REST de libros (Programación 3).\n\nOrganización:\n1. **Seed** — carga libros de ejemplo para tener datos\n2. **Crear** — POST /books\n3. **Leer** — GET /books y GET /books/:isbn\n4. **Modificar** — PUT y PATCH\n5. **Eliminar** — DELETE\n6. **Errores** — casos de validación y recursos inexistentes\n\n**Variable de colección:** `baseUrl` = http://localhost:3000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "isbn_mockingbird",
+      "value": "978-0-06-112008-4",
+      "type": "string"
+    },
+    {
+      "key": "isbn_1984",
+      "value": "978-0-45-228285-0",
+      "type": "string"
+    },
+    {
+      "key": "isbn_huxley",
+      "value": "978-0-06-085052-4",
+      "type": "string"
+    },
+    {
+      "key": "isbn_garcia_marquez",
+      "value": "978-84-450-7550-5",
+      "type": "string"
+    },
+    {
+      "key": "isbn_gatsby",
+      "value": "978-0-14-028329-7",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Seed — Carga de datos iniciales",
+      "description": "Ejecutá estas requests en orden para poblar la base de datos con libros de ejemplo antes de probar los demás endpoints.",
+      "item": [
+        {
+          "name": "Seed 1 — Matar un ruiseñor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"{{isbn_mockingbird}}\",\n  \"titulo\": \"Matar un ruiseñor\",\n  \"autor\": \"Harper Lee\",\n  \"genero\": \"Ficción\",\n  \"paginas\": 281\n}"
+            }
+          }
+        },
+        {
+          "name": "Seed 2 — 1984",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"{{isbn_1984}}\",\n  \"titulo\": \"1984\",\n  \"autor\": \"George Orwell\",\n  \"genero\": \"Distopía\",\n  \"paginas\": 328\n}"
+            }
+          }
+        },
+        {
+          "name": "Seed 3 — Un mundo feliz",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"{{isbn_huxley}}\",\n  \"titulo\": \"Un mundo feliz\",\n  \"autor\": \"Aldous Huxley\",\n  \"genero\": \"Distopía\",\n  \"paginas\": 311\n}"
+            }
+          }
+        },
+        {
+          "name": "Seed 4 — Cien años de soledad",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"{{isbn_garcia_marquez}}\",\n  \"titulo\": \"Cien años de soledad\",\n  \"autor\": \"Gabriel García Márquez\",\n  \"genero\": \"Realismo mágico\",\n  \"paginas\": 432\n}"
+            }
+          }
+        },
+        {
+          "name": "Seed 5 — El gran Gatsby",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"{{isbn_gatsby}}\",\n  \"titulo\": \"El gran Gatsby\",\n  \"autor\": \"F. Scott Fitzgerald\",\n  \"genero\": \"Ficción\",\n  \"paginas\": 180\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Crear — POST /books",
+      "description": "Crea un nuevo libro. Devuelve 201 con el libro creado y sus _links HATEOAS.\n\n**Reglas de negocio validadas por el Service:**\n- El ISBN debe ser único (409 si ya existe)\n\n**Validaciones del Controller (forma del input):**\n- Todos los campos son obligatorios (400)\n- `paginas` debe ser un entero positivo (400)",
+      "item": [
+        {
+          "name": "Crear libro ✅ 201",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"978-0-14-303943-3\",\n  \"titulo\": \"El proceso\",\n  \"autor\": \"Franz Kafka\",\n  \"genero\": \"Absurdismo\",\n  \"paginas\": 255\n}"
+            },
+            "description": "Crea un nuevo libro. Respuesta esperada: 201 Created con el objeto del libro y _links."
+          }
+        },
+        {
+          "name": "Crear libro — ISBN duplicado ❌ 409",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"{{isbn_1984}}\",\n  \"titulo\": \"1984 (duplicado)\",\n  \"autor\": \"George Orwell\",\n  \"genero\": \"Distopía\",\n  \"paginas\": 328\n}"
+            },
+            "description": "Intenta crear un libro con un ISBN que ya existe.\nRespuesta esperada: 409 Conflict."
+          }
+        },
+        {
+          "name": "Crear libro — campos faltantes ❌ 400",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"978-0-00-000000-0\",\n  \"titulo\": \"Libro incompleto\"\n}"
+            },
+            "description": "Intenta crear un libro sin todos los campos requeridos.\nRespuesta esperada: 400 Bad Request."
+          }
+        },
+        {
+          "name": "Crear libro — paginas inválido ❌ 400",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/books", "host": ["{{baseUrl}}"], "path": ["books"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"978-0-00-000001-0\",\n  \"titulo\": \"Páginas inválidas\",\n  \"autor\": \"Autor\",\n  \"genero\": \"Género\",\n  \"paginas\": -10\n}"
+            },
+            "description": "Intenta crear un libro con paginas negativo.\nRespuesta esperada: 400 Bad Request."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Leer — GET /books y GET /books/:isbn",
+      "description": "Operaciones de lectura. Todas las respuestas incluyen _links HATEOAS.",
+      "item": [
+        {
+          "name": "Obtener un libro ✅ 200",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_mockingbird}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_mockingbird}}"]
+            },
+            "description": "Obtiene un libro por su ISBN.\nObservá los _links en la respuesta: self, update, patch, delete, list."
+          }
+        },
+        {
+          "name": "Obtener libro inexistente ❌ 404",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books/ISBN-INEXISTENTE",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "ISBN-INEXISTENTE"]
+            },
+            "description": "Respuesta esperada: 404 Not Found con mensaje de error."
+          }
+        },
+        {
+          "name": "Listar todos los libros",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"]
+            },
+            "description": "Devuelve todos los libros con paginación por defecto (page=1, limit=10).\nObservá: data[], pagination{} y _links{} de colección."
+          }
+        },
+        {
+          "name": "Listar — paginado (page=1, limit=2)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?page=1&limit=2",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "2" }
+              ]
+            },
+            "description": "Paginación: primera página con 2 resultados.\nObservá _links.next con la URL de la página siguiente y _links.prev = null."
+          }
+        },
+        {
+          "name": "Listar — paginado (page=2, limit=2)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?page=2&limit=2",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "page", "value": "2" },
+                { "key": "limit", "value": "2" }
+              ]
+            },
+            "description": "Segunda página. Ahora _links.prev tiene valor y _links.next también."
+          }
+        },
+        {
+          "name": "Listar — filtrar por título",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?titulo=1984",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "titulo", "value": "1984" }
+              ]
+            },
+            "description": "Filtra libros cuyo titulo contenga '1984' (búsqueda parcial, LIKE)."
+          }
+        },
+        {
+          "name": "Listar — filtrar por título parcial",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?titulo=mundo",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "titulo", "value": "mundo" }
+              ]
+            },
+            "description": "Búsqueda parcial: devuelve todos los libros que contengan 'mundo' en el título."
+          }
+        },
+        {
+          "name": "Listar — filtrar por ISBN parcial",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?isbn=978-0-06",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "isbn", "value": "978-0-06" }
+              ]
+            },
+            "description": "Filtra libros cuyo ISBN contenga '978-0-06'."
+          }
+        },
+        {
+          "name": "Listar — filtros combinados con paginación",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?genero=Distop%C3%ADa&page=1&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["books"],
+              "query": [
+                { "key": "titulo", "value": "dist", "disabled": true },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "5" }
+              ]
+            },
+            "description": "Combinación de filtros y paginación. Los _links de navegación preservan los filtros activos en sus URLs."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Modificar — PUT y PATCH",
+      "description": "PUT reemplaza el libro completo. PATCH actualiza sólo los campos enviados.",
+      "item": [
+        {
+          "name": "PUT — Reemplazar libro completo ✅ 200",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_mockingbird}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_mockingbird}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"To Kill a Mockingbird\",\n  \"autor\": \"Harper Lee\",\n  \"genero\": \"Fiction\",\n  \"paginas\": 281\n}"
+            },
+            "description": "Reemplaza todos los campos del libro. Hay que enviar TODOS los campos (titulo, autor, genero, paginas).\nEl isbn NO va en el body: se toma de la URI."
+          }
+        },
+        {
+          "name": "PUT — Libro inexistente ❌ 404",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/ISBN-INEXISTENTE",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "ISBN-INEXISTENTE"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Título\",\n  \"autor\": \"Autor\",\n  \"genero\": \"Género\",\n  \"paginas\": 100\n}"
+            },
+            "description": "Respuesta esperada: 404 Not Found."
+          }
+        },
+        {
+          "name": "PUT — Campos faltantes ❌ 400",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_1984}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_1984}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Solo el título\"\n}"
+            },
+            "description": "PUT requiere todos los campos. Si falta alguno: 400 Bad Request."
+          }
+        },
+        {
+          "name": "PATCH — Actualizar solo el título ✅ 200",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_1984}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_1984}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Nineteen Eighty-Four\"\n}"
+            },
+            "description": "Modifica sólo el título. Los demás campos (autor, genero, paginas) no cambian."
+          }
+        },
+        {
+          "name": "PATCH — Actualizar solo las páginas ✅ 200",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_huxley}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_huxley}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paginas\": 350\n}"
+            },
+            "description": "Modifica sólo el número de páginas."
+          }
+        },
+        {
+          "name": "PATCH — Actualizar múltiples campos ✅ 200",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_garcia_marquez}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_garcia_marquez}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"genero\": \"Novela latinoamericana\",\n  \"paginas\": 471\n}"
+            },
+            "description": "PATCH puede actualizar varios campos a la vez. Solo los campos enviados se modifican."
+          }
+        },
+        {
+          "name": "PATCH — Sin campos válidos ❌ 400",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_1984}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_1984}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"978-0-00-000000-0\"\n}"
+            },
+            "description": "El campo isbn es inmutable. Si el body no contiene ningún campo patcheable (titulo, autor, genero, paginas): 400 Bad Request."
+          }
+        },
+        {
+          "name": "PATCH — Libro inexistente ❌ 404",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/books/ISBN-INEXISTENTE",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "ISBN-INEXISTENTE"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Nuevo título\"\n}"
+            },
+            "description": "Respuesta esperada: 404 Not Found."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Eliminar — DELETE /books/:isbn",
+      "description": "Elimina un libro por ISBN. Devuelve 204 sin body si fue exitoso.",
+      "item": [
+        {
+          "name": "Eliminar libro ✅ 204",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_gatsby}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_gatsby}}"]
+            },
+            "description": "Elimina el libro. Respuesta: 204 No Content (sin body).\nVerificá luego con GET /books que ya no aparece."
+          }
+        },
+        {
+          "name": "Verificar eliminación ✅ 404",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books/{{isbn_gatsby}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "{{isbn_gatsby}}"]
+            },
+            "description": "Confirmación: después de eliminarlo, GET debe devolver 404."
+          }
+        },
+        {
+          "name": "Eliminar libro inexistente ❌ 404",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/books/ISBN-INEXISTENTE",
+              "host": ["{{baseUrl}}"],
+              "path": ["books", "ISBN-INEXISTENTE"]
+            },
+            "description": "Respuesta esperada: 404 Not Found."
+          }
+        }
+      ]
+    }
+  ]
+}

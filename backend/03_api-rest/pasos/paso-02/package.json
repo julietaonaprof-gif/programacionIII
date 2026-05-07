@@ -1,0 +1,16 @@
+{
+  "name": "paso-02",
+  "version": "1.0.0",
+  "scripts": {
+    "start:dev": "ts-node --transpile-only src/app.ts"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
