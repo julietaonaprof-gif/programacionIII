@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/cambiosDOM.js"></script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* Cuando se aplique la clase "destacado" al título */
+    .destacado {
+      color: #c47800;
+      background: #fff8dc;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: all 0.4s;
+    }
+
+    /* Para los items nuevos que agregamos por JS */
+    .nuevo {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    li {
+      padding: 4px 0;
+    }
+
+    .info {
+      background: #1e1e1e;
+      color: #9bd16f;
+      font-family: monospace;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-top: 24px;
+    }
+  </style>
+  <title>Document</title>
+</head>
+
+<body>
+
+  <h1 id="titulo">Título original</h1>
+  <p id="descripcion">Descripción inicial del párrafo.</p>
+
+  <ul id="lista">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+  </ul>
+
+  <p class="info">Abrí la consola del navegador (F12 → Console) para ver el detalle de cada paso.</p>
+</body>
+
+</html>

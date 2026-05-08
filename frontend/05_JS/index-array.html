@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Arrays y sus métodos</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h3 {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    #display {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      min-height: 32px;
+      margin: 12px 0;
+    }
+
+    .item {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    #log {
+      background: #1e1e1e;
+      color: #9bd16f;
+      font-family: monospace;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 4px;
+      min-height: 20px;
+    }
+
+    button {
+      padding: 6px 12px;
+      margin: 2px;
+      cursor: pointer;
+    }
+
+    input {
+      padding: 6px 10px;
+      width: 60px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Métodos de arrays</h1>
+
+  <div id="display"></div>
+  <div id="log">array inicial</div>
+
+  <h3>Agregar y quitar (mutan el array)</h3>
+  <input type="number" id="entrada" value="6">
+  <button id="push">push (al final)</button>
+  <button id="unshift">unshift (al principio)</button>
+  <button id="pop">pop (quitar último)</button>
+  <button id="shift">shift (quitar primero)</button>
+
+  <h3>Transformar (devuelven array nuevo)</h3>
+  <button id="map">map (× 2)</button>
+  <button id="filter">filter (solo pares)</button>
+  <button id="find">find (primero > 3)</button>
+
+  <h3>Ordenar (mutan el array)</h3>
+  <button id="sort">sort</button>
+  <button id="reverse">reverse</button>
+
+  <h3>Reset</h3>
+  <button id="reset">Volver a [1, 2, 3, 4, 5]</button>
+
+  <script src="js/arrays.js"></script>
+</body>
+
+</html>

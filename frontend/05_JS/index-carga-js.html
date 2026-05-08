@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('¡HTML listo!');
+      // Acá podés acceder a cualquier elemento del DOM con seguridad
+      const titulo = document.querySelector('h1');
+      console.log(titulo);
+    });
+
+    window.addEventListener('load', () => {
+      console.log('¡Todo cargado, incluso las imágenes!');
+
+      // Por ejemplo, ahora podés medir el tamaño real de una imagen
+      const img = document.querySelector('img');
+      console.log('Ancho real:', img.naturalWidth);
+    });
+
+    console.log('Estado actual del documento:', document.readyState);
+    // 'loading'      → todavía está parseando
+    // 'interactive'  → DOMContentLoaded ya pasó (DOM listo)
+    // 'complete'     → todo cargado (load ya pasó)
+  </script>
+  <script src="js/carga/script-carga.js"></script>
+  <script src="js/carga/script-carga2.js"></script>
+  <title>Carga Común JS</title>
+</head>
+
+<body>
+
+</body>
+
+</html>

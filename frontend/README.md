@@ -16,6 +16,7 @@ Curso completo de desarrollo frontend. Cada carpeta es una clase con archivos co
 | 2 | `02_HTML/` | HTML: formularios, tablas, dialog, ejercicios formularios y tablas | ✅ |
 | 3 | `03_CSS/`  | CSS: introducción, box modal, fuentes, fondos, ancho, alto, tamaños | ✅ |
 | 4 | `04_CSS/`  | CSS: variables, media querys, grid, flex | ✅ |
+| 5 | `05_JS/`   | JS: DOM, arrays, primitivos, window, document | ✅ |
 
 
 > Los temas y la cantidad de clases pueden cambiar a medida que avance el curso.

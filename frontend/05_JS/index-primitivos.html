@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tipos de datos primitivos en JavaScript</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 720px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      margin-top: 28px;
+      font-size: 18px;
+    }
+
+    h2 code {
+      background: #eef2f7;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    p.desc {
+      color: #555;
+      margin: 4px 0 10px;
+      font-size: 14px;
+    }
+
+    .botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    button {
+      padding: 6px 10px;
+      cursor: pointer;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+    }
+
+    button:hover {
+      background: #f5f5f5;
+      border-color: #888;
+    }
+
+    #log {
+      position: sticky;
+      top: 10px;
+      background: #1e1e1e;
+      color: #ddd;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #log .linea {
+      padding: 2px 0;
+    }
+
+    #log .codigo {
+      color: #79c0ff;
+    }
+
+    #log .resultado {
+      color: #a5d6a7;
+    }
+
+    #log .tipo {
+      color: #ffb74a;
+      opacity: 0.85;
+    }
+
+    #log .vacio {
+      color: #777;
+      font-style: italic;
+    }
+
+    .limpiar {
+      background: transparent;
+      color: #777;
+      border: 1px solid #444;
+      font-size: 11px;
+    }
+
+    .meta {
+      font-size: 11px;
+      color: #888;
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Tipos de datos primitivos</h1>
+  <p>Hacé clic en cualquier botón para ver el resultado y el tipo (<code>typeof</code>).</p>
+
+  <div id="log">
+    <div class="vacio">→ El log aparecerá acá</div>
+  </div>
+
+  <h2>1. <code>number</code></h2>
+  <p class="desc">Todos los números son float de 64 bits (IEEE 754). No existe la distinción entre int y float.</p>
+  <div class="botones">
+    <button data-code="typeof 42">typeof 42</button>
+    <button data-code="0.1 + 0.2">0.1 + 0.2</button>
+    <button data-code="0.1 + 0.2 === 0.3">0.1 + 0.2 === 0.3</button>
+    <button data-code="NaN === NaN">NaN === NaN</button>
+    <button data-code="Number.isNaN(NaN)">Number.isNaN(NaN)</button>
+    <button data-code="1 / 0">1 / 0</button>
+    <button data-code="Number.MAX_SAFE_INTEGER">Number.MAX_SAFE_INTEGER</button>
+  </div>
+
+  <h2>2. <code>string</code></h2>
+  <p class="desc">Texto. Inmutable. Se delimita con <code>'</code>, <code>"</code> o <code>`</code> (este último permite
+    template literals).</p>
+  <div class="botones">
+    <button data-code="typeof 'hola'">typeof 'hola'</button>
+    <button data-code="'hola'.length">'hola'.length</button>
+    <button data-code="'5' + 3">'5' + 3</button>
+    <button data-code="'5' - 3">'5' - 3</button>
+    <button data-code="'hola'[0]">'hola'[0]</button>
+    <button data-code="`suma: ${1+1}`">`suma: ${1+1}`</button>
+  </div>
+
+  <h2>3. <code>boolean</code></h2>
+  <p class="desc">Solo dos valores: <code>true</code> o <code>false</code>. Pero todos los demás valores son "truthy" o
+    "falsy" cuando se convierten.</p>
+  <div class="botones">
+    <button data-code="typeof true">typeof true</button>
+    <button data-code="Boolean(0)">Boolean(0)</button>
+    <button data-code="Boolean('')">Boolean('')</button>
+    <button data-code="Boolean('false')">Boolean('false')</button>
+    <button data-code="Boolean([])">Boolean([])</button>
+    <button data-code="Boolean({})">Boolean({})</button>
+  </div>
+
+  <h2>4. <code>undefined</code></h2>
+  <p class="desc">Una variable declarada sin asignar, una función sin <code>return</code>, una propiedad inexistente.
+  </p>
+  <div class="botones">
+    <button data-code="typeof undefined">typeof undefined</button>
+    <button data-code="({}).propiedadInexistente">({}).propiedadInexistente</button>
+    <button data-code="(function(){})()">(function(){})()</button>
+  </div>
+
+  <h2>5. <code>null</code></h2>
+  <p class="desc">Ausencia <em>intencional</em> de valor. Distinto de undefined.</p>
+  <div class="botones">
+    <button data-code="typeof null">typeof null</button>
+    <button data-code="null == undefined">null == undefined</button>
+    <button data-code="null === undefined">null === undefined</button>
+    <button data-code="null === null">null === null</button>
+  </div>
+
+  <h2>6. <code>symbol</code> <span class="meta">(ES6, 2015)</span></h2>
+  <p class="desc">Identificadores únicos. Cada Symbol es distinto, incluso con la misma descripción.</p>
+  <div class="botones">
+    <button data-code="typeof Symbol()">typeof Symbol()</button>
+    <button data-code="Symbol('x') === Symbol('x')">Symbol('x') === Symbol('x')</button>
+  </div>
+
+  <h2>7. <code>bigint</code> <span class="meta">(ES2020)</span></h2>
+  <p class="desc">Enteros sin límite de precisión. Se escriben con <code>n</code> al final.</p>
+  <div class="botones">
+    <button data-code="typeof 123n">typeof 123n</button>
+    <button data-code="9007199254740993n - 9007199254740992n">precisión con BigInt</button>
+    <button data-code="9007199254740993 - 9007199254740992">precisión con Number (pierde!)</button>
+  </div>
+
+  <p style="margin-top: 24px;">
+    <button class="limpiar" id="limpiar">Limpiar log</button>
+  </p>
+
+  <script src="js/primitivos.js"></script>
+</body>
+
+</html>

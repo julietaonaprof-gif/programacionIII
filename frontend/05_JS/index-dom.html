@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>DOM básico: seleccionar, leer, agregar y borrar</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    input,
+    button {
+      padding: 8px 12px;
+      font-size: 16px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    li:hover {
+      color: #c00;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Mi lista de tareas</h1>
+
+  <input type="text" id="entrada" placeholder="Nueva tarea">
+  <button id="agregar">Agregar</button>
+
+  <ul id="lista">
+    <li>Tarea de ejemplo (clic para borrar)</li>
+  </ul>
+
+  <script src="js/dom.js"></script>
+</body>
+
+</html>
