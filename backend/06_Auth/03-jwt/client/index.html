@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cliente — JWT Authentication</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header { text-align: center; margin-bottom: 2rem; }
+    header h1 { font-size: 1.8rem; color: #f8fafc; }
+    header p  { color: #94a3b8; margin-top: 0.4rem; font-size: 0.9rem; }
+
+    .badge {
+      display: inline-block;
+      background: #14532d;
+      color: #4ade80;
+      border: 1px solid #16a34a;
+      border-radius: 999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.6rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.8rem;
+      width: 100%;
+      max-width: 560px;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      color: #cbd5e1;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group { margin-bottom: 1rem; }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus { outline: none; border-color: #10b981; }
+
+    .btn-row { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    button {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    button:active { transform: scale(0.97); }
+    .btn-green   { background: #059669; color: #fff; }
+    .btn-green:hover { background: #047857; }
+    .btn-red     { background: #dc2626; color: #fff; }
+    .btn-red:hover { background: #b91c1c; }
+    .btn-slate   { background: #334155; color: #cbd5e1; }
+    .btn-slate:hover { background: #475569; }
+
+    /* Token display */
+    .token-display {
+      background: #0a0f1a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-family: monospace;
+      font-size: 0.72rem;
+      word-break: break-all;
+      line-height: 1.6;
+      color: #64748b;
+    }
+    .token-part-header  { color: #f472b6; }
+    .token-part-payload { color: #a78bfa; }
+    .token-part-sig     { color: #34d399; }
+
+    .token-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.8rem;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-green  { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+    .dot-red    { background: #f87171; }
+    .dot-gray   { background: #475569; }
+
+    /* Endpoint grid */
+    .endpoint-grid { display: grid; gap: 0.6rem; }
+    .endpoint-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.85rem;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+    }
+    .endpoint-btn:hover { border-color: #10b981; background: #0f1f15; }
+    .method-get   { background: #064e3b; color: #34d399; border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.7rem; font-weight: 700; font-family: monospace; }
+    .method-post  { background: #1e3a5f; color: #60a5fa; border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.7rem; font-weight: 700; font-family: monospace; }
+
+    .role-tag {
+      margin-left: auto;
+      font-size: 0.7rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+    }
+    .role-admin  { background: #450a0a; color: #f87171; }
+    .role-editor { background: #1c1917; color: #fb923c; }
+    .role-any    { background: #1e293b; color: #64748b; border: 1px solid #334155; }
+    .role-open   { background: #0f172a; color: #475569; }
+
+    /* Response */
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .response-header span { font-size: 0.8rem; color: #64748b; }
+    .status-pill { padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+    .status-ok     { background: #14532d; color: #4ade80; }
+    .status-error  { background: #450a0a; color: #f87171; }
+    .status-idle   { background: #1e293b; color: #64748b; border: 1px solid #334155; }
+
+    pre {
+      background: #0a0f1a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.78rem;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 280px;
+      overflow-y: auto;
+      color: #a5f3fc;
+      line-height: 1.5;
+    }
+
+    /* JWT Decoder */
+    .jwt-parts { display: grid; gap: 0.6rem; margin-top: 0.6rem; }
+    .jwt-part {
+      background: #0a0f1a;
+      border-radius: 8px;
+      padding: 0.7rem;
+      font-size: 0.75rem;
+    }
+    .jwt-part-title {
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+    .jwt-part-title.header  { color: #f472b6; }
+    .jwt-part-title.payload { color: #a78bfa; }
+    .jwt-part-title.sig     { color: #34d399; }
+    .jwt-part pre { max-height: none; border: none; padding: 0; background: none; }
+
+    .spinner {
+      display: none;
+      width: 14px; height: 14px;
+      border: 2px solid #334155;
+      border-top-color: #10b981;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-left: 0.4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔑 JWT Authentication</h1>
+    <p>Cliente web — Login, tokens y rutas protegidas por rol</p>
+    <span class="badge">JWT · Bearer Token · localStorage · RBAC</span>
+  </header>
+
+  <!-- Login -->
+  <div class="card">
+    <h2>🔐 Login — Obtener Token</h2>
+    <div class="form-group">
+      <label for="username">Usuario</label>
+      <select id="username" onchange="updatePassword()">
+        <option value="admin">admin (rol: admin)</option>
+        <option value="juan">juan (rol: editor)</option>
+        <option value="maria">maria (rol: viewer)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" value="admin123" />
+    </div>
+    <div class="btn-row">
+      <button class="btn-green" onclick="login()">🚀 Iniciar Sesión</button>
+      <button class="btn-red"   onclick="logout()">🚪 Cerrar Sesión</button>
+    </div>
+  </div>
+
+  <!-- Estado del Token -->
+  <div class="card">
+    <h2>🪙 Estado del Token <span class="spinner" id="spinner"></span></h2>
+    <div class="token-status" id="token-status">
+      <span class="dot dot-gray"></span>
+      <span style="color:#64748b">Sin sesión activa</span>
+    </div>
+    <div class="token-display" id="token-display">
+      <span style="color:#334155">El token aparecerá aquí después del login...</span>
+    </div>
+  </div>
+
+  <!-- Decodificador JWT -->
+  <div class="card" id="jwt-decoder-card" style="display:none">
+    <h2>🔍 Decodificador JWT</h2>
+    <div class="jwt-parts" id="jwt-parts"></div>
+  </div>
+
+  <!-- Endpoints -->
+  <div class="card">
+    <h2>🌐 Endpoints Disponibles</h2>
+    <div class="endpoint-grid">
+      <button class="endpoint-btn" onclick="callApi('GET', '/api/public', false)">
+        <span class="method-get">GET</span>
+        <span>/api/public</span>
+        <span class="role-tag role-open">sin auth</span>
+      </button>
+      <button class="endpoint-btn" onclick="callApi('GET', '/api/auth/verify', true)">
+        <span class="method-get">GET</span>
+        <span>/api/auth/verify</span>
+        <span class="role-tag role-any">any</span>
+      </button>
+      <button class="endpoint-btn" onclick="callApi('GET', '/api/protected', true)">
+        <span class="method-get">GET</span>
+        <span>/api/protected</span>
+        <span class="role-tag role-any">any</span>
+      </button>
+      <button class="endpoint-btn" onclick="callApi('GET', '/api/profile', true)">
+        <span class="method-get">GET</span>
+        <span>/api/profile</span>
+        <span class="role-tag role-any">any</span>
+      </button>
+      <button class="endpoint-btn" onclick="callApi('GET', '/api/editor', true)">
+        <span class="method-get">GET</span>
+        <span>/api/editor</span>
+        <span class="role-tag role-editor">editor+</span>
+      </button>
+      <button class="endpoint-btn" onclick="callApi('GET', '/api/admin', true)">
+        <span class="method-get">GET</span>
+        <span>/api/admin</span>
+        <span class="role-tag role-admin">admin</span>
+      </button>
+      <button class="endpoint-btn" onclick="callApi('POST', '/api/auth/logout', true)">
+        <span class="method-post">POST</span>
+        <span>/api/auth/logout</span>
+        <span class="role-tag role-any">any</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Respuesta -->
+  <div class="card">
+    <h2>📄 Respuesta del Servidor</h2>
+    <div class="response-header">
+      <span id="request-label">—</span>
+      <span class="status-pill status-idle" id="status-pill">IDLE</span>
+    </div>
+    <pre id="response-output">// La respuesta aparecerá aquí...</pre>
+  </div>
+
+  <!-- ═══════════════════════════ SCRIPT ══════════════════════════════ -->
+  <script>
+    const API_BASE      = "http://localhost:3000";
+    const TOKEN_KEY     = "jwt_token";   // Clave en localStorage
+
+    // ── Contraseñas de prueba ──────────────────────────────────────────
+    const CREDENTIALS = {
+      admin: "admin123",
+      juan:  "juan456",
+      maria: "maria789",
+    };
+
+    function updatePassword() {
+      const user = document.getElementById("username").value;
+      document.getElementById("password").value = CREDENTIALS[user] || "";
+    }
+
+    // ── Gestión del token en localStorage ─────────────────────────────
+
+    function saveToken(token) {
+      localStorage.setItem(TOKEN_KEY, token);
+    }
+
+    function getToken() {
+      return localStorage.getItem(TOKEN_KEY);
+    }
+
+    function removeToken() {
+      localStorage.removeItem(TOKEN_KEY);
+    }
+
+    // ── Login ──────────────────────────────────────────────────────────
+    async function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      setLoading(true);
+      document.getElementById("request-label").textContent = "POST /api/auth/login";
+
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          saveToken(data.token);
+          updateTokenDisplay(data.token);
+          showDecodedJWT(data.token);
+          showResponse(res.status, data);
+        } else {
+          removeToken();
+          updateTokenDisplay(null);
+          showResponse(res.status, data);
+        }
+      } catch (err) {
+        showResponse(0, { error: "Error de conexión: " + err.message });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── Logout ─────────────────────────────────────────────────────────
+    async function logout() {
+      const token = getToken();
+
+      if (token) {
+        // Notificar al servidor (para auditoría o invalidación de refresh token)
+        try {
+          await fetch(`${API_BASE}/api/auth/logout`, {
+            method:  "POST",
+            headers: { "Authorization": `Bearer ${token}` },
+          });
+        } catch (_) { /* ignorar errores de red en logout */ }
+      }
+
+      removeToken();
+      updateTokenDisplay(null);
+      document.getElementById("jwt-decoder-card").style.display = "none";
+      showResponse(200, { message: "Sesión cerrada. Token eliminado de localStorage." });
+      document.getElementById("request-label").textContent = "Logout";
+    }
+
+    // ── Llamada a endpoint protegido ───────────────────────────────────
+    async function callApi(method, path, requiresAuth) {
+      const url = `${API_BASE}${path}`;
+
+      setLoading(true);
+      document.getElementById("request-label").textContent = `${method} ${path}`;
+
+      const headers = { "Content-Type": "application/json" };
+
+      if (requiresAuth) {
+        const token = getToken();
+        if (!token) {
+          showResponse(401, {
+            error: "No hay token en localStorage",
+            hint:  "Primero iniciá sesión para obtener un token",
+          });
+          setLoading(false);
+          return;
+        }
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      try {
+        const res = await fetch(url, { method, headers });
+        const data = await res.json();
+        showResponse(res.status, data);
+      } catch (err) {
+        showResponse(0, {
+          error: "Error de conexión: " + err.message,
+          hint:  "¿Está corriendo el servidor en localhost:3000?",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── Decodificar y mostrar partes del JWT ───────────────────────────
+    function decodeBase64Url(str) {
+      // Base64URL → Base64 → JSON
+      const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+      const padded  = base64 + "=".repeat((4 - base64.length % 4) % 4);
+      try {
+        return JSON.parse(atob(padded));
+      } catch {
+        return null;
+      }
+    }
+
+    function showDecodedJWT(token) {
+      const parts = token.split(".");
+      if (parts.length !== 3) return;
+
+      const header  = decodeBase64Url(parts[0]);
+      const payload = decodeBase64Url(parts[1]);
+
+      // Enriquecer payload con fechas legibles
+      if (payload) {
+        if (payload.iat) payload._iat_legible = new Date(payload.iat * 1000).toLocaleString();
+        if (payload.exp) payload._exp_legible = new Date(payload.exp * 1000).toLocaleString();
+      }
+
+      const card = document.getElementById("jwt-decoder-card");
+      const cont = document.getElementById("jwt-parts");
+      card.style.display = "block";
+
+      cont.innerHTML = `
+        <div class="jwt-part">
+          <div class="jwt-part-title header">Header (algoritmo y tipo)</div>
+          <pre>${JSON.stringify(header, null, 2)}</pre>
+        </div>
+        <div class="jwt-part">
+          <div class="jwt-part-title payload">Payload (claims del usuario)</div>
+          <pre>${JSON.stringify(payload, null, 2)}</pre>
+        </div>
+        <div class="jwt-part">
+          <div class="jwt-part-title sig">Signature</div>
+          <pre style="color:#34d399;font-size:0.7rem">${parts[2]}</pre>
+          <p style="color:#64748b;font-size:0.7rem;margin-top:0.4rem">
+            ⚠️ La firma solo puede verificarse en el servidor con la clave secreta.
+          </p>
+        </div>
+      `;
+    }
+
+    // ── Mostrar token en pantalla ──────────────────────────────────────
+    function updateTokenDisplay(token) {
+      const statusEl  = document.getElementById("token-status");
+      const displayEl = document.getElementById("token-display");
+
+      if (!token) {
+        statusEl.innerHTML = `<span class="dot dot-red"></span>
+          <span style="color:#f87171">Sin sesión — no hay token en localStorage</span>`;
+        displayEl.innerHTML = `<span style="color:#334155">Sin token almacenado.</span>`;
+        return;
+      }
+
+      const parts = token.split(".");
+      statusEl.innerHTML = `<span class="dot dot-green"></span>
+        <span style="color:#4ade80">Token activo almacenado en <code>localStorage["${TOKEN_KEY}"]</code></span>`;
+
+      // Colorear las tres partes del JWT
+      displayEl.innerHTML = parts.length === 3
+        ? `<span class="token-part-header">${parts[0]}</span>.<span class="token-part-payload">${parts[1]}</span>.<span class="token-part-sig">${parts[2]}</span>`
+        : `<span style="color:#f87171">${token}</span>`;
+    }
+
+    // ── UI Helpers ─────────────────────────────────────────────────────
+    function showResponse(status, data) {
+      const pill = document.getElementById("status-pill");
+      const out  = document.getElementById("response-output");
+
+      if (status >= 200 && status < 300) {
+        pill.className = "status-pill status-ok";
+        pill.textContent = `${status} OK`;
+      } else if (status === 0) {
+        pill.className = "status-pill status-error";
+        pill.textContent = "ERROR";
+      } else {
+        pill.className = "status-pill status-error";
+        pill.textContent = `${status} Error`;
+      }
+      out.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function setLoading(v) {
+      document.getElementById("spinner").style.display = v ? "inline-block" : "none";
+    }
+
+    // ── Inicializar: recuperar token existente de localStorage ─────────
+    (function init() {
+      const token = getToken();
+      if (token) {
+        updateTokenDisplay(token);
+        showDecodedJWT(token);
+      }
+    })();
+  </script>
+
+</body>
+</html>

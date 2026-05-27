@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cliente — Digest Authentication</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 { font-size: 1.8rem; color: #f8fafc; }
+    header p  { color: #94a3b8; margin-top: 0.4rem; font-size: 0.9rem; }
+
+    .badge {
+      display: inline-block;
+      background: #1e3a5f;
+      color: #60a5fa;
+      border: 1px solid #2563eb;
+      border-radius: 999px;
+      padding: 0.2rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.6rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.8rem;
+      width: 100%;
+      max-width: 520px;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      color: #cbd5e1;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card h2 .icon { font-size: 1.2rem; }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    button {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    button:active { transform: scale(0.97); }
+
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-secondary { background: #334155; color: #cbd5e1; }
+    .btn-secondary:hover { background: #475569; }
+
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-danger:hover { background: #b91c1c; }
+
+    /* Endpoints */
+    .endpoint-grid {
+      display: grid;
+      gap: 0.6rem;
+    }
+    .endpoint-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.85rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .endpoint-btn:hover { border-color: #3b82f6; background: #1e2d40; }
+    .endpoint-btn .method {
+      background: #064e3b;
+      color: #34d399;
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: monospace;
+    }
+    .endpoint-btn .lock { font-size: 0.9rem; }
+
+    /* Response */
+    .response-area {
+      margin-top: 0.8rem;
+    }
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .response-header span {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .status-pill {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .status-ok     { background: #14532d; color: #4ade80; }
+    .status-error  { background: #450a0a; color: #f87171; }
+    .status-idle   { background: #1e293b; color: #64748b; border: 1px solid #334155; }
+
+    pre {
+      background: #0a0f1a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.78rem;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 280px;
+      overflow-y: auto;
+      color: #a5f3fc;
+      line-height: 1.5;
+    }
+
+    /* Steps info */
+    .steps {
+      background: #0f172a;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.8rem;
+    }
+    .steps h3 {
+      font-size: 0.78rem;
+      color: #60a5fa;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .step {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+    .step .num {
+      background: #1e3a5f;
+      color: #60a5fa;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .spinner {
+      display: none;
+      width: 14px; height: 14px;
+      border: 2px solid #334155;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-left: 0.4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔐 Digest Authentication</h1>
+    <p>Cliente web — implementación manual del protocolo RFC 2617</p>
+    <span class="badge">MD5 · Challenge-Response · qop=auth</span>
+  </header>
+
+  <!-- Credenciales -->
+  <div class="card">
+    <h2><span class="icon">👤</span> Credenciales</h2>
+    <div class="form-group">
+      <label for="username">Usuario</label>
+      <select id="username">
+        <option value="admin">admin (rol: admin)</option>
+        <option value="juan">juan (rol: editor)</option>
+        <option value="maria">maria (rol: viewer)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" value="admin123" />
+    </div>
+
+    <!-- Muestra hash HA1 en tiempo real para fines educativos -->
+    <div class="form-group">
+      <label>HA1 = MD5(usuario:realm:contraseña) <em style="color:#475569">(calculado en tiempo real)</em></label>
+      <input type="text" id="ha1-display" readonly style="font-family:monospace;font-size:0.75rem;color:#64748b;" />
+    </div>
+  </div>
+
+  <!-- Pasos del protocolo -->
+  <div class="card">
+    <h2><span class="icon">⚙️</span> Flujo del Protocolo</h2>
+    <div class="steps">
+      <h3>Cómo funciona Digest Auth</h3>
+      <div class="step"><span class="num">1</span><span>Cliente pide el recurso protegido (sin credenciales)</span></div>
+      <div class="step"><span class="num">2</span><span>Servidor responde 401 con nonce, realm y qop en WWW-Authenticate</span></div>
+      <div class="step"><span class="num">3</span><span>Cliente calcula: HA1=MD5(user:realm:pass), HA2=MD5(method:uri)</span></div>
+      <div class="step"><span class="num">4</span><span>Cliente calcula: response=MD5(HA1:nonce:nc:cnonce:qop:HA2)</span></div>
+      <div class="step"><span class="num">5</span><span>Cliente envía la request con el header Authorization:Digest</span></div>
+      <div class="step"><span class="num">6</span><span>Servidor recalcula el hash y lo compara con el del cliente</span></div>
+    </div>
+  </div>
+
+  <!-- Endpoints -->
+  <div class="card">
+    <h2><span class="icon">🌐</span> Endpoints</h2>
+    <div class="endpoint-grid">
+      <button class="endpoint-btn" onclick="callEndpoint('/api/public', false)">
+        <span class="method">GET</span>
+        <span>/api/public</span>
+        <span style="margin-left:auto;color:#64748b;font-size:0.75rem;">sin auth</span>
+      </button>
+      <button class="endpoint-btn" onclick="callEndpoint('/api/protected', true)">
+        <span class="method">GET</span>
+        <span>/api/protected</span>
+        <span class="lock" style="margin-left:auto">🔒</span>
+      </button>
+      <button class="endpoint-btn" onclick="callEndpoint('/api/profile', true)">
+        <span class="method">GET</span>
+        <span>/api/profile</span>
+        <span class="lock" style="margin-left:auto">🔒</span>
+      </button>
+      <button class="endpoint-btn" onclick="callEndpoint('/api/data', true)">
+        <span class="method">GET</span>
+        <span>/api/data</span>
+        <span class="lock" style="margin-left:auto">🔒</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Respuesta -->
+  <div class="card">
+    <h2>
+      <span class="icon">📄</span> Respuesta del Servidor
+      <span class="spinner" id="spinner"></span>
+    </h2>
+    <div class="response-area">
+      <div class="response-header">
+        <span id="request-label">—</span>
+        <span class="status-pill status-idle" id="status-pill">IDLE</span>
+      </div>
+      <pre id="response-output">// La respuesta aparecerá aquí...</pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════ SCRIPT ══════════════════════════════ -->
+  <script>
+    const API_BASE = "http://localhost:3000";
+    const REALM   = "api-digest.ejemplo.com";
+
+    // ── Actualizar HA1 en tiempo real ──────────────────────────────────
+    document.getElementById("username").addEventListener("change", updateHA1Preview);
+    document.getElementById("password").addEventListener("input",  updateHA1Preview);
+
+    async function updateHA1Preview() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const ha1 = await md5(`${username}:${REALM}:${password}`);
+      document.getElementById("ha1-display").value = ha1;
+    }
+    updateHA1Preview(); // Inicial
+
+    // ── MD5 usando Web Crypto API ──────────────────────────────────────
+    // Nota: Web Crypto no tiene MD5 nativo (por ser débil), usamos una
+    // implementación pura en JS para fines educativos.
+    async function md5(str) {
+      // Implementación de MD5 en JavaScript puro (RFC 1321)
+      function safeAdd(x, y) {
+        const lsw = (x & 0xffff) + (y & 0xffff);
+        const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+        return (msw << 16) | (lsw & 0xffff);
+      }
+      function bitRotateLeft(num, cnt) { return (num << cnt) | (num >>> (32 - cnt)); }
+      function md5cmn(q, a, b, x, s, t) { return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
+      function md5ff(a, b, c, d, x, s, t) { return md5cmn((b & c) | (~b & d), a, b, x, s, t); }
+      function md5gg(a, b, c, d, x, s, t) { return md5cmn((b & d) | (c & ~d), a, b, x, s, t); }
+      function md5hh(a, b, c, d, x, s, t) { return md5cmn(b ^ c ^ d, a, b, x, s, t); }
+      function md5ii(a, b, c, d, x, s, t) { return md5cmn(c ^ (b | ~d), a, b, x, s, t); }
+
+      function md5blks(s) {
+        const nblk = ((s.length + 8) >> 6) + 1;
+        const blks = new Array(nblk * 16).fill(0);
+        for (let i = 0; i < s.length; i++) blks[i >> 2] |= s.charCodeAt(i) << ((i % 4) * 8);
+        blks[s.length >> 2] |= 0x80 << ((s.length % 4) * 8);
+        blks[nblk * 16 - 2] = s.length * 8;
+        return blks;
+      }
+
+      function md5core(x) {
+        let [a, b, c, d] = [1732584193, -271733879, -1732584194, 271733878];
+        for (let i = 0; i < x.length; i += 16) {
+          const [oa, ob, oc, od] = [a, b, c, d];
+          a = md5ff(a,b,c,d,x[i],7,-680876936);    d=md5ff(d,a,b,c,x[i+1],12,-389564586);
+          c = md5ff(c,d,a,b,x[i+2],17,606105819);  b=md5ff(b,c,d,a,x[i+3],22,-1044525330);
+          a = md5ff(a,b,c,d,x[i+4],7,-176418897);  d=md5ff(d,a,b,c,x[i+5],12,1200080426);
+          c = md5ff(c,d,a,b,x[i+6],17,-1473231341);b=md5ff(b,c,d,a,x[i+7],22,-45705983);
+          a = md5ff(a,b,c,d,x[i+8],7,1770035416);  d=md5ff(d,a,b,c,x[i+9],12,-1958414417);
+          c = md5ff(c,d,a,b,x[i+10],17,-42063);    b=md5ff(b,c,d,a,x[i+11],22,-1990404162);
+          a = md5ff(a,b,c,d,x[i+12],7,1804603682); d=md5ff(d,a,b,c,x[i+13],12,-40341101);
+          c = md5ff(c,d,a,b,x[i+14],17,-1502002290);b=md5ff(b,c,d,a,x[i+15],22,1236535329);
+          a = md5gg(a,b,c,d,x[i+1],5,-165796510);  d=md5gg(d,a,b,c,x[i+6],9,-1069501632);
+          c = md5gg(c,d,a,b,x[i+11],14,643717713); b=md5gg(b,c,d,a,x[i],20,-373897302);
+          a = md5gg(a,b,c,d,x[i+5],5,-701558691);  d=md5gg(d,a,b,c,x[i+10],9,38016083);
+          c = md5gg(c,d,a,b,x[i+15],14,-660478335);b=md5gg(b,c,d,a,x[i+4],20,-405537848);
+          a = md5gg(a,b,c,d,x[i+9],5,568446438);   d=md5gg(d,a,b,c,x[i+14],9,-1019803690);
+          c = md5gg(c,d,a,b,x[i+3],14,-187363961); b=md5gg(b,c,d,a,x[i+8],20,1163531501);
+          a = md5gg(a,b,c,d,x[i+13],5,-1444681467);d=md5gg(d,a,b,c,x[i+2],9,-51403784);
+          c = md5gg(c,d,a,b,x[i+7],14,1735328473); b=md5gg(b,c,d,a,x[i+12],20,-1926607734);
+          a = md5hh(a,b,c,d,x[i+5],4,-378558);     d=md5hh(d,a,b,c,x[i+8],11,-2022574463);
+          c = md5hh(c,d,a,b,x[i+11],16,1839030562);b=md5hh(b,c,d,a,x[i+14],23,-35309556);
+          a = md5hh(a,b,c,d,x[i+1],4,-1530992060); d=md5hh(d,a,b,c,x[i+4],11,1272893353);
+          c = md5hh(c,d,a,b,x[i+7],16,-155497632); b=md5hh(b,c,d,a,x[i+10],23,-1094730640);
+          a = md5hh(a,b,c,d,x[i+13],4,681279174);  d=md5hh(d,a,b,c,x[i],11,-358537222);
+          c = md5hh(c,d,a,b,x[i+3],16,-722521979); b=md5hh(b,c,d,a,x[i+6],23,76029189);
+          a = md5hh(a,b,c,d,x[i+9],4,-640364487);  d=md5hh(d,a,b,c,x[i+12],11,-421815835);
+          c = md5hh(c,d,a,b,x[i+15],16,530742520); b=md5hh(b,c,d,a,x[i+2],23,-995338651);
+          a = md5ii(a,b,c,d,x[i],6,-198630844);    d=md5ii(d,a,b,c,x[i+7],10,1126891415);
+          c = md5ii(c,d,a,b,x[i+14],15,-1416354905);b=md5ii(b,c,d,a,x[i+5],21,-57434055);
+          a = md5ii(a,b,c,d,x[i+12],6,1700485571); d=md5ii(d,a,b,c,x[i+3],10,-1894986606);
+          c = md5ii(c,d,a,b,x[i+10],15,-1051523);  b=md5ii(b,c,d,a,x[i+1],21,-2054922799);
+          a = md5ii(a,b,c,d,x[i+8],6,1873313359);  d=md5ii(d,a,b,c,x[i+15],10,-30611744);
+          c = md5ii(c,d,a,b,x[i+6],15,-1560198380);b=md5ii(b,c,d,a,x[i+13],21,1309151649);
+          a = md5ii(a,b,c,d,x[i+4],6,-145523070);  d=md5ii(d,a,b,c,x[i+11],10,-1120210379);
+          c = md5ii(c,d,a,b,x[i+2],15,718787259);  b=md5ii(b,c,d,a,x[i+9],21,-343485551);
+          a=safeAdd(a,oa); b=safeAdd(b,ob); c=safeAdd(c,oc); d=safeAdd(d,od);
+        }
+        return [a, b, c, d];
+      }
+
+      function rhex(n) {
+        const s = "0123456789abcdef";
+        let r = "";
+        for (let j = 0; j < 4; j++) r += s[(n >> (j*8+4)) & 0xf] + s[(n >> (j*8)) & 0xf];
+        return r;
+      }
+
+      const result = md5core(md5blks(str));
+      return result.map(rhex).join("");
+    }
+
+    // ── Parsear header WWW-Authenticate: Digest ... ───────────────────
+    function parseWWWAuthenticate(header) {
+      const params = {};
+      const regex = /(\w+)=(?:"([^"]*?)"|([^,\s]+))/g;
+      let m;
+      while ((m = regex.exec(header)) !== null) {
+        params[m[1]] = m[2] !== undefined ? m[2] : m[3];
+      }
+      return params;
+    }
+
+    // ── Construir header Authorization: Digest ... ────────────────────
+    async function buildDigestHeader(method, url, username, password, challenge) {
+      const { realm, nonce, qop, algorithm } = challenge;
+      const uri = new URL(url).pathname;
+
+      // HA1 = MD5(username:realm:password)
+      const ha1 = await md5(`${username}:${realm}:${password}`);
+
+      // HA2 = MD5(method:uri)
+      const ha2 = await md5(`${method}:${uri}`);
+
+      // cnonce: valor aleatorio generado por el cliente
+      const cnonce = Math.random().toString(36).substring(2, 18);
+      const nc = "00000001"; // Contador de nonce (simplificado)
+
+      let response;
+      if (qop === "auth") {
+        // Con qop: response = MD5(HA1:nonce:nc:cnonce:qop:HA2)
+        response = await md5(`${ha1}:${nonce}:${nc}:${cnonce}:${qop}:${ha2}`);
+      } else {
+        // Sin qop: response = MD5(HA1:nonce:HA2)
+        response = await md5(`${ha1}:${nonce}:${ha2}`);
+      }
+
+      let header = `Digest username="${username}", realm="${realm}", ` +
+                   `nonce="${nonce}", uri="${uri}", algorithm=${algorithm || "MD5"}, ` +
+                   `response="${response}"`;
+
+      if (qop) header += `, qop=${qop}, nc=${nc}, cnonce="${cnonce}"`;
+
+      return { header, debugInfo: { ha1, ha2, response, cnonce, nc } };
+    }
+
+    // ── Llamada con Digest Auth (2 pasos) ─────────────────────────────
+    async function callEndpoint(path, requiresAuth) {
+      const url = API_BASE + path;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      setLoading(true);
+      document.getElementById("request-label").textContent =
+        `GET ${path}` + (requiresAuth ? " 🔒" : "");
+
+      try {
+        let debugLog = {};
+
+        if (!requiresAuth) {
+          // Ruta pública: request simple
+          const res = await fetch(url);
+          const data = await res.json();
+          showResponse(res.status, { response: data });
+          return;
+        }
+
+        // ── Paso 1: Primera request para obtener el desafío ──────────
+        const step1 = await fetch(url, { method: "GET" });
+
+        if (step1.status !== 401) {
+          const data = await step1.json();
+          showResponse(step1.status, data);
+          return;
+        }
+
+        const wwwAuth = step1.headers.get("WWW-Authenticate");
+        if (!wwwAuth || !wwwAuth.startsWith("Digest ")) {
+          showResponse(step1.status, { error: "No se recibió desafío Digest" });
+          return;
+        }
+
+        const challenge = parseWWWAuthenticate(wwwAuth.substring(7));
+        debugLog.paso1 = { status: step1.status, challenge };
+
+        // ── Paso 2: Calcular respuesta y reenviar con Authorization ──
+        const { header: authHeader, debugInfo } =
+          await buildDigestHeader("GET", url, username, password, challenge);
+
+        debugLog.paso2 = {
+          calculos: {
+            "HA1 = MD5(user:realm:pass)": debugInfo.ha1,
+            "HA2 = MD5(method:uri)":       debugInfo.ha2,
+            "response = MD5(HA1:nonce:nc:cnonce:qop:HA2)": debugInfo.response,
+          },
+          header_enviado: authHeader,
+        };
+
+        const step2 = await fetch(url, {
+          method: "GET",
+          headers: { "Authorization": authHeader },
+        });
+
+        const data = await step2.json();
+        debugLog.paso3 = { status: step2.status, response: data };
+
+        showResponse(step2.status, debugLog);
+
+      } catch (err) {
+        showResponse(0, { error: "Error de conexión: " + err.message,
+                          hint: "¿Está corriendo el servidor en localhost:3000?" });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // ── UI Helpers ─────────────────────────────────────────────────────
+    function showResponse(status, data) {
+      const pill = document.getElementById("status-pill");
+      const out  = document.getElementById("response-output");
+
+      if (status >= 200 && status < 300) {
+        pill.className = "status-pill status-ok";
+        pill.textContent = `${status} OK`;
+      } else if (status === 0) {
+        pill.className = "status-pill status-error";
+        pill.textContent = "ERROR";
+      } else {
+        pill.className = "status-pill status-error";
+        pill.textContent = `${status} Error`;
+      }
+
+      out.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function setLoading(isLoading) {
+      document.getElementById("spinner").style.display =
+        isLoading ? "inline-block" : "none";
+    }
+  </script>
+
+</body>
+</html>
