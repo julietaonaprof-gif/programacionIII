@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo: Rate Limiting</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 0 16px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    #log { margin-top: 20px; border: 1px solid #ccc; padding: 12px; border-radius: 6px; min-height: 100px; }
+    .ok    { color: green; }
+    .error { color: red; }
+    .info  { color: gray; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h2>Rate Limiting & Throttling</h2>
+  <p>El servidor permite <strong>5 requests por minuto</strong> por IP.<br>
+     Hacé clic varias veces rápido para ver el bloqueo.</p>
+
+  <button onclick="hacerRequest()">Hacer Request</button>
+  <button onclick="document.getElementById('log').innerHTML = ''">Limpiar</button>
+
+  <div id="log"></div>
+
+  <script>
+    let contador = 0;
+
+    async function hacerRequest() {
+      contador++;
+      const num = contador;
+      log(`[#${num}] Enviando request...`, 'info');
+
+      try {
+        const inicio = Date.now();
+        const res = await fetch('http://localhost:3000/api/data');
+        const tiempo = Date.now() - inicio;
+        const data = await res.json();
+
+        if (res.ok) {
+          // Los headers de rate limit informan el estado de la ventana
+          const remaining = res.headers.get('RateLimit-Remaining');
+          log(`[#${num}] ✅ OK (${tiempo}ms) | Restantes: ${remaining ?? 'N/A'}`, 'ok');
+        } else {
+          // HTTP 429 = Too Many Requests
+          log(`[#${num}] ❌ ${res.status} - ${data.error}`, 'error');
+        }
+      } catch (e) {
+        log(`[#${num}] ❌ Error de red: ${e.message}`, 'error');
+      }
+    }
+
+    function log(msg, cls) {
+      const div = document.getElementById('log');
+      div.innerHTML += `<div class="${cls}">${msg}</div>`;
+    }
+  </script>
+</body>
+</html>

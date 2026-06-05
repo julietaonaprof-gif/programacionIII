@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo: CORS</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 16px; }
+    button { padding: 8px 16px; margin: 4px; cursor: pointer; }
+    #resultado { margin-top: 20px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; min-height: 80px; }
+    .ok    { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h2>CORS – Cross-Origin Resource Sharing</h2>
+
+  <p>Abrí la consola del navegador (F12) para ver los errores de CORS.</p>
+
+  <p>
+    <strong>Ruta permitida:</strong> el servidor incluye el header
+    <code>Access-Control-Allow-Origin</code> con tu origen.<br>
+    <strong>Ruta bloqueada:</strong> el servidor NO incluye ese header →
+    el navegador bloquea la respuesta (error en consola).
+  </p>
+
+  <button onclick="probarPermitida()">✅ Probar ruta PERMITIDA</button>
+  <button onclick="probarBloqueada()">❌ Probar ruta BLOQUEADA</button>
+
+  <div id="resultado">Hacé clic en algún botón...</div>
+
+  <script>
+    const BASE = 'http://localhost:3001';
+
+    async function probarPermitida() {
+      mostrar('Enviando request a /api/publico...', '');
+      try {
+        const res = await fetch(`${BASE}/api/publico`);
+        const data = await res.json();
+        mostrar(`✅ Éxito: ${data.mensaje}`, 'ok');
+      } catch (e) {
+        mostrar(`❌ Error: ${e.message} — revisá la consola`, 'error');
+      }
+    }
+
+    async function probarBloqueada() {
+      mostrar('Enviando request a /api/bloqueado...', '');
+      try {
+        // Esta ruta no setea CORS headers → el navegador bloqueará la respuesta
+        const res = await fetch(`${BASE}/api/bloqueado`);
+        const data = await res.json();
+        mostrar(`⚠️ Respuesta: ${data.mensaje}`, 'ok');
+      } catch (e) {
+        // El navegador intercepta y lanza un TypeError antes de que veamos la respuesta
+        mostrar(
+          `❌ Bloqueado por CORS: "${e.message}"<br>
+           <small>El servidor respondió pero el navegador ocultó la respuesta
+           porque falta el header Access-Control-Allow-Origin.</small>`,
+          'error'
+        );
+      }
+    }
+
+    function mostrar(msg, cls) {
+      const div = document.getElementById('resultado');
+      div.className = cls;
+      div.innerHTML = msg;
+    }
+  </script>
+</body>
+</html>

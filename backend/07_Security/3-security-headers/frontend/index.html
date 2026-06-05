@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo: Headers de Seguridad</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; }
+    button { padding: 8px 16px; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 13px; }
+    th, td { border: 1px solid #ccc; padding: 8px 10px; text-align: left; }
+    th { background: #f0f0f0; }
+    .highlight { background: #fffbe6; font-weight: bold; }
+    .note { font-size: 12px; color: #666; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Headers de Seguridad HTTP</h2>
+  <p>
+    Hacé clic en el botón para llamar al servidor y ver los headers de seguridad
+    que devuelve. También podés verlos en <strong>DevTools → Network → Response Headers</strong>.
+  </p>
+
+  <button onclick="inspeccionarHeaders()">Inspeccionar Headers</button>
+
+  <div id="resultado"></div>
+
+  <p class="note">
+    ⚠️ Nota: el navegador no expone todos los headers de respuesta vía JavaScript
+    por seguridad (CORS). Para ver la lista completa usá DevTools → Network.
+  </p>
+
+  <script>
+    // Headers de seguridad que helmet agrega y su propósito
+    const HEADERS_ESPERADOS = {
+      "strict-transport-security": "Fuerza HTTPS (HSTS)",
+      "x-content-type-options":    "Evita MIME sniffing",
+      "x-frame-options":           "Evita clickjacking",
+      "content-security-policy":   "Restringe fuentes de contenido (CSP)",
+      "x-xss-protection":          "Protección XSS del navegador (legacy)",
+      "referrer-policy":           "Controla el header Referer",
+      "x-permitted-cross-domain-policies": "Restringe políticas cross-domain",
+    };
+
+    async function inspeccionarHeaders() {
+      try {
+        const res = await fetch('http://localhost:3002/api/inspect-headers');
+
+        let html = '<table><tr><th>Header</th><th>Valor expuesto al JS</th><th>Propósito</th></tr>';
+
+        for (const [header, proposito] of Object.entries(HEADERS_ESPERADOS)) {
+          const valor = res.headers.get(header) ?? '(no visible desde JS — ver DevTools)';
+          const clase = res.headers.get(header) ? 'highlight' : '';
+          html += `<tr class="${clase}">
+            <td><code>${header}</code></td>
+            <td>${valor}</td>
+            <td>${proposito}</td>
+          </tr>`;
+        }
+
+        html += '</table>';
+        document.getElementById('resultado').innerHTML = html;
+
+      } catch (e) {
+        document.getElementById('resultado').innerHTML =
+          `<p style="color:red">Error: ${e.message} — ¿El servidor está corriendo?</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

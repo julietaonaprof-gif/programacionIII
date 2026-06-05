@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo: Input Validation</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; }
+    section { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+    h3 { margin-top: 0; }
+    input { padding: 6px; width: 300px; margin-right: 8px; }
+    button { padding: 6px 14px; cursor: pointer; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+    .vuln { border-color: #e74c3c; }
+    .safe { border-color: #27ae60; }
+    .tag { font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+    .tag.v { background: #fde; color: #c00; }
+    .tag.s { background: #dfd; color: #060; }
+  </style>
+</head>
+<body>
+  <h2>Input Validation – SQL Injection & XSS</h2>
+
+  <!-- SQL INJECTION -->
+  <section class="vuln">
+    <h3>💉 SQL Injection <span class="tag v">VULNERABLE</span></h3>
+    <p>
+      Probá escribir: <code>' OR '1'='1</code><br>
+      La query concatena tu input directamente → devuelve <strong>todos</strong> los usuarios.
+    </p>
+    <input id="sql-vuln" placeholder="username" value="admin" />
+    <button onclick="probarSQLVuln()">Consultar</button>
+    <pre id="sql-vuln-result">—</pre>
+  </section>
+
+  <section class="safe">
+    <h3>🛡️ SQL Injection <span class="tag s">SEGURO</span></h3>
+    <p>
+      Mismo payload: <code>' OR '1'='1</code><br>
+      Usa prepared statement → el driver escapa el input, la query no se rompe.
+    </p>
+    <input id="sql-safe" placeholder="username" value="admin" />
+    <button onclick="probarSQLSafe()">Consultar</button>
+    <pre id="sql-safe-result">—</pre>
+  </section>
+
+  <!-- XSS -->
+  <section class="vuln">
+    <h3>📜 XSS – Script Injection <span class="tag v">VULNERABLE</span></h3>
+    <p>
+      Probá: <code>&lt;img src=x onerror="alert('XSS')"&gt;</code><br>
+      El servidor devuelve tu input sin escapar → el navegador ejecuta el script.
+    </p>
+    <input id="xss-vuln" placeholder="tu nombre" value="Juan" />
+    <button onclick="probarXSSVuln()">Saludar</button>
+    <div id="xss-vuln-result" style="margin-top:8px; padding:8px; background:#fff3f3;">
+      (resultado aparece acá)
+    </div>
+  </section>
+
+  <section class="safe">
+    <h3>🛡️ XSS – Script Injection <span class="tag s">SEGURO</span></h3>
+    <p>
+      Mismo payload: el servidor escapa los caracteres HTML antes de renderizar.
+    </p>
+    <input id="xss-safe" placeholder="tu nombre" value="Juan" />
+    <button onclick="probarXSSSafe()">Saludar</button>
+    <div id="xss-safe-result" style="margin-top:8px; padding:8px; background:#f3fff3;">
+      (resultado aparece acá)
+    </div>
+  </section>
+
+  <script>
+    const BASE = 'http://localhost:3003';
+
+    async function probarSQLVuln() {
+      const val = document.getElementById('sql-vuln').value;
+      const res = await fetch(`${BASE}/api/users/vulnerable?username=${encodeURIComponent(val)}`);
+      const data = await res.json();
+      document.getElementById('sql-vuln-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function probarSQLSafe() {
+      const val = document.getElementById('sql-safe').value;
+      const res = await fetch(`${BASE}/api/users/seguro?username=${encodeURIComponent(val)}`);
+      const data = await res.json();
+      document.getElementById('sql-safe-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function probarXSSVuln() {
+      const val = document.getElementById('xss-vuln').value;
+      const res = await fetch(`${BASE}/api/greet/vulnerable?name=${encodeURIComponent(val)}`);
+      const html = await res.text();
+      // innerHTML renderiza el HTML tal cual → ejecuta scripts maliciosos
+      document.getElementById('xss-vuln-result').innerHTML = html;
+    }
+
+    async function probarXSSSafe() {
+      const val = document.getElementById('xss-safe').value;
+      const res = await fetch(`${BASE}/api/greet/seguro?name=${encodeURIComponent(val)}`);
+      const html = await res.text();
+      document.getElementById('xss-safe-result').innerHTML = html;
+    }
+  </script>
+</body>
+</html>

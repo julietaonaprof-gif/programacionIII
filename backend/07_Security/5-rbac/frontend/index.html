@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ejemplo: RBAC</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; }
+    .card { border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    select, button { padding: 7px 12px; margin: 4px 2px; cursor: pointer; }
+    button { border: none; border-radius: 4px; color: #fff; }
+    .btn-get    { background: #3498db; }
+    .btn-post   { background: #27ae60; }
+    .btn-delete { background: #e74c3c; }
+    .btn-admin  { background: #8e44ad; }
+    pre { background: #f5f5f5; padding: 10px; border-radius: 4px; font-size: 12px; overflow-x: auto; }
+    .role-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: bold; margin-left: 8px; }
+    .admin  { background: #8e44ad; color: #fff; }
+    .editor { background: #27ae60; color: #fff; }
+    .viewer { background: #3498db; color: #fff; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; }
+    td, th { border: 1px solid #ddd; padding: 6px 10px; text-align: center; }
+    .yes { color: green; } .no { color: red; }
+  </style>
+</head>
+<body>
+  <h2>RBAC – Control de Acceso Basado en Roles</h2>
+
+  <div class="card">
+    <h3>Seleccioná un usuario</h3>
+    <select id="token" onchange="actualizarRol()">
+      <option value="token_viewer">👁️ viewer — solo lectura</option>
+      <option value="token_editor">✏️ editor — lectura + escritura</option>
+      <option value="token_admin">👑 admin — acceso total</option>
+    </select>
+    <span id="rol-badge" class="role-badge viewer">viewer</span>
+
+    <table style="margin-top:12px">
+      <tr><th>Permiso</th><th>viewer</th><th>editor</th><th>admin</th></tr>
+      <tr><td>read</td>         <td class="yes">✅</td><td class="yes">✅</td><td class="yes">✅</td></tr>
+      <tr><td>write</td>        <td class="no">❌</td> <td class="yes">✅</td><td class="yes">✅</td></tr>
+      <tr><td>delete</td>       <td class="no">❌</td> <td class="no">❌</td> <td class="yes">✅</td></tr>
+      <tr><td>manage_users</td> <td class="no">❌</td> <td class="no">❌</td> <td class="yes">✅</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Probar endpoints</h3>
+    <button class="btn-get"    onclick="llamar('GET',    '/api/articulos')">     GET /articulos (read)</button>
+    <button class="btn-post"   onclick="llamar('POST',   '/api/articulos')">     POST /articulos (write)</button>
+    <button class="btn-delete" onclick="llamar('DELETE', '/api/articulos/42')">  DELETE /articulos/42 (delete)</button>
+    <button class="btn-admin"  onclick="llamar('GET',    '/api/admin/usuarios')"> GET /admin/usuarios (manage_users)</button>
+  </div>
+
+  <div class="card">
+    <h3>Respuesta del servidor</h3>
+    <pre id="resultado">Seleccioná un usuario y probá un endpoint.</pre>
+  </div>
+
+  <script>
+    const BASE = 'http://localhost:3004';
+
+    const roles = {
+      token_viewer: 'viewer',
+      token_editor: 'editor',
+      token_admin:  'admin',
+    };
+
+    function actualizarRol() {
+      const token = document.getElementById('token').value;
+      const rol = roles[token];
+      const badge = document.getElementById('rol-badge');
+      badge.textContent = rol;
+      badge.className = `role-badge ${rol}`;
+    }
+
+    async function llamar(method, path) {
+      const token = document.getElementById('token').value;
+      const pre = document.getElementById('resultado');
+      pre.textContent = `${method} ${path} con token "${token}"...\n`;
+
+      try {
+        const res = await fetch(`${BASE}${path}`, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': token,         // Nuestro "token" simulado
+          },
+          body: method === 'POST' ? JSON.stringify({ titulo: 'Nuevo artículo' }) : undefined,
+        });
+
+        const data = await res.json();
+        const status = res.ok ? `✅ ${res.status}` : `❌ ${res.status}`;
+        pre.textContent = `${method} ${path}\nStatus: ${status}\n\n${JSON.stringify(data, null, 2)}`;
+      } catch (e) {
+        pre.textContent = `Error de red: ${e.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
